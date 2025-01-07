@@ -1,0 +1,59 @@
+GeometryExample.exe
+Test the Geometry library and demonstrate use-cases.
+
+Syntax:
+GeometryExample /action:{ActionType} [/count:{Count}]
+    [/startPoint:{Coordinate}] [/controlPoint:{Coordinate}]
+    [/endPoint:{Coordinate}] [/wait]
+
+Parameters:
+    /action         -   The action to take during this call to the
+                        application.
+
+    /controlPoint   -   The control point on the line or curve.
+
+    /count          -   The count of items to process.
+
+    /endPoint       -   The end point on the line or curve.
+
+    /startPoint     -   The starting point of the line or curve.
+
+    /wait           -   Value indicating whether to wait for user input after
+                        processing has completed and before ending the
+                        application.
+
+Values:
+    ActionType      -   Recognized actions available in the geometry example
+                        application. The following choices are currently
+                        available:
+
+                        QuadraticBezierPlotPoints - Generate plot points for
+                        a quadratic Bezier curve using incoming start point,
+                        control point, and end point values. Required
+                        parameters are /startPoint, /controlPoint, /endPoint,
+                        and /count.
+
+                        QuadraticBezierPlotPointsEquidistant - Generate
+                        equidistantly spaced plot points for a quadratic
+                        Bezier curve using incoming start point, control
+                        point, and end point values. Required parameters are
+                        /startPoint, /controlPoint, /endPoint, and /count.
+
+    Coordinate      -   A pair of numbers, separated by commas, that identify
+                        a two dimensional location.
+
+    Count           -   An integer number indicating a count of items or
+                        interations to process.
+
+Examples:
+In the following examples, note the use of the caret '^' character to continue
+the command to the next line in a DOS-based environment. In operating systems
+other than Windows, please replace that caret character with the appropriate
+line continuation for that command line.
+
+The following example generates 25 points along a quadratic Bezier curve and
+outputs the coordinates to the display.
+
+GeometryExample /action:QuadraticBezierPlotPointsEquidistant /count:25^
+ /startpoint:0,0 /controlPoint:170,321.566 /endPoint:350,0
+

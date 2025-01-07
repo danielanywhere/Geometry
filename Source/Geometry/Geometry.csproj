@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+    <Nullable>disable</Nullable>
+    <UserSecretsId>951381aa-9161-4492-9e42-7bce18a07442</UserSecretsId>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>Dans.Geometry.Library</PackageId>
+    <Title>Dan's Geometry Library</Title>
+    <Version>25.1105.1217</Version>
+    <Description>Dan's Geometry Library.</Description>
+    <Copyright>Copyright(c) 2025. Daniel Patterson, MCSD (danielanywhere)</Copyright>
+    <PackageProjectUrl>https://github.com/danielanywhere/Geometry</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>Daniel Patterson, MCSD (danielanywhere)</Authors>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\NuGet\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ResourceMain.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResourceMain.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="ResourceMain.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceMain.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

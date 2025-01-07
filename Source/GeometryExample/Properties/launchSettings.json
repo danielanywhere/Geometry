@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GeometryExample": {
+      "commandName": "Project",
+      "commandLineArgs": "/wait /action:QuadraticBezierPlotPointsEquidistant /count:25 /startpoint:0,0 /controlPoint:170,321.566 /endPoint:350,0"
+    }
+  }
+}

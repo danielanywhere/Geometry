@@ -1,0 +1,38 @@
+[
+	{
+		"Remarks": "Replace file insertion variable with file content.",
+		"FindPattern": "(?i:\\{\\s*(?<block>CodeBlock)\\s*,\\s*(?<language>\\w+)\\s*,\\s*(?<filename>[^\\}]+)\\s*\\})",
+		"ReplacePattern": "```${language}\r\nLoadFileContent(${filename})\r\n```",
+		"UseRegEx": 1
+	},
+	{
+		"Remarks": "Add printable blank lines between sections.",
+		"FindPattern": "(?i:\\{Line\\})",
+		"ReplacePattern": "<p>&nbsp;</p>",
+		"UseRegEx": 1
+	},
+	{
+		"Remarks": "Set the marked content to big.",
+		"FindPattern": "(?s:(?i:( |\\t)*\\{big\\}(?<lineContent>.*?)( |\\t)*\\{/big\\}))",
+		"ReplacePattern": "<h3>${lineContent}</h3>",
+		"UseRegEx": 1
+	},
+	{
+		"Remarks": "Set the marked content to bold.",
+		"FindPattern": "(?s:(?i:( |\\t)*\\{bold\\}(?<lineContent>.*?)( |\\t)*\\{/bold\\}))",
+		"ReplacePattern": "<b>${lineContent}</b>",
+		"UseRegEx": 1
+	},
+	{
+		"Remarks": "Center the current line.",
+		"FindPattern": "(?s:(?i:( |\\t)*\\{center\\}(?<lineContent>.*?)( |\\t)*\\{/center\\}))",
+		"ReplacePattern": "<center>${lineContent}</center>",
+		"UseRegEx": 1
+	},
+	{
+		"Remarks": "Set the marked content to preserved.",
+		"FindPattern": "(?s:(?i:( |\\t)*\\{pre\\}(?<lineContent>.*?)( |\\t)*\\{/pre\\}))",
+		"ReplacePattern": "<pre>${lineContent}</pre>",
+		"UseRegEx": 1
+	}
+]

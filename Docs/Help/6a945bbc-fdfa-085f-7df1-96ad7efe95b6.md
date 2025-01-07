@@ -1,0 +1,41 @@
+# GetLineHypFromAngOpp Method
+
+
+Return the length of the hypotenuse from the angle and opposite length.
+
+
+
+## Definition
+**Namespace:** <a href="eb409b48-e279-bdb4-daf3-3196b72d55a2.md">Geometry</a>  
+**Assembly:** Geometry (in Geometry.dll) Version: 25.1105.1217+b6bb0e7fb3781583b73a2836dfe45a1dcf927a94
+
+**C#**
+``` C#
+public static float GetLineHypFromAngOpp(
+	float angle,
+	float opposite
+)
+```
+**VB**
+``` VB
+Public Shared Function GetLineHypFromAngOpp ( 
+	angle As Single,
+	opposite As Single
+) As Single
+```
+
+
+
+#### Parameters
+<dl><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.single" target="_blank" rel="noopener noreferrer">Single</a></dt><dd>Angle, in radians.</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.single" target="_blank" rel="noopener noreferrer">Single</a></dt><dd>Length of the opposide side.</dd></dl>
+
+#### Return Value
+<a href="https://learn.microsoft.com/dotnet/api/system.single" target="_blank" rel="noopener noreferrer">Single</a>  
+Length of hypotenuse.
+
+## See Also
+
+
+#### Reference
+<a href="71fcc577-416c-fb39-4db6-887defd7b424.md">Trig Class</a>  
+<a href="eb409b48-e279-bdb4-daf3-3196b72d55a2.md">Geometry Namespace</a>  

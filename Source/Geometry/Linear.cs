@@ -1,0 +1,101 @@
+/*
+ * Copyright (c). 1997 - 2025 Daniel Patterson, MCSD (danielanywhere).
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * 
+ */
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Geometry
+{
+	//*-------------------------------------------------------------------------*
+	//*	Linear																																	*
+	//*-------------------------------------------------------------------------*
+	/// <summary>
+	/// Functionality and utility procedures for working with Linear Geometry.
+	/// </summary>
+	public class Linear
+	{
+		//*************************************************************************
+		//*	Private																																*
+		//*************************************************************************
+		//*************************************************************************
+		//*	Protected																															*
+		//*************************************************************************
+		//*************************************************************************
+		//*	Public																																*
+		//*************************************************************************
+		//*-----------------------------------------------------------------------*
+		//* Lerp																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the linear interpolation of the scalar value between start and
+		/// end representing the specified progress as a value between 0 and 1.
+		/// </summary>
+		/// <param name="start">
+		/// The starting position.
+		/// </param>
+		/// <param name="end">
+		/// The ending position.
+		/// </param>
+		/// <param name="progress">
+		/// The progress of completion between the start and end values.
+		/// </param>
+		/// <returns>
+		/// The linear interpolated value between start and end as indicated by
+		/// the progress value.
+		/// </returns>
+		public static float Lerp(float start, float end, float progress)
+		{
+			return start * (1 - progress) + end * progress;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the dual linear interpolation of the values between start and
+		/// end points representing the specified progress as a value between 0
+		/// and 1.
+		/// </summary>
+		/// <param name="start">
+		/// Reference to the start point to be considered.
+		/// </param>
+		/// <param name="end">
+		/// Reference to the end point to be considered.
+		/// </param>
+		/// <param name="progress">
+		/// Current progress value.
+		/// </param>
+		/// <returns>
+		/// The linear interpolated point value between start and end, as indicated
+		/// by the progress value.
+		/// </returns>
+		public static FPoint Lerp(FPoint start, FPoint end,
+			float progress)
+		{
+			FPoint result = new FPoint();
+
+			if (start != null && end != null)
+			{
+				result.X = Lerp(start.X, end.X, progress);
+				result.Y = Lerp(start.Y, end.Y, progress);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+	}
+	//*-------------------------------------------------------------------------*
+
+}

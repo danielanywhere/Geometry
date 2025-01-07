@@ -1,0 +1,28 @@
+# Bezier Constructor
+
+
+Initializes a new instance of the <a href="31d408c3-5009-a134-1e05-823900a16db6.md">Bezier</a> class
+
+
+
+## Definition
+**Namespace:** <a href="eb409b48-e279-bdb4-daf3-3196b72d55a2.md">Geometry</a>  
+**Assembly:** Geometry (in Geometry.dll) Version: 25.1105.1217+b6bb0e7fb3781583b73a2836dfe45a1dcf927a94
+
+**C#**
+``` C#
+public Bezier()
+```
+**VB**
+``` VB
+Public Sub New
+```
+
+
+
+## See Also
+
+
+#### Reference
+<a href="31d408c3-5009-a134-1e05-823900a16db6.md">Bezier Class</a>  
+<a href="eb409b48-e279-bdb4-daf3-3196b72d55a2.md">Geometry Namespace</a>  
