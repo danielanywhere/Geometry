@@ -142,5 +142,5 @@ GDI+ dimensional objects, like Point, Rectangle, and others normally
 found in .NET system libraries like System.Drawing have been defined for
 generic public use with or without a statically typed graphics system.
 
-For the full documentation of this library, please see this [Wiki](Wiki)
-page.
+For the full documentation of this library, please see this
+[Wiki](https://github.com/danielanywhere/Geometry/wiki) page.
