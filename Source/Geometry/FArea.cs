@@ -404,64 +404,6 @@ namespace Geometry
 		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//* Assign																																*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Assign the values from the source to the target, raising any associated
-		/// events where appropriate.
-		/// </summary>
-		/// <param name="source">
-		/// Reference to the source shape.
-		/// </param>
-		/// <param name="target">
-		/// Reference to the target shape.
-		/// </param>
-		public static void Assign(FArea source, FArea target)
-		{
-			float originalBottom = 0f;
-			float originalLeft = 0f;
-			float originalRight = 0f;
-			float originalTop = 0f;
-
-			if(source != null && target != null)
-			{
-				originalBottom = target.mBottom;
-				originalLeft = target.mLeft;
-				originalRight = target.mRight;
-				originalTop = target.mTop;
-				target.mBottom = source.mBottom;
-				target.mLeft = source.mLeft;
-				target.mRight = source.mRight;
-				target.mTop = source.mTop;
-				if(originalLeft != source.mLeft)
-				{
-					target.OnLeftChanged(new FloatEventArgs(source.mLeft, originalLeft));
-					target.OnLocationChanged(
-						new FloatPointEventArgs(
-							Location(source), new FPoint(originalLeft, originalTop)));
-				}
-				if(originalTop != source.mTop)
-				{
-					target.OnTopChanged(new FloatEventArgs(source.mTop, originalTop));
-					target.OnLocationChanged(
-						new FloatPointEventArgs(
-							Location(source), new FPoint(originalLeft, originalTop)));
-				}
-				if(originalRight != source.mRight)
-				{
-					target.OnRightChanged(
-						new FloatEventArgs(source.mRight, originalRight));
-				}
-				if(originalBottom != source.mBottom)
-				{
-					target.OnBottomChanged(
-						new FloatEventArgs(source.mBottom, originalBottom));
-				}
-			}
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
 		//*	Bottom																																*
 		//*-----------------------------------------------------------------------*
 		private float mBottom = 0f;
@@ -1210,6 +1152,64 @@ namespace Geometry
 		{
 			string result = "{" + $"{mLeft},{mTop},{Width},{Height}" + "}";
 			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TransferValues																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Transfer the member values from the source to the target, raising any
+		/// associated events where appropriate.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the source shape.
+		/// </param>
+		/// <param name="target">
+		/// Reference to the target shape.
+		/// </param>
+		public static void TransferValues(FArea source, FArea target)
+		{
+			float originalBottom = 0f;
+			float originalLeft = 0f;
+			float originalRight = 0f;
+			float originalTop = 0f;
+
+			if(source != null && target != null)
+			{
+				originalBottom = target.mBottom;
+				originalLeft = target.mLeft;
+				originalRight = target.mRight;
+				originalTop = target.mTop;
+				target.mBottom = source.mBottom;
+				target.mLeft = source.mLeft;
+				target.mRight = source.mRight;
+				target.mTop = source.mTop;
+				if(originalLeft != source.mLeft)
+				{
+					target.OnLeftChanged(new FloatEventArgs(source.mLeft, originalLeft));
+					target.OnLocationChanged(
+						new FloatPointEventArgs(
+							Location(source), new FPoint(originalLeft, originalTop)));
+				}
+				if(originalTop != source.mTop)
+				{
+					target.OnTopChanged(new FloatEventArgs(source.mTop, originalTop));
+					target.OnLocationChanged(
+						new FloatPointEventArgs(
+							Location(source), new FPoint(originalLeft, originalTop)));
+				}
+				if(originalRight != source.mRight)
+				{
+					target.OnRightChanged(
+						new FloatEventArgs(source.mRight, originalRight));
+				}
+				if(originalBottom != source.mBottom)
+				{
+					target.OnBottomChanged(
+						new FloatEventArgs(source.mBottom, originalBottom));
+				}
+			}
 		}
 		//*-----------------------------------------------------------------------*
 

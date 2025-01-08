@@ -574,8 +574,8 @@ namespace Geometry
 				if(thickness == 0)
 				{
 					//	If the parallel area is zero, then source line is target line.
-					FPoint.Assign(pointA, result.PointA);
-					FPoint.Assign(pointB, result.PointB);
+					FPoint.TransferValues(pointA, result.PointA);
+					FPoint.TransferValues(pointB, result.PointB);
 				}
 				else
 				{

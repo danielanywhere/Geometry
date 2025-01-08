@@ -66,28 +66,6 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	Assign																																*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Assign values to the specified line.
-		/// </summary>
-		/// <param name="target">
-		/// Reference to the target line to receive the new points.
-		/// </param>
-		/// <param name="pointA">
-		/// Reference to the point to be assigned to the target PointA property.
-		/// </param>
-		/// <param name="pointB">
-		/// Reference to the point to be assigned to the target PointB property.
-		/// </param>
-		public static void Assign(FLine target, FPoint pointA, FPoint pointB)
-		{
-			FPoint.Assign(pointA, target.mPointA);
-			FPoint.Assign(pointB, target.mPointB);
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
 		//*	HasIntersection																												*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -573,6 +551,29 @@ namespace Geometry
 		{
 			get { return mPointB; }
 			set { mPointB = value; }
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	TransferValues																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Transfer member values to the specified line.
+		/// </summary>
+		/// <param name="target">
+		/// Reference to the target line to receive the new points.
+		/// </param>
+		/// <param name="pointA">
+		/// Reference to the point to be assigned to the target PointA property.
+		/// </param>
+		/// <param name="pointB">
+		/// Reference to the point to be assigned to the target PointB property.
+		/// </param>
+		public static void TransferValues(FLine target,
+			FPoint pointA, FPoint pointB)
+		{
+			FPoint.TransferValues(pointA, target.mPointA);
+			FPoint.TransferValues(pointB, target.mPointB);
 		}
 		//*-----------------------------------------------------------------------*
 

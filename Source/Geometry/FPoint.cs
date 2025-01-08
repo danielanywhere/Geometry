@@ -440,52 +440,6 @@ namespace Geometry
 		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	Assign																																*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Assign the member values of one instance to another.
-		/// </summary>
-		/// <param name="source">
-		/// Reference to the source point whose values will be assigned.
-		/// </param>
-		/// <param name="target">
-		/// Reference to the target point that will receive the values.
-		/// </param>
-		public static void Assign(FPoint source, FPoint target)
-		{
-			if (source != null && target != null && !target.mReadOnly)
-			{
-				//	It would be possible to allow a null target, but that strategy
-				//	would have to assigned an 'out' value to the parameter, or to
-				//	return the newly created value.
-				target.mX = source.mX;
-				target.mY = source.mY;
-			}
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
-		/// <summary>
-		/// Assign member values to the specified target.
-		/// </summary>
-		/// <param name="target">
-		/// Reference to the item to be set.
-		/// </param>
-		/// <param name="x">
-		/// X coordinate to assign.
-		/// </param>
-		/// <param name="y">
-		/// Y coordinate to assign.
-		/// </param>
-		public static void Assign(FPoint target, float x, float y)
-		{
-			if (target != null && !target.mReadOnly)
-			{
-				target.mX = x;
-				target.mY = y;
-			}
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
 		//* Clear																																	*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -871,6 +825,52 @@ namespace Geometry
 				result.mY = point.mY * scale;
 			}
 			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	TransferValues																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Transfer the member values of one instance to another.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the source point whose values will be assigned.
+		/// </param>
+		/// <param name="target">
+		/// Reference to the target point that will receive the values.
+		/// </param>
+		public static void TransferValues(FPoint source, FPoint target)
+		{
+			if(source != null && target != null && !target.mReadOnly)
+			{
+				//	It would be possible to allow a null target, but that strategy
+				//	would have to assigned an 'out' value to the parameter, or to
+				//	return the newly created value.
+				target.mX = source.mX;
+				target.mY = source.mY;
+			}
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Transfer member values to the specified target.
+		/// </summary>
+		/// <param name="target">
+		/// Reference to the item to be set.
+		/// </param>
+		/// <param name="x">
+		/// X coordinate to assign.
+		/// </param>
+		/// <param name="y">
+		/// Y coordinate to assign.
+		/// </param>
+		public static void TransferValues(FPoint target, float x, float y)
+		{
+			if(target != null && !target.mReadOnly)
+			{
+				target.mX = x;
+				target.mY = y;
+			}
 		}
 		//*-----------------------------------------------------------------------*
 

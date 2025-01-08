@@ -31,11 +31,14 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
-| 24.1105.1217 | Initial public release. |
+| 25.1108.3829 | Rename all **Assign** methods to **TransferValues** |
+| 25.1105.1217 | Initial public release. |
 
 
 ## More Information
 
 For more information, please see the GitHub project:
 [danielanywhere/Geometry](https://github.com/danielanywhere/Geometry)
+
+Full API documentation is available at this library's [GitHub User Page](https://danielanywhere.github.io/Geometry).
 
