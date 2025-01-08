@@ -365,6 +365,9 @@ namespace Geometry
 		/// <summary>
 		/// Get/Set the number of decimal points used in distance epsilon values.
 		/// </summary>
+		/// <remarks>
+		/// The default value for this property is 6.
+		/// </remarks>
 		public static int EpsilonDistance
 		{
 			get { return mEpsilonDistance; }
@@ -380,6 +383,9 @@ namespace Geometry
 		/// Get/Set the number of decimal points used to establish the epsilon
 		/// value for rotations.
 		/// </summary>
+		/// <remarks>
+		/// The default value for this property is 6.
+		/// </remarks>
 		public static int EpsilonRotation
 		{
 			get { return mEpsilonRotation; }

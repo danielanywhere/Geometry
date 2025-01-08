@@ -143,5 +143,5 @@ found in .NET system libraries like System.Drawing have been defined for
 generic public use with or without a statically typed graphics system.
 
 For the full documentation of this library, you can access the API in
-HTML format at the associated GutHub user page library
+HTML format at the associated GitHub user page library
 <https://danielanywhere.github.io/Geometry>.
