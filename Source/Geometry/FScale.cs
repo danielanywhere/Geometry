@@ -38,6 +38,33 @@ namespace Geometry
 		//*************************************************************************
 		//*	Public																																*
 		//*************************************************************************
+		//*-----------------------------------------------------------------------*
+		//*	Clone																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a memberwise clone of the provided scale.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the source scale to be cloned.
+		/// </param>
+		/// <returns>
+		/// Reference to a new FScale instance where the primitive member values
+		/// are the same as those in the source, if a legitimate source was
+		/// provided. Otherwise, an empty FScale.
+		/// </returns>
+		public static FScale Clone(FScale source)
+		{
+			FScale result = new FScale();
+
+			if(source != null)
+			{
+				result.mScaleX = source.mScaleX;
+				result.mScaleY = source.mScaleY;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
 		////*-----------------------------------------------------------------------*
 		////* Delta																																	*
 		////*-----------------------------------------------------------------------*

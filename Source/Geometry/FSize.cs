@@ -153,6 +153,33 @@ namespace Geometry
 		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	Clone																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a memberwise clone of the provided size.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the source size to be cloned.
+		/// </param>
+		/// <returns>
+		/// Reference to a new FSize instance where the primitive member values
+		/// are the same as those in the source, if a legitimate source was
+		/// provided. Otherwise, an empty FSize.
+		/// </returns>
+		public static FSize Clone(FSize source)
+		{
+			FSize result = new FSize();
+
+			if(source != null)
+			{
+				result.mHeight = source.mHeight;
+				result.mWidth = source.mWidth;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* IsDifferent																														*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

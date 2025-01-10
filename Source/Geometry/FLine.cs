@@ -66,6 +66,35 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	Clone																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a memberwise clone of the provided line.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the source line to be cloned.
+		/// </param>
+		/// <returns>
+		/// Reference to a new FLine instance where the primitive member values
+		/// are the same as those in the source, if a legitimate source was
+		/// provided. Otherwise, an empty FLine.
+		/// </returns>
+		public static FLine Clone(FLine source)
+		{
+			FLine result = new FLine();
+
+			if(source != null)
+			{
+				result.mPointA.X = source.mPointA.X;
+				result.mPointA.Y = source.mPointA.Y;
+				result.mPointB.X = source.mPointB.X;
+				result.mPointB.Y = source.mPointB.Y;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	HasIntersection																												*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

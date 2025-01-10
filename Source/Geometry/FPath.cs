@@ -65,6 +65,35 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	Clone																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a memberwise clone of the provided path.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the source path to be cloned.
+		/// </param>
+		/// <returns>
+		/// Reference to a new FPath instance where the primitive member values
+		/// are the same as those in the source, if a legitimate source was
+		/// provided. Otherwise, an empty FPath.
+		/// </returns>
+		public static FPath Clone(FPath source)
+		{
+			FPath result = new FPath();
+
+			if(source != null)
+			{
+				foreach(FPoint pointItem in source)
+				{
+					result.Add(FPoint.Clone(pointItem));
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	GetCenter																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

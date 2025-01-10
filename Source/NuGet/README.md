@@ -31,6 +31,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.1110.4639 | Added static methods **GetCubicBoundingBox**, **GetLinearBoundingBox**, **GetQuadraticBoundingBox** to the *Bezier* class; Added **Clone** methods to the *FArea*, *FLine*, *FPath*, *FPoint*, *FScale*, and *FSize* classes; Added static method **GetLinePoint** to the *Linear* class; Added the **NormalizeRad** method to replace the depreciated **ReduceRad** method in the *Trig* class. |
 | 25.1108.3829 | Rename all **Assign** methods to **TransferValues** |
 | 25.1105.1217 | Initial public release. |
 

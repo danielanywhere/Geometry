@@ -458,6 +458,34 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	Clone																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a memberwise clone of the provided point.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the source point to be cloned.
+		/// </param>
+		/// <returns>
+		/// Reference to a new FPoint instance where the primitive member values
+		/// are the same as those in the source, if a legitimate source was
+		/// provided. Otherwise, an empty FPoint.
+		/// </returns>
+		public static FPoint Clone(FPoint source)
+		{
+			FPoint result = new FPoint();
+
+			if(source != null)
+			{
+				result.mReadOnly = source.mReadOnly;
+				result.mX = source.mX;
+				result.mY = source.mY;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* ClosestPoint																													*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -673,7 +701,8 @@ namespace Geometry
 		//* Offset																																*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Return the caller's point, translated by the specified offset.
+		/// Return a new instance the caller's point, translated by the specified
+		/// offset.
 		/// </summary>
 		/// <param name="point">
 		/// Reference to the point to be offset.

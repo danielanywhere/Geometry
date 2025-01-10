@@ -486,6 +486,36 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	Clone																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a memberwise clone of the provided area.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the source area to be cloned.
+		/// </param>
+		/// <returns>
+		/// Reference to a new FArea instance where the primitive member values
+		/// are the same as those in the source, if a legitimate source was
+		/// provided. Otherwise, an empty FArea.
+		/// </returns>
+		public static FArea Clone(FArea source)
+		{
+			FArea result = new FArea();
+
+			if(source != null)
+			{
+				result.mBottom = source.mBottom;
+				result.mLeft = source.mLeft;
+				result.mReadOnly = source.mReadOnly;
+				result.mRight = source.mRight;
+				result.mTop = source.mTop;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* Contains																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

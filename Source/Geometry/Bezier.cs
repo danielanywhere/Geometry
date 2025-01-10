@@ -17,6 +17,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Geometry
 {
@@ -44,6 +45,59 @@ namespace Geometry
 		//*************************************************************************
 		//*	Public																																*
 		//*************************************************************************
+		//*-----------------------------------------------------------------------*
+		//* GetCubicBoundingBox																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the bounding box area for the supplied cubic Bezier curve.
+		/// </summary>
+		/// <param name="p0">
+		/// The starting point.
+		/// </param>
+		/// <param name="p1">
+		/// Control point 1.
+		/// </param>
+		/// <param name="p2">
+		/// Control point 2.
+		/// </param>
+		/// <param name="p3">
+		/// The ending point.
+		/// </param>
+		/// <param name="sampleCount">
+		/// Count of samples to take when generating the discrete curve edge.
+		/// </param>
+		/// <returns>
+		/// Reference to the bounding box area of the provided cubic Bezier
+		/// curve, if legitimate. Otherwise, an empty rectangle.
+		/// </returns>
+		public static FArea GetCubicBoundingBox(FPoint p0,
+			FPoint p1, FPoint p2, FPoint p3, int sampleCount)
+		{
+			float index = 0f;
+			float count = 0f;
+			FArea result = new FArea();
+			List<FPoint> samples = null;
+			float t = 0f;
+
+			if(p0 != null && p1 != null && p2 != null && p3 != null &&
+				sampleCount > 3)
+			{
+				samples = new List<FPoint>();
+				count = sampleCount;
+				for(index = 0f; index < count; index ++)
+				{
+					t = index / count;
+					samples.Add(GetCubicCurvePoint(p0, p1, p2, p3, t));
+				}
+				result.X = samples.Min(x => x.X);
+				result.Y = samples.Min(y => y.Y);
+				result.Right = samples.Max(x => x.X);
+				result.Bottom = samples.Max(y => y.Y);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
 		//*-----------------------------------------------------------------------*
 		//* GetCubicCurvePoint																										*
 		//*-----------------------------------------------------------------------*
@@ -187,6 +241,41 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetLinearBoundingBox																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the bounding box area for the supplied linear Bezier curve,
+		/// aka a straight line.
+		/// </summary>
+		/// <param name="p0">
+		/// Reference to the starting point.
+		/// </param>
+		/// <param name="p1">
+		/// Reference to the ending point.
+		/// </param>
+		/// <returns>
+		/// Reference to the bounding box area of the provided linear Bezier
+		/// curve, if legitimate. Otherwise, an empty rectangle.
+		/// </returns>
+		public static FArea GetLinearBoundingBox(FPoint p0, FPoint p1)
+		{
+			FArea result = new FArea();
+			List<FPoint> samples = null;
+
+			if(p0 != null && p1 != null)
+			{
+				samples.Add(p0);
+				samples.Add(p1);
+				result.X = samples.Min(x => x.X);
+				result.Y = samples.Min(y => y.Y);
+				result.Right = samples.Max(x => x.X);
+				result.Bottom = samples.Max(y => y.Y);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* GetLinearCurvePoint																										*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -256,6 +345,56 @@ namespace Geometry
 					time = (float)index / (float)count;
 					result.Add(GetLinearCurvePoint(p0, p1, time));
 				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetQuadraticBoundingBox																								*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the bounding box area for the supplied quadratic Bezier curve.
+		/// </summary>
+		/// <param name="p0">
+		/// The starting point.
+		/// </param>
+		/// <param name="p1">
+		/// Control point 1.
+		/// </param>
+		/// <param name="p2">
+		/// Reference to the ending point.
+		/// </param>
+		/// <param name="sampleCount">
+		/// Count of samples to take when generating the discrete curve edge.
+		/// </param>
+		/// <returns>
+		/// Reference to the bounding box area of the provided quadratic Bezier
+		/// curve, if legitimate. Otherwise, an empty rectangle.
+		/// </returns>
+		public static FArea GetQuadraticBoundingBox(FPoint p0,
+			FPoint p1, FPoint p2, int sampleCount)
+		{
+			float index = 0f;
+			float count = 0f;
+			FArea result = new FArea();
+			List<FPoint> samples = null;
+			float t = 0f;
+
+			if(p0 != null && p1 != null && p2 != null &&
+				sampleCount > 3)
+			{
+				samples = new List<FPoint>();
+				count = sampleCount;
+				for(index = 0f; index < count; index++)
+				{
+					t = index / count;
+					samples.Add(GetQuadraticCurvePoint(p0, p1, p2, t));
+				}
+				result.X = samples.Min(x => x.X);
+				result.Y = samples.Min(y => y.Y);
+				result.Right = samples.Max(x => x.X);
+				result.Bottom = samples.Max(y => y.Y);
 			}
 			return result;
 		}

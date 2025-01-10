@@ -260,7 +260,7 @@ namespace Geometry
 			//console.log("AngleSweep: " + angleSweep);
 
 			points = SegmentCurve(centerPoint, radius,
-				RadToDeg(ReduceRad(angleStart)), RadToDeg(angleSweep),
+				RadToDeg(NormalizeRad(angleStart)), RadToDeg(angleSweep),
 				sweepStep);
 			return points;
 		}
@@ -1147,6 +1147,41 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	NormalizeRad																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Normalize the number of radians to a single turn.
+		/// </summary>
+		/// <param name="angle">
+		/// Angle, in radians.
+		/// </param>
+		/// <returns>
+		/// Angle, in radians, between 0 and 2pi.
+		/// </returns>
+		public static float NormalizeRad(float angle)
+		{
+			double result = angle;
+			if(angle >= 0)
+			{
+				//	Positive.
+				while(result > (Math.PI * 2))
+				{
+					result -= (Math.PI * 2);
+				}
+			}
+			else
+			{
+				//	Negative.
+				while(result < 0)
+				{
+					result += (Math.PI * 2);
+				}
+			}
+			return (float)result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	RadToDeg																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -1176,26 +1211,10 @@ namespace Geometry
 		/// <returns>
 		/// Angle, in radians, between 0 and 2pi.
 		/// </returns>
+		[Obsolete("ReduceRad is depreciated, please use NormalizeRad instead.")]
 		public static float ReduceRad(float angle)
 		{
-			double result = angle;
-			if(angle >= 0)
-			{
-				//	Positive.
-				while(result > (Math.PI * 2))
-				{
-					result -= (Math.PI * 2);
-				}
-			}
-			else
-			{
-				//	Negative.
-				while(result < 0)
-				{
-					result += (Math.PI * 2);
-				}
-			}
-			return (float)result;
+			return NormalizeRad(angle);
 		}
 		//*-----------------------------------------------------------------------*
 

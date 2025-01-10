@@ -39,6 +39,40 @@ namespace Geometry
 		//*	Public																																*
 		//*************************************************************************
 		//*-----------------------------------------------------------------------*
+		//* GetLinePoint																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the point on the line relative to a decimal portion of the
+		/// distance t between point 0.0 and point 1.0.
+		/// </summary>
+		/// <param name="point0">
+		/// Reference to the first line point.
+		/// </param>
+		/// <param name="point1">
+		/// Reference to the second line point.
+		/// </param>
+		/// <param name="t">
+		/// The decimal portion along the line upon which the return point
+		/// rests, relative to point 1. In other words, on a line from 0, 0 to
+		/// 100, 100, a value of t = 1 would yield the point 100, 100.
+		/// </param>
+		/// <returns>
+		/// A reference to the point on the line, relative to point 1,
+		/// identified by t, if found. Otherwise, null.
+		/// </returns>
+		public static FPoint GetLinePoint(FPoint point0, FPoint point1, float t)
+		{
+			FPoint result = null;
+
+			if(point0 != null && point1 != null)
+			{
+				result = Lerp(point0, point1, t);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* Lerp																																	*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
