@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Geometry
 {
@@ -559,7 +560,7 @@ namespace Geometry
 		/// Second point.
 		/// </param>
 		/// <param name="orientation">
-		/// Path orientation.
+		/// Path orientation, relative to a natural arc.
 		/// </param>
 		/// <param name="thickness">
 		/// Thickness of the parallel area.
@@ -569,7 +570,7 @@ namespace Geometry
 		/// line, with reference to the specified thickness.
 		/// </returns>
 		public static FLine GetInsideParallelLine(FPoint pointA, FPoint pointB,
-			WindingOrientationEnum orientation, float thickness)
+			ArcDirectionEnum orientation, float thickness)
 		{
 			float angle = 0f;
 			FLine result = new FLine();
@@ -586,13 +587,13 @@ namespace Geometry
 				else
 				{
 					angle = GetLineAngle(pointA, pointB);
-					if(orientation == WindingOrientationEnum.Clockwise)
+					if(orientation == ArcDirectionEnum.Increasing)
 					{
-						tangent = angle - (float)(0.5 * Math.PI);
+						tangent = angle + (float)(0.5 * Math.PI);
 					}
 					else
 					{
-						tangent = angle + (float)(0.5 * Math.PI);
+						tangent = angle - (float)(0.5 * Math.PI);
 					}
 					if(tangent < 0)
 					{
@@ -1087,28 +1088,35 @@ namespace Geometry
 		//*	GetPathOrientation																										*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Return the direction of point declaration in the shape, in terms of
-		/// clockwise or counter-clockwise.
+		/// Return the direction of point progression within the shape, in terms
+		/// of whether the angle is increasing or decreasing in angle relative to
+		/// a natural arc.
 		/// </summary>
 		/// <param name="path">
 		/// Reference to the collection of points for which a winding orientation
 		/// will be found.
 		/// </param>
 		/// <returns>
-		/// Path orientation of the shape.
+		/// Path orientation of the shape, relative to the angular progression of
+		/// a natural arc.
 		/// </returns>
 		/// <remarks>
+		/// <para>
+		/// This method is compatible with either Display or Cartesian space.
+		/// </para>
+		/// <para>
 		/// Zero points or a single point in the collection will result
 		/// in an orientation of None.
+		/// </para>
 		/// </remarks>
-		public static WindingOrientationEnum GetPathOrientation(
+		public static ArcDirectionEnum GetPathOrientation(
 			List<FPoint> path)
 		{
 			int count = 0;
 			int index = 0;
 			FPoint point1 = null;
 			FPoint point2 = null;
-			WindingOrientationEnum result = WindingOrientationEnum.None;
+			ArcDirectionEnum result = ArcDirectionEnum.None;
 			List<double> tallies = new List<double>();
 			double total = 0d;
 
@@ -1135,11 +1143,11 @@ namespace Geometry
 				total = tallies.Sum();
 				if(total >= 0)
 				{
-					result = WindingOrientationEnum.Clockwise;
+					result = ArcDirectionEnum.Increasing;
 				}
 				else
 				{
-					result = WindingOrientationEnum.CounterClockwise;
+					result = ArcDirectionEnum.Decreasing;
 				}
 			}
 			return result;

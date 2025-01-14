@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 using Geometry;
@@ -37,6 +38,85 @@ namespace GeometryExample
 		//*************************************************************************
 		//*	Private																																*
 		//*************************************************************************
+		//*-----------------------------------------------------------------------*
+		//* TestArcBoundingBox																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test the Arc bounding box by validating all 40 possible combinations.
+		/// </summary>
+		private static void TestArcBoundingBox()
+		{
+			float angleEnd = 0f;
+			float angleStart = 0f;
+			FArea area = null;
+			FPoint center = new FPoint(0, 0);
+			int count = 0;
+			int index = 0;
+			FPoint[,] points = new FPoint[,]
+			{
+				{ new FPoint(10f, 10f), new FPoint(11f, 10f) },
+				{ new FPoint(10f, 10f), new FPoint(8f, 10f) },
+				{ new FPoint(10f, 10f), new FPoint(-10f, 10f) },
+				{ new FPoint(10f, 10f), new FPoint(-10f, -10f) },
+				{ new FPoint(10f, 10f), new FPoint(10f, -10f) },
+				{ new FPoint(-10f, 10f), new FPoint(-11f, 10f) },
+				{ new FPoint(-10f, 10f), new FPoint(-8f, 10f) },
+				{ new FPoint(-10f, 10f), new FPoint(-10f, -10f) },
+				{ new FPoint(-10f, 10f), new FPoint(10f, -10f) },
+				{ new FPoint(-10f, 10f), new FPoint(10f, 10f) },
+				{ new FPoint(-10f, -10f), new FPoint(-10f, -8f) },
+				{ new FPoint(-10f, -10f), new FPoint(-10f, -11f) },
+				{ new FPoint(-10f, -10f), new FPoint(10f, -10f) },
+				{ new FPoint(-10f, -10f), new FPoint(10f, 10f) },
+				{ new FPoint(-10f, -10f), new FPoint(-10f, 10f) },
+				{ new FPoint(10f, -10f), new FPoint(10f, -8f) },
+				{ new FPoint(10f, -10f), new FPoint(10f, -11f) },
+				{ new FPoint(10f, -10f), new FPoint(10f, 10f) },
+				{ new FPoint(10f, -10f), new FPoint(-10f, 10f) },
+				{ new FPoint(10f, -10f), new FPoint(-10f, -10f) },
+			};
+			ArcDirectionEnum winding = ArcDirectionEnum.None;
+
+			Console.WriteLine("** Testing arc bounding boxes **");
+			count = points.GetLength(0);
+			Console.WriteLine("Forward progression...");
+			winding = ArcDirectionEnum.Forward;
+			for(index = 0; index < count; index++)
+			{
+				angleStart =
+					Trig.RadToDeg(Trig.GetLineAngle(center, points[index, 0]));
+				angleEnd =
+					Trig.RadToDeg(Trig.GetLineAngle(center, points[index, 1]));
+				area = Circle.GetArcBoundingBox(
+					center, points[index, 0], points[index, 1], winding);
+				Console.Write($" {points[index, 0].X}, {points[index, 0].Y} -> ");
+				Console.Write($"{points[index, 1].X}, {points[index, 1].Y}: ");
+				Console.Write($"{angleStart:0.###}deg - {angleEnd:0.###}deg: ");
+				Console.Write($"L:{area.Left:0.###}, T:{area.Top:0.###}, ");
+				Console.Write($"R:{area.Right:0.###}, B:{area.Bottom:0.###}: ");
+				Console.WriteLine($"W:{area.Width:0.###}, H:{area.Height:0.###}");
+			}
+			Console.WriteLine("Reverse progression...");
+			winding = ArcDirectionEnum.Reverse;
+			for(index = 0; index < count; index++)
+			{
+				angleStart =
+					Trig.RadToDeg(Trig.GetLineAngle(center, points[index, 0]));
+				angleEnd =
+					Trig.RadToDeg(Trig.GetLineAngle(center, points[index, 1]));
+				area = Circle.GetArcBoundingBox(
+					center, points[index, 0], points[index, 1], winding);
+				Console.Write($" {points[index, 0].X}, {points[index, 0].Y} -> ");
+				Console.Write($"{points[index, 1].X}, {points[index, 1].Y}: ");
+				Console.Write($"{angleStart:0.###}deg - {angleEnd:0.###}deg: ");
+				Console.Write($"L:{area.Left:0.###}, T:{area.Top:0.###}, ");
+				Console.Write($"R:{area.Right:0.###}, B:{area.Bottom:0.###}: ");
+				Console.WriteLine($"W:{area.Width:0.###}, H:{area.Height:0.###}");
+			}
+			Console.WriteLine("");
+		}
+		//*-----------------------------------------------------------------------*
+
 		//*************************************************************************
 		//*	Protected																															*
 		//*************************************************************************
@@ -149,9 +229,6 @@ namespace GeometryExample
 						break;
 					case GeometryExampleActionType.None:
 					default:
-						message.Append("No action has been specified. ");
-						message.AppendLine("Please provide an /action parameter.");
-						bShowHelp = true;
 						break;
 				}
 			}
@@ -242,6 +319,9 @@ namespace GeometryExample
 			List<FPoint> points = null;
 			float time = 0f;
 			int index = 0;
+
+			//	Test Arc bounding boxes.
+			TestArcBoundingBox();
 
 			Console.WriteLine($"**{mAction}**");
 			switch(mAction)

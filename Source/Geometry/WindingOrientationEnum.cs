@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c). 1997 - 2025 Daniel Patterson, MCSD (danielanywhere).
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Geometry
@@ -27,6 +28,8 @@ namespace Geometry
 	/// <summary>
 	/// Enumeration of possible types of winding orientation.
 	/// </summary>
+	[Obsolete("This enumeration is depreciated. Please use ArcDirectionEnum " +
+		"instead.")]
 	public enum WindingOrientationEnum
 	{
 		/// <summary>
