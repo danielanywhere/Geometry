@@ -34,7 +34,7 @@ namespace Geometry
 	/// ArcDirectionEnum.Forward is a counterclockwise progression from the
 	/// positive-going ray along the X-axis, while in Display space, the value
 	/// ArcDirectionEnum.Forward represents a clockwise progression from the
-	/// positive-going rad along the X-axis.
+	/// positive-going ray along the X-axis.
 	/// </remarks>
 	public enum ArcDirectionEnum
 	{

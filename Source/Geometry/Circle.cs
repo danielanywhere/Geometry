@@ -317,9 +317,9 @@ namespace Geometry
 		/// the arc, if any where found. Otherwise, an empty array.
 		/// </returns>
 		/// <remarks>
-		/// In this version, quadrant 0 is the area in X+, Y+,
-		/// quadrant 1 is X-, Y-, quadrant 2 is X-, Y+,
-		/// and quadrant 3 is X+, Y+.
+		/// In this version, quadrant 0 is the area in +X, +Y,
+		/// quadrant 1 is -X, +Y, quadrant 2 is -X, -Y,
+		/// and quadrant 3 is +X, -Y.
 		/// </remarks>
 		public static int[] GetQuadrantCrossings(float startAngle, float endAngle,
 			ArcDirectionEnum windingDirection)
@@ -369,9 +369,9 @@ namespace Geometry
 		/// the arc, if any where found. Otherwise, an empty array.
 		/// </returns>
 		/// <remarks>
-		/// In this version, quadrant 0 is the area in X+, Y+,
-		/// quadrant 1 is X-, Y-, quadrant 2 is X-, Y+,
-		/// and quadrant 3 is X+, Y+.
+		/// In this version, quadrant 0 is the area in +X, +Y,
+		/// quadrant 1 is -X, +Y, quadrant 2 is -X, -Y,
+		/// and quadrant 3 is +X, -Y.
 		/// </remarks>
 		public static int[] GetQuadrantsOccupied(float startAngle, float endAngle,
 			ArcDirectionEnum windingDirection)
