@@ -9,7 +9,7 @@ Perform the following tasks when publishing a new version of *Dans.Geometry.Libr
  - [ ] Update **Source/NuGet/README.md**.
  - [ ] Open **Scripts/GeometryDocumentation.shfbproj** and update the version number in **HelpFileVersion**.
  - [ ] Open **Scripts/GeometryDocumentation.shfbproj** in SHFB and compile the new version of the API.
- - [ ] Check in API documentation on **danielanywhere.github.io**.
- - [ ] Check in source changes on **danielanywhere/Geometry**.
+ - [ ] Check in API documentation on **danielanywhere.github.io**. Use the summary 'Geometry API updates for version {Version}'.
+ - [ ] Check in source changes on **danielanywhere/Geometry**. Use the summary 'Updates for version {Version}'.
  - [ ] Upload new release version to **NuGet**.
 
