@@ -17,31 +17,31 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Geometry
 {
 	//*-------------------------------------------------------------------------*
-	//*	WindingOrientationEnum																									*
+	//*	DrawingSpaceEnum																												*
 	//*-------------------------------------------------------------------------*
 	/// <summary>
-	/// Enumeration of possible types of winding orientation.
+	/// Enumeration of recognized drawing spaces.
 	/// </summary>
-	public enum WindingOrientationEnum
+	public enum DrawingSpaceEnum
 	{
 		/// <summary>
-		/// Unknown or undefined.
+		/// No drawing space specified, or unknown.
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Shape is oriented in a clockwise path.
+		/// Cartesian space. TR:+X,+Y, TL:-X,+Y, BL:-X,-Y, BR:+X,-Y.
 		/// </summary>
-		Clockwise,
+		Cartesian,
 		/// <summary>
-		/// Shape is oriented in a counter-clockwise path.
+		/// Display space. BR:+X,+Y, BL:-X,+Y, TL:-X,-Y, TR:+X,-Y.
 		/// </summary>
-		CounterClockwise
+		Display
 	}
 	//*-------------------------------------------------------------------------*
+
 }

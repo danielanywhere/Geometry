@@ -247,6 +247,74 @@ namespace Geometry
 			}
 			return result;
 		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return a reference to the bounding box for a circular arc being
+		/// measured by center point, start point, and end point, with a winding
+		/// direction.
+		/// </summary>
+		/// <param name="center">
+		/// Reference to the circle center.
+		/// </param>
+		/// <param name="start">
+		/// Reference to the start point.
+		/// </param>
+		/// <param name="end">
+		/// Reference to the end point.
+		/// </param>
+		/// <param name="winding">
+		/// The winding direction taken to create the arc.
+		/// </param>
+		/// <param name="drawingSpace">
+		/// The drawing space in which the winding direction applies.
+		/// Default = Display.
+		/// </param>
+		/// <returns>
+		/// Reference to the bounding box occupied by the specified arc, if
+		/// legitimate values were presented. Otherwise, a empty rectangle.
+		/// </returns>
+		public static FArea GetArcBoundingBox(FPoint center,
+			FPoint start, FPoint end, WindingOrientationEnum winding,
+			DrawingSpaceEnum drawingSpace = DrawingSpaceEnum.Display)
+		{
+			ArcDirectionEnum angularRevolution = ArcDirectionEnum.None;
+			FArea result = null;
+
+			switch(winding)
+			{
+				case WindingOrientationEnum.Clockwise:
+					switch(drawingSpace)
+					{
+						case DrawingSpaceEnum.Cartesian:
+							angularRevolution = ArcDirectionEnum.Reverse;
+							break;
+						case DrawingSpaceEnum.Display:
+							angularRevolution = ArcDirectionEnum.Forward;
+							break;
+					}
+					break;
+				case WindingOrientationEnum.CounterClockwise:
+					switch(drawingSpace)
+					{
+						case DrawingSpaceEnum.Cartesian:
+							angularRevolution = ArcDirectionEnum.Forward;
+							break;
+						case DrawingSpaceEnum.Display:
+							angularRevolution = ArcDirectionEnum.Reverse;
+							break;
+					}
+					break;
+			}
+			if(angularRevolution != ArcDirectionEnum.None)
+			{
+				result = GetArcBoundingBox(center, start, end, angularRevolution);
+			}
+			if(result == null)
+			{
+				result = new FArea();
+			}
+			return result;
+		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
@@ -346,6 +414,75 @@ namespace Geometry
 			}
 			return result;
 		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return an array containing the ordinal quadrant crossings of the
+		/// quadrants occupied by the specified arc.
+		/// </summary>
+		/// <param name="startAngle">
+		/// The starting angle, in radians.
+		/// </param>
+		/// <param name="endAngle">
+		/// The ending angle, in radians.
+		/// </param>
+		/// <param name="windingDirection">
+		/// The winding direction taken by the arc.
+		/// </param>
+		/// <param name="drawingSpace">
+		/// The drawing space for which this request is being prepared.
+		/// Default = Display.
+		/// </param>
+		/// <returns>
+		/// Reference to an array of ordinal quadrants crossed out of by
+		/// the arc, if any where found. Otherwise, an empty array.
+		/// </returns>
+		/// <remarks>
+		/// In this version, quadrant 0 is the area in +X, +Y,
+		/// quadrant 1 is -X, +Y, quadrant 2 is -X, -Y,
+		/// and quadrant 3 is +X, -Y.
+		/// </remarks>
+		public static int[] GetQuadrantCrossings(float startAngle, float endAngle,
+			WindingOrientationEnum windingDirection,
+			DrawingSpaceEnum drawingSpace = DrawingSpaceEnum.Display)
+		{
+			int[] result = null;
+
+
+			switch(windingDirection)
+			{
+				case WindingOrientationEnum.Clockwise:
+					switch(drawingSpace)
+					{
+						case DrawingSpaceEnum.Cartesian:
+							result = GetQuadrantCrossings(startAngle, endAngle,
+								ArcDirectionEnum.Decreasing);
+							break;
+						case DrawingSpaceEnum.Display:
+							result = GetQuadrantCrossings(startAngle, endAngle,
+								ArcDirectionEnum.Increasing);
+							break;
+					}
+					break;
+				case WindingOrientationEnum.CounterClockwise:
+					switch(drawingSpace)
+					{
+						case DrawingSpaceEnum.Cartesian:
+							result = GetQuadrantCrossings(startAngle, endAngle,
+								ArcDirectionEnum.Increasing);
+							break;
+						case DrawingSpaceEnum.Display:
+							result = GetQuadrantCrossings(startAngle, endAngle,
+								ArcDirectionEnum.Decreasing);
+							break;
+					}
+					break;
+			}
+			if(result == null)
+			{
+				result = new int[0];
+			}
+			return result;
+		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
@@ -390,6 +527,74 @@ namespace Geometry
 					break;
 				case ArcDirectionEnum.Reverse:
 					result = mQuadrantsReverse[quadrantIndex];
+					break;
+			}
+			if(result == null)
+			{
+				result = new int[0];
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return an array containing the ordinal quadrant positions of the
+		/// quadrants occupied by the specified arc.
+		/// </summary>
+		/// <param name="startAngle">
+		/// The starting angle, in radians.
+		/// </param>
+		/// <param name="endAngle">
+		/// The ending angle, in radians.
+		/// </param>
+		/// <param name="windingDirection">
+		/// The winding direction taken by the arc.
+		/// </param>
+		/// <param name="drawingSpace">
+		/// The drawing space for which this request is being prepared.
+		/// Default = Display.
+		/// </param>
+		/// <returns>
+		/// Reference to an array of ordinal quadrant positions occupied by
+		/// the arc, if any where found. Otherwise, an empty array.
+		/// </returns>
+		/// <remarks>
+		/// In this version, quadrant 0 is the area in +X, +Y,
+		/// quadrant 1 is -X, +Y, quadrant 2 is -X, -Y,
+		/// and quadrant 3 is +X, -Y.
+		/// </remarks>
+		public static int[] GetQuadrantsOccupied(float startAngle, float endAngle,
+			WindingOrientationEnum windingDirection,
+			DrawingSpaceEnum drawingSpace = DrawingSpaceEnum.Display)
+		{
+			int[] result = null;
+
+			switch(windingDirection)
+			{
+				case WindingOrientationEnum.Clockwise:
+					switch(drawingSpace)
+					{
+						case DrawingSpaceEnum.Cartesian:
+							result = GetQuadrantsOccupied(startAngle, endAngle,
+								ArcDirectionEnum.Reverse);
+							break;
+						case DrawingSpaceEnum.Display:
+							result = GetQuadrantsOccupied(startAngle, endAngle,
+								ArcDirectionEnum.Forward);
+							break;
+					}
+					break;
+				case WindingOrientationEnum.CounterClockwise:
+					switch(drawingSpace)
+					{
+						case DrawingSpaceEnum.Cartesian:
+							result = GetQuadrantsOccupied(startAngle, endAngle,
+								ArcDirectionEnum.Forward);
+							break;
+						case DrawingSpaceEnum.Display:
+							result = GetQuadrantsOccupied(startAngle, endAngle,
+								ArcDirectionEnum.Reverse);
+							break;
+					}
 					break;
 			}
 			if(result == null)

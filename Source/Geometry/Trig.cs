@@ -66,6 +66,10 @@ namespace Geometry
 		/// Returns reference to a collection of points from the start of the
 		/// curve to the end.
 		/// </returns>
+		/// <remarks>
+		/// To match AutoCAD's hard-coded angular orientation, this method
+		/// always uses the Cartesian drawing space.
+		/// </remarks>
 		public static List<FPoint> CalcAutoCADBulge(
 			FPoint previousPoint, FPoint currentPoint,
 			float bulge, float sweepStep)
@@ -79,7 +83,8 @@ namespace Geometry
 			float bulgeAngleRemain = 0;
 			float bulgeAntiAngle = 0;
 			FPoint centerPoint = new FPoint(0, 0);
-			DirectionEnum direction = GetDirection(previousPoint, currentPoint);
+			DirectionEnum direction =
+				GetDirection(previousPoint, currentPoint, DrawingSpaceEnum.Cartesian);
 			float lineAngle = 0;
 			float lineDist1 = 0;
 			float lineDist2 = 0;
@@ -518,29 +523,55 @@ namespace Geometry
 		/// <param name="endPoint">
 		/// End coordinates.
 		/// </param>
+		/// <param name="drawingSpace">
+		/// The drawing space for which the result is being prepared.
+		/// Default = Display.
+		/// </param>
 		/// <returns>
 		/// Direction mask with 8 point resolution.
 		/// </returns>
 		public static DirectionEnum GetDirection(FPoint startPoint,
-			FPoint endPoint)
+			FPoint endPoint,
+			DrawingSpaceEnum drawingSpace = DrawingSpaceEnum.Display)
 		{
 			DirectionEnum result = DirectionEnum.None;
 
-			if(endPoint.X > startPoint.X)
+			switch(drawingSpace)
 			{
-				result |= DirectionEnum.East;
+				case DrawingSpaceEnum.Cartesian:
+				case DrawingSpaceEnum.Display:
+					if(endPoint.X > startPoint.X)
+					{
+						result |= DirectionEnum.East;
+					}
+					else if(endPoint.X < startPoint.X)
+					{
+						result |= DirectionEnum.West;
+					}
+					break;
 			}
-			else if(endPoint.X < startPoint.X)
+			switch(drawingSpace)
 			{
-				result |= DirectionEnum.West;
-			}
-			if(endPoint.Y > startPoint.Y)
-			{
-				result |= DirectionEnum.North;
-			}
-			else if(endPoint.Y < startPoint.Y)
-			{
-				result |= DirectionEnum.South;
+				case DrawingSpaceEnum.Cartesian:
+					if(endPoint.Y > startPoint.Y)
+					{
+						result |= DirectionEnum.North;
+					}
+					else if(endPoint.Y < startPoint.Y)
+					{
+						result |= DirectionEnum.South;
+					}
+					break;
+				case DrawingSpaceEnum.Display:
+					if(endPoint.Y > startPoint.Y)
+					{
+						result |= DirectionEnum.South;
+					}
+					else if(endPoint.Y < startPoint.Y)
+					{
+						result |= DirectionEnum.North;
+					}
+					break;
 			}
 			return result;
 		}
@@ -612,6 +643,72 @@ namespace Geometry
 					result.PointB.Y =
 						pointB.Y + GetLineOppFromAngHyp(tangent, thickness);
 				}
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the line parallel to the caller's, located to the inside of the
+		/// edge.
+		/// </summary>
+		/// <param name="pointA">
+		/// First point.
+		/// </param>
+		/// <param name="pointB">
+		/// Second point.
+		/// </param>
+		/// <param name="thickness">
+		/// Thickness of the parallel area.
+		/// </param>
+		/// <param name="orientation">
+		/// Path orientation, relative to the specified drawing space.
+		/// </param>
+		/// <param name="drawingSpace">
+		/// Drawing space for which the results are being prepared.
+		/// Default = Display.
+		/// </param>
+		/// <returns>
+		/// Reference to a line parallel to and inside of the caller's specified
+		/// line, with reference to the specified thickness.
+		/// </returns>
+		public static FLine GetInsideParallelLine(FPoint pointA, FPoint pointB,
+			float thickness, WindingOrientationEnum orientation,
+			DrawingSpaceEnum drawingSpace = DrawingSpaceEnum.Display)
+		{
+			FLine result = null;
+
+			switch(orientation)
+			{
+				case WindingOrientationEnum.Clockwise:
+					switch(drawingSpace)
+					{
+						case DrawingSpaceEnum.Cartesian:
+							result = GetInsideParallelLine(pointA, pointB,
+								ArcDirectionEnum.Reverse, thickness);
+							break;
+						case DrawingSpaceEnum.Display:
+							result = GetInsideParallelLine(pointA, pointB,
+								ArcDirectionEnum.Forward, thickness);
+							break;
+					}
+					break;
+				case WindingOrientationEnum.CounterClockwise:
+					switch(drawingSpace)
+					{
+						case DrawingSpaceEnum.Cartesian:
+							result = GetInsideParallelLine(pointA, pointB,
+								ArcDirectionEnum.Forward, thickness);
+							break;
+						case DrawingSpaceEnum.Display:
+							result = GetInsideParallelLine(pointA, pointB,
+								ArcDirectionEnum.Reverse, thickness);
+							break;
+					}
+					break;
+			}
+			if(result == null)
+			{
+				result = new FLine();
 			}
 			return result;
 		}
@@ -1152,6 +1249,63 @@ namespace Geometry
 			}
 			return result;
 		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the direction of point progression within the shape, in terms
+		/// of clockwise or counterclockwise rotation.
+		/// </summary>
+		/// <param name="path">
+		/// Reference to the collection of points for which a winding orientation
+		/// will be found.
+		/// </param>
+		/// <param name="drawingSpace">
+		/// The drawing space for which the results are being prepared.
+		/// Default = Display.
+		/// </param>
+		/// <returns>
+		/// Path orientation of the shape, relative to the angular progression of
+		/// a natural arc.
+		/// </returns>
+		/// <remarks>
+		/// <para>
+		/// Zero points or a single point in the collection will result
+		/// in an orientation of None.
+		/// </para>
+		/// </remarks>
+		public static WindingOrientationEnum GetPathOrientation(
+			List<FPoint> path,
+			DrawingSpaceEnum drawingSpace = DrawingSpaceEnum.Display)
+		{
+			ArcDirectionEnum natural = GetPathOrientation(path);
+			WindingOrientationEnum result = WindingOrientationEnum.None;
+
+			switch(drawingSpace)
+			{
+				case DrawingSpaceEnum.Cartesian:
+					switch(natural)
+					{
+						case ArcDirectionEnum.Forward:
+							result = WindingOrientationEnum.CounterClockwise;
+							break;
+						case ArcDirectionEnum.Reverse:
+							result = WindingOrientationEnum.Clockwise;
+							break;
+					}
+					break;
+				case DrawingSpaceEnum.Display:
+					switch(natural)
+					{
+						case ArcDirectionEnum.Forward:
+							result = WindingOrientationEnum.Clockwise;
+							break;
+						case ArcDirectionEnum.Reverse:
+							result = WindingOrientationEnum.CounterClockwise;
+							break;
+					}
+					break;
+			}
+			return result;
+		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
@@ -1252,11 +1406,11 @@ namespace Geometry
 		/// Collection of points, including the start and end.
 		/// </returns>
 		/// <remarks>
-		/// All counter-clockwise sweeps are counted in incrementing steps while
-		/// all clockwise sweeps are counted in decrementing steps.
+		/// All increasing sweeps are counted in incrementing steps while
+		/// all decreasing sweeps are counted in decrementing steps.
 		/// If you need for the ray to pass through the 0 point during
-		/// generation, as in 350 to 10 in a clockwise direction, or 10 to 350 in a
-		/// counter-clockwise direction, then set the destination angle higher than
+		/// generation, as in 350 to 10 in a decreasing direction, or 10 to 350 in
+		/// an increasing direction, then set the destination angle higher than
 		/// 360 or less than 0, as appropriate for the direction of cast,
 		/// respectively.
 		/// </remarks>
@@ -1275,7 +1429,7 @@ namespace Geometry
 
 			if(sweepRad >= 0)
 			{
-				//	Counter-clockwise.
+				//	Increasing.
 				for(currentRad = startRad;
 					currentRad < stopRad;
 					currentRad += stepRad)
@@ -1289,7 +1443,7 @@ namespace Geometry
 			}
 			else
 			{
-				//	Clockwise.
+				//	Decreasing.
 				for(currentRad = startRad;
 					currentRad > stopRad;
 					currentRad -= stepRad)
