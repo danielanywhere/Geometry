@@ -17,7 +17,8 @@ You can jump to any section of this page from the following list.
 
 -   [Installation](#installation).
 
--   [Usage Notes](#usage-notes).
+-   [Usage Notes](#usage-notes). Including a link to the full API
+    documentation here on GitHub.
 
 <p>&nbsp;</p>
 
@@ -65,20 +66,79 @@ prompting me to convert the library to C# in 2001. Since then, it has
 been an integral tool in my internal .NET projects, continuously
 evolving to meet new challenges.
 
-The current version introduces three key components:
+<p>&nbsp;</p>
 
-1.  **Trig Class**: Equipped with all the standard tools for working
-    with angles and trigonometric functions, it offers seamless support
-    for angular computations.
+### Geometric Descriptors
 
-2.  **Linear Class**: Focused on basic linear interpolation, this class
-    includes overloads of the Lerp method, making it simple to
-    interpolate scalar values or points with precision.
+In the current version, you will find these primitive geometric
+descriptor classes that can be used generically anywhere:
 
-3.  **Bezier Class**: A high-performance, lightweight module for
+-   **FArea**. Many of the same competencies as the more familiar
+    RectangleF, but with support for negative area.
+
+-   **FLine**. A floating point line.
+
+-   **FMatrix2**. A 2x2 linear matrix.
+
+-   **FMatrix3**. A 3x3 affine matrix.
+
+-   **FPath**. Collection of single floating-point points.
+
+-   **FPoint**. A single floating-point coordinate.
+
+-   **FScale**. A single floating-point scaling value.
+
+-   **FSize**. A single floating-point size.
+
+-   **FVector2**. A single floating-point 2-position array vector for
+    use with matrix operations.
+
+-   **FVector3**. A single floating-point 3-position array vector for
+    use with matrix operations.
+
+Our geometric descriptors differ from others on two main features.
+First, all of our geometric descriptors are first-class objects, which
+allows you to pass everything by reference, maintain multiple references
+to the same coordinate, whose member values can be changed singularly
+from everywhere, and other benefits one gets from single instance
+storage. Secondly, many of our geometric descriptors provide event-based
+support for changing values and other notable circumstances.
+
+<p>&nbsp;</p>
+
+### Utility Classes
+
+The Geometry library also contains the following utility classes for
+reaching answers in different categories.
+
+-   **Bezier Class**. A high-performance, lightweight module for
     identifying points along any type of Bézier curve. Whether your
     focus is precision or speed, this class delivers both, enabling
     quick and efficient calculations even for complex curves.
+
+-   **Circle Class**. Provides intuitive tools and methods for analyzing
+    and interacting with circles, including slice-based angles, bounding
+    boxes, quadrant mapping, and spatial quadrant analysis.
+
+-   **GeometryUtil Class**. Generally, the 'Util' class of my libraries
+    provide base singleton values and static support methods to all of
+    the classes within the associated library but I never mark these as
+    internal in case they might be helpful to anyone else using the
+    library.
+
+-   **Linear Class**. Focused on basic linear interpolation, this class
+    includes overloads of the Lerp method, making it simple to
+    interpolate scalar values or points with precision.
+
+-   **SlopeIntercept Class**. Although this class also utilizes linear
+    math, this class provides dedicated support for lines using the
+    *slope intercept* technique.
+
+-   **Trig Class**. Equipped with all the standard tools for working
+    with angles and trigonometric functions, it offers seamless support
+    for angular computations. Grandfathered in, this class also contains
+    some methods that might be more suitable in the newer Circle class.
+    Feedback on this would be welcome.
 
 Through these features, this library aims to simplify and streamline
 geometric operations, empowering you to tackle projects with confidence
