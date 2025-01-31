@@ -458,10 +458,14 @@ namespace Geometry
 
 			if(areas?.Count > 0)
 			{
-				result.mLeft = areas.Min(x => x.mLeft);
-				result.mTop = areas.Min(y => y.mTop);
-				result.mRight = areas.Max(x => x.mRight);
-				result.mBottom = areas.Max(y => y.mBottom);
+				result.mLeft =
+					Math.Min(areas.Min(x => x.mLeft), areas.Min(x => x.mRight));
+				result.mTop =
+					Math.Min(areas.Min(y => y.mTop), areas.Min(y => y.mBottom));
+				result.mRight =
+					Math.Max(areas.Max(x => x.mRight), areas.Max(x => x.Left));
+				result.mBottom =
+					Math.Max(areas.Max(y => y.mBottom), areas.Max(y => y.Top));
 			}
 			return result;
 		}
@@ -534,14 +538,32 @@ namespace Geometry
 		/// </returns>
 		public static bool Contains(FArea container, FArea subject)
 		{
+			float containerBottom = 0f;
+			float containerLeft = 0f;
+			float containerRight = 0f;
+			float containerTop = 0f;
 			bool result = false;
+			float subjectBottom = 0f;
+			float subjectLeft = 0f;
+			float subjectRight = 0f;
+			float subjectTop = 0f;
 
 			if(container != null && subject != null)
 			{
-				if(container.mLeft <= subject.mLeft &&
-					container.mTop <= subject.mTop &&
-					container.mRight >= subject.mRight &&
-					container.mBottom >= subject.mBottom)
+				//	Convert the areas to global space for comparison.
+				containerLeft = Math.Min(container.mLeft, container.mRight);
+				containerTop = Math.Min(container.mTop, container.mBottom);
+				containerRight = Math.Max(container.mRight, container.mLeft);
+				containerBottom = Math.Max(container.mBottom, container.mTop);
+				subjectLeft = Math.Min(subject.mLeft, subject.mRight);
+				subjectTop = Math.Min(subject.mTop, subject.mBottom);
+				subjectRight = Math.Max(subject.mRight, subject.mLeft);
+				subjectBottom = Math.Max(subject.mBottom, subject.mTop);
+
+				if(containerLeft <= subjectLeft &&
+					containerTop <= subjectTop &&
+					containerRight >= subjectRight &&
+					containerBottom >= subjectBottom)
 				{
 					result = true;
 				}
@@ -580,6 +602,58 @@ namespace Geometry
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
+
+		////*-----------------------------------------------------------------------*
+		////* GetLocation																														*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Return the location of the provided area as a floating point point.
+		///// </summary>
+		///// <param name="area">
+		///// Reference to the area to inspect.
+		///// </param>
+		///// <returns>
+		///// Reference to a new point containing the area's location, if legitimate.
+		///// Otherwise, an empty point.
+		///// </returns>
+		//public static FPoint GetLocation(FArea area)
+		//{
+		//	FPoint result = new FPoint();
+
+		//	if(area != null)
+		//	{
+		//		result.X = area.X;
+		//		result.Y = area.Y;
+		//	}
+		//	return result;
+		//}
+		////*-----------------------------------------------------------------------*
+
+		////*-----------------------------------------------------------------------*
+		////* GetSize																																*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Return the size of the provided area as a floating point size.
+		///// </summary>
+		///// <param name="area">
+		///// Reference to the area to inspect.
+		///// </param>
+		///// <returns>
+		///// Reference to the new size containing the area's size, if legitimate.
+		///// Otherwise, an empty size.
+		///// </returns>
+		//public static FSize GetSize(FArea area)
+		//{
+		//	FSize result = new FSize();
+
+		//	if(area != null)
+		//	{
+		//		result.Width = area.Width;
+		//		result.Height = area.Height;
+		//	}
+		//	return result;
+		//}
+		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//* HasVolume																															*
@@ -675,6 +749,33 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* IsEmpty																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the provided area is empty.
+		/// </summary>
+		/// <param name="area">
+		/// Reference to the area to inspect.
+		/// </param>
+		/// <returns>
+		/// True if the specified area is empty. Otherwise, false.
+		/// </returns>
+		public static bool IsEmpty(FArea area)
+		{
+			bool result = true;
+
+			if(area != null)
+			{
+				result = (area.mLeft == 0f &&
+					area.mRight == 0f &&
+					area.mTop == 0f &&
+					area.mBottom == 0f);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	Left																																	*
 		//*-----------------------------------------------------------------------*
 		private float mLeft = 0f;
@@ -729,7 +830,7 @@ namespace Geometry
 
 			if(area != null)
 			{
-				result = new FPoint(area.Left, area.Top);
+				result = new FPoint(area.mLeft, area.mTop);
 			}
 			else
 			{
@@ -767,7 +868,7 @@ namespace Geometry
 
 			if(area != null)
 			{
-				result = new FPoint(area.Right, area.Bottom);
+				result = new FPoint(area.mRight, area.mBottom);
 			}
 			else
 			{
@@ -1069,31 +1170,52 @@ namespace Geometry
 		/// <param name="amount">
 		/// The amount by which to uniformly shrink the area.
 		/// </param>
+		/// <param name="allowZeroCrossing">
+		/// Optional value indicating whether or not to allow a zero-crossing on
+		/// the width or height. Default = false.
+		/// </param>
 		/// <returns>
 		/// Reference to the shrunken area.
 		/// </returns>
-		public static FArea Shrink(FArea area, float amount)
+		public static FArea Shrink(FArea area, float amount,
+			bool allowZeroCrossing = false)
 		{
 			FArea result = null;
 
 			if(area != null)
 			{
 				result = new FArea(area);
-				if(result.Width > amount)
+				if(allowZeroCrossing)
 				{
 					result.Width -= amount;
-				}
-				else
-				{
-					result.Width = 0f;
-				}
-				if(result.Height > amount)
-				{
 					result.Height -= amount;
 				}
 				else
 				{
-					result.Height = 0f;
+					if(result.Width >= 0f && result.Width > amount)
+					{
+						result.Width -= amount;
+					}
+					else if(result.Width < 0f && Math.Abs(result.Width) > amount)
+					{
+						result.Width += amount;
+					}
+					else
+					{
+						result.Width = 0f;
+					}
+					if(result.Height >= 0f && result.Height > amount)
+					{
+						result.Height -= amount;
+					}
+					else if(result.Height < 0f && Math.Abs(result.Height) > amount)
+					{
+						result.Height += amount;
+					}
+					else
+					{
+						result.Height = 0f;
+					}
 				}
 			}
 			else
@@ -1239,6 +1361,49 @@ namespace Geometry
 					target.OnBottomChanged(
 						new FloatEventArgs(source.mBottom, originalBottom));
 				}
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Translate																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Translate the specified area by a relative amount.
+		/// </summary>
+		/// <param name="area">
+		/// The area to be moved.
+		/// </param>
+		/// <param name="offsetX">
+		/// The X offset by which to move the area.
+		/// </param>
+		/// <param name="offsetY">
+		/// The Y offset by which to move the area.
+		/// </param>
+		public static void Translate(FArea area, float offsetX, float offsetY)
+		{
+			if(area != null && !area.mReadOnly)
+			{
+				area.X += offsetX;
+				area.Y += offsetY;
+			}
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Translate the specified area to the new location.
+		/// </summary>
+		/// <param name="area">
+		/// The area to be moved.
+		/// </param>
+		/// <param name="offset">
+		/// The offset by which to move the area.
+		/// </param>
+		public static void Translate(FArea area, FPoint offset)
+		{
+			if(area != null && !area.mReadOnly && offset != null)
+			{
+				area.X += offset.X;
+				area.Y += offset.Y;
 			}
 		}
 		//*-----------------------------------------------------------------------*

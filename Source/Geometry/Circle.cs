@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using static Geometry.GeometryUtil;
+
 namespace Geometry
 {
 	//*-------------------------------------------------------------------------*
@@ -141,6 +143,48 @@ namespace Geometry
 		//*************************************************************************
 		//*	Public																																*
 		//*************************************************************************
+		//*-----------------------------------------------------------------------*
+		//* GetAngleAtSliceIndex																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Given a circle sliced symmetrically into multiple equal slices with a
+		/// reference to 0 degrees, return the starting angle of the slice at the
+		/// specified index, in radians.
+		/// </summary>
+		/// <param name="slices">
+		/// Count of slices defined in the circle.
+		/// </param>
+		/// <param name="index">
+		/// The index of the slice at which to retrieve the starting angle.
+		/// </param>
+		/// <returns>
+		/// The angle within the circle at which the specified slice begins. Index
+		/// 0 will always return zero, the beginning of any slice of the circle.
+		/// </returns>
+		/// <remarks>
+		/// <para>
+		/// This method will return correct values for negative indices and indices
+		/// greater than the number of slices defined, to support cases where
+		/// a scenario includes multiple turns in either direction.
+		/// </para>
+		/// <para>
+		/// If your case might include a multi-turn scenario, consider calling
+		/// Trig.NormalizeRad on the result of this method to maintain an angle
+		/// less than a single turn.
+		/// </para>
+		/// </remarks>
+		public static float GetAngleAtSliceIndex(int slices, int index)
+		{
+			float result = 0f;
+
+			if(slices > 0)
+			{
+				result = (TwoPi / (float)slices) * (float)index;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
 		//*-----------------------------------------------------------------------*
 		//* GetArcBoundingBox																											*
 		//*-----------------------------------------------------------------------*

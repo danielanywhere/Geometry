@@ -327,6 +327,31 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* IsEmpty																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the specified line is empty.
+		/// </summary>
+		/// <param name="line">
+		/// Reference to the object to inspect.
+		/// </param>
+		/// <returns>
+		/// True if the specified line is empty. Otherwise, false.
+		/// </returns>
+		public static bool IsEmpty(FLine line)
+		{
+			bool result = true;
+
+			if(line != null)
+			{
+				result = (line.mPointA.X == 0f && line.mPointA.Y == 0f &&
+					line.mPointB.X == 0f && line.mPointB.Y == 0f);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	IsPointInArea																													*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

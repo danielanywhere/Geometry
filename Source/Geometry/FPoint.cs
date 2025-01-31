@@ -645,6 +645,30 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* IsEmpty																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the specified point is empty.
+		/// </summary>
+		/// <param name="point">
+		/// Reference to the object to inspect.
+		/// </param>
+		/// <returns>
+		/// True if the specified point is empty. Otherwise, false.
+		/// </returns>
+		public static bool IsEmpty(FPoint point)
+		{
+			bool result = true;
+
+			if(point != null)
+			{
+				result = (point.mX == 0f && point.mY == 0f);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* Magnitude																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

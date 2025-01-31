@@ -117,6 +117,57 @@ namespace GeometryExample
 		}
 		//*-----------------------------------------------------------------------*
 
+		//*-----------------------------------------------------------------------*
+		//* RandomFloatWhole																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a random single point floating point value whole number within
+		/// the specified range.
+		/// </summary>
+		/// <param name="minimum">
+		/// The minimum allowable value in the range.
+		/// </param>
+		/// <param name="maximum">
+		/// The maximum allowable value in the range.
+		/// </param>
+		/// <returns>
+		/// A random floating point value in the requested range.
+		/// </returns>
+		private static float RandomFloatWhole(float minimum, float maximum)
+		{
+			Random random = new Random((int)DateTime.Now.Ticks);
+			return ((float)random.Next((int)minimum, (int)maximum));
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestMatrix3																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test FMatrix3 operations.
+		/// </summary>
+		private static void TestMatrix3()
+		{
+			FPoint point = new FPoint(
+				RandomFloatWhole(0f, 1920f),
+				RandomFloatWhole(0f, 1080f));
+
+			Console.WriteLine("** Testing FMatrix3 **");
+			Console.WriteLine("Transform view with top left anchor to bottom left.");
+			Console.WriteLine(
+				$" Starting point (top left anchor): {point.X:0}, {point.Y:0}");
+
+			//	Flip Y.
+			point = FMatrix3.Scale(point, new FPoint(1f, -1f));
+			//	Reposition Y.
+			point = FMatrix3.Translate(point, new FPoint(0f, 1080f));
+
+			Console.WriteLine(
+				$" Transformed point (bottom left anchor): {point.X:0}, {point.Y:0}");
+			Console.WriteLine("");
+		}
+		//*-----------------------------------------------------------------------*
+
 		//*************************************************************************
 		//*	Protected																															*
 		//*************************************************************************
@@ -319,6 +370,9 @@ namespace GeometryExample
 			List<FPoint> points = null;
 			float time = 0f;
 			int index = 0;
+
+			//	Test FMatrix3 operations.
+			TestMatrix3();
 
 			//	Test Arc bounding boxes.
 			TestArcBoundingBox();

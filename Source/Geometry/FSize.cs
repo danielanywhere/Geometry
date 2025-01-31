@@ -212,6 +212,30 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* IsEmpty																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the specified size is empty.
+		/// </summary>
+		/// <param name="size">
+		/// Reference to the object to inspect.
+		/// </param>
+		/// <returns>
+		/// True if the specified size is empty. Otherwise, false.
+		/// </returns>
+		public static bool IsEmpty(FSize size)
+		{
+			bool result = true;
+
+			if(size != null)
+			{
+				result = (size.mHeight == 0f && size.mWidth == 0f);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	Height																																*
 		//*-----------------------------------------------------------------------*
 		private float mHeight = 0f;

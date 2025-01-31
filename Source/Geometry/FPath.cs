@@ -132,6 +132,30 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* IsEmpty																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the specified path is empty.
+		/// </summary>
+		/// <param name="path">
+		/// Reference to the object to inspect.
+		/// </param>
+		/// <returns>
+		/// True if the specified path is empty. Otherwise, false.
+		/// </returns>
+		public static bool IsEmpty(FPath path)
+		{
+			bool result = true;
+
+			if(path != null)
+			{
+				result = (path.Count == 0);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	IsPointInPolygon																											*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

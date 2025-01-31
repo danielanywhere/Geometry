@@ -94,6 +94,30 @@ namespace Geometry
 		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* IsEmpty																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the specified scale is empty.
+		/// </summary>
+		/// <param name="scale">
+		/// Reference to the object to inspect.
+		/// </param>
+		/// <returns>
+		/// True if the specified scale is empty. Otherwise, false.
+		/// </returns>
+		public static bool IsEmpty(FScale scale)
+		{
+			bool result = true;
+
+			if(scale != null)
+			{
+				result = (scale.mScaleX == 1f && scale.mScaleY == 1f);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* Scalar																																*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
