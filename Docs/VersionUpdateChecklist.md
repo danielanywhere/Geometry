@@ -5,8 +5,8 @@ Perform the following tasks when publishing a new version of *Dans.Geometry.Libr
  - [ ] Make sure the project is in **Debug** mode.
  - [ ] Update the version number in **Geometry.csproj**.
  - [ ] Compile and test all changes to the library.
+ - [ ] Update **Source/NuGet/README.md**. This step is required prior to compile because the file is included in the NuGet package.
  - [ ] Switch the project mode to **Release** and compile.
- - [ ] Update **Source/NuGet/README.md**.
  - [ ] Check the GitHub project online to make sure any issues to be addressed in this version have been completed.
  - [ ] Open **Scripts/GeometryDocumentation.shfbproj** and update the version number in **HelpFileVersion**.
  - [ ] Open **Scripts/GeometryDocumentation.shfbproj** in SHFB and compile the new version of the API.

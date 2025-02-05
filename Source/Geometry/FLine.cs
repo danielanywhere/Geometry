@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
+using static Geometry.GeometryUtil;
+
 namespace Geometry
 {
 	//*-------------------------------------------------------------------------*
@@ -631,6 +633,75 @@ namespace Geometry
 		}
 		//*-----------------------------------------------------------------------*
 
+		//*-----------------------------------------------------------------------*
+		//* Translate																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Translate the points of the provided target line by the specified
+		/// offset.
+		/// </summary>
+		/// <param name="target">
+		/// Reference to the target line to be translated.
+		/// </param>
+		/// <param name="offset">
+		/// Reference to the offset by which to translate the line.
+		/// </param>
+		public static void Translate(FLine target, FPoint offset)
+		{
+			if(target != null && offset != null)
+			{
+				target.mPointA.X += offset.X;
+				target.mPointA.Y += offset.Y;
+				target.mPointB.X += offset.X;
+				target.mPointB.Y += offset.Y;
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TranslateVector																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Translate the target line as a vector from its left or right sides,
+		/// along the line's direction of travel.
+		/// </summary>
+		/// <param name="target">
+		/// Reference to the target line to be translated.
+		/// </param>
+		/// <param name="offset">
+		/// The offset amount by which to translate the line parallel to its
+		/// current axis.
+		/// </param>
+		/// <param name="direction">
+		/// Optional value indicating whether the offset will be applied to the
+		/// left side tangent of the line if Forward, or to the right side tangent
+		/// of the line if Reverse, relative to its direction of travel from
+		/// PointA to PointB. Default is Forward.
+		/// </param>
+		public static void TranslateVector(FLine target, float offset,
+			ArcDirectionEnum direction = ArcDirectionEnum.Forward)
+		{
+			float angle = 0f;
+			FPoint point = null;
+
+			if(target != null && offset != 0f && direction != ArcDirectionEnum.None)
+			{
+				angle = Trig.GetLineAngle(target);
+
+				switch(direction)
+				{
+					case ArcDirectionEnum.Forward:
+						angle += HalfPi;
+						break;
+					case ArcDirectionEnum.Reverse:
+						angle -= HalfPi;
+						break;
+				}
+				point = Trig.GetDestPoint(target.mPointA, angle, offset);
+				Translate(target, FPoint.Delta(point, target.mPointA));
+			}
+		}
+		//*-----------------------------------------------------------------------*
 
 	}
 	//*-------------------------------------------------------------------------*

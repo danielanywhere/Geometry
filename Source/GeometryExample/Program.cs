@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using System.Text;
 
 using Geometry;
@@ -137,6 +138,34 @@ namespace GeometryExample
 		{
 			Random random = new Random((int)DateTime.Now.Ticks);
 			return ((float)random.Next((int)minimum, (int)maximum));
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestFLineTranslateVector																							*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test the FLine TranslateVector method.
+		/// </summary>
+		private static void TestFLineTranslateVector()
+		{
+			FLine line = new FLine(
+				new FPoint(
+					RandomFloatWhole(0f, 1920f),
+					RandomFloatWhole(0f, 1080f)),
+				new FPoint(
+					RandomFloatWhole(0f, 1920f),
+					RandomFloatWhole(0f, 1080f)));
+
+			Console.WriteLine("** Testing FLine TranslateVector **");
+			Console.WriteLine(" Start");
+			Console.WriteLine($"  Point A: {line.PointA.X:0}, {line.PointA.Y:0}");
+			Console.WriteLine($"  Point B: {line.PointB.X:0}, {line.PointB.Y:0}");
+
+			FLine.TranslateVector(line, 10f, ArcDirectionEnum.Increasing);
+			Console.WriteLine(" End");
+			Console.WriteLine($"  Point A: {line.PointA.X:0}, {line.PointA.Y:0}");
+			Console.WriteLine($"  Point B: {line.PointB.X:0}, {line.PointB.Y:0}");
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -370,6 +399,9 @@ namespace GeometryExample
 			List<FPoint> points = null;
 			float time = 0f;
 			int index = 0;
+
+			//	Test FLine TranslateVector.
+			TestFLineTranslateVector();
 
 			//	Test FMatrix3 operations.
 			TestMatrix3();
