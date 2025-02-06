@@ -208,18 +208,18 @@ namespace Geometry
 		public static FPoint Intersect(FLine lineA,
 			FLine lineB, bool allowImaginary = false)
 		{
-			float rd = 0f;
+			double rd = 0f;
 			FPoint result =
 				new FPoint(float.NegativeInfinity, float.NegativeInfinity);
-			float rn = 0f;
-			float x1 = 0f;
-			float x2 = 0f;
-			float x3 = 0f;
-			float x4 = 0f;
-			float y1 = 0f;
-			float y2 = 0f;
-			float y3 = 0f;
-			float y4 = 0f;
+			double rn = 0f;
+			double x1 = 0f;
+			double x2 = 0f;
+			double x3 = 0f;
+			double x4 = 0f;
+			double y1 = 0f;
+			double y2 = 0f;
+			double y3 = 0f;
+			double y4 = 0f;
 
 			if(lineA != null && lineB != null)
 			{
@@ -236,12 +236,12 @@ namespace Geometry
 					(x1 - x2) * (x3 * y4 - y3 * x4);
 				rd = (x1 - x2) * (y3 - y4) -
 					(y1 - y2) * (x3 - x4);
-				result.X = (rd != 0 ? rn / rd : float.NegativeInfinity);
+				result.X = (rd != 0d ? (float)(rn / rd) : float.NegativeInfinity);
 				rn = (x1 * y2 - y1 * x2) * (y3 - y4) -
 					(y1 - y2) * (x3 * y4 - y3 * x4);
 				rd = (x1 - x2) * (y3 - y4) -
 					(y1 - y2) * (x3 - x4);
-				result.Y = (rd != 0 ? rn / rd : float.NegativeInfinity);
+				result.Y = (rd != 0d ? (float)(rn / rd) : float.NegativeInfinity);
 
 				if(!allowImaginary &&
 					!IsPointNearLine(lineA, result, 0.0005f) &&

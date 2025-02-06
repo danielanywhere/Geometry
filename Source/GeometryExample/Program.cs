@@ -142,6 +142,35 @@ namespace GeometryExample
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* TestFLineIntersect																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test the FLine Intersect method.
+		/// </summary>
+		private static void TestFLineIntersect()
+		{
+			FLine line1 = new FLine(
+				new FPoint(1301.75f, 609.6f),
+				new FPoint(1301.75f, 158.485f));
+			FLine line2 = new FLine(
+				new FPoint(1301.75f, 160.0725f),
+				new FPoint(1428.485f, 160.0725f));
+			FPoint location = null;
+
+			Console.WriteLine("** Testing FLine Intersect **");
+			Console.WriteLine(" Line 1");
+			Console.WriteLine($"  Point A: {line1.PointA.X}, {line1.PointA.Y}");
+			Console.WriteLine($"  Point B: {line1.PointB.X}, {line1.PointB.Y}");
+			Console.WriteLine(" Line 2");
+			Console.WriteLine($"  Point A: {line2.PointA.X}, {line2.PointA.Y}");
+			Console.WriteLine($"  Point B: {line2.PointB.X}, {line2.PointB.Y}");
+			Console.WriteLine("Expecting: 1301.75, 160.0725");
+			location = FLine.Intersect(line1, line2, true);
+			Console.WriteLine($"Actual:    {location.X}, {location.Y}");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* TestFLineTranslateVector																							*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -399,6 +428,9 @@ namespace GeometryExample
 			List<FPoint> points = null;
 			float time = 0f;
 			int index = 0;
+
+			//	Test FLine Intersection.
+			TestFLineIntersect();
 
 			//	Test FLine TranslateVector.
 			TestFLineTranslateVector();

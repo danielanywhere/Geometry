@@ -31,6 +31,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.1206.4136 | No breaking changes; Repaired bug in **FLine.Intersect** that was causing minor inaccuracies. |
 | 25.1205.4515 | No breaking changes; Added **Translate** and **TranslateVector** methods to the **FLine** class. |
 | 25.1131.3500 | No breaking changes; Added the **FMatrix** and **FVector** classes from another internal library; **Translate** method has been added to the **FArea** class; **IsEmpty** method is now available on all geometric descriptor classes; **FArea** class now fully supports negative widths and heights. |
 | 25.1116.3952 | No breaking changes; Re-activated complete support for intuitive orientation of angular functions by introducing the **DrawingSpaceEnum** enumeration; Re-appreciated the **WindingOrientationEnum** enumeration to allow all angular methods to express an intuitive direction, in conjunction with a **DrawingSpaceEnum** value, where appropriate. |
