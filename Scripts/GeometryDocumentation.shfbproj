@@ -36,8 +36,8 @@
       <DocumentationSource sourceFile="..\Source\Geometry\bin\Release\netstandard2.0\Geometry.dll" />
     </DocumentationSources>
     <HelpTitle>Dan&amp;#39%3bs Geometry Library</HelpTitle>
-    <HelpFileVersion>25.1206.4136</HelpFileVersion>
-    <NamingMethod>Guid</NamingMethod>
+    <HelpFileVersion>25.1218.4115</HelpFileVersion>
+    <NamingMethod>MemberName</NamingMethod>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <NamespaceGrouping>False</NamespaceGrouping>
@@ -52,8 +52,8 @@
     <ProjectSummary>
     </ProjectSummary>
     <NamespaceSummaries>
-      <NamespaceSummaryItem name="(global)" isDocumented="True">An easy-to-implement function library providing numeric operations to handle solutions to typical problems encountered in the field of geometry, including Bezier Curves, Linear Interpolation (Lerp), and Trigonometry. See the full project source at &lt;a target=&quot;_blank&quot; href=&quot;https://github.com/danielanywhere/Geometry&quot;&gt;https://github.com/danielanywhere/Geometry&lt;/a&gt;</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Geometry" isDocumented="True">An easy-to-implement function library providing numeric operations to handle solutions to typical problems encountered in the field of geometry, including Bezier Curves, Linear Interpolation (Lerp), and Trigonometry. See the full project source at &lt;a target=&quot;_blank&quot; href=&quot;https://github.com/danielanywhere/Geometry&quot;&gt;https://github.com/danielanywhere/Geometry&lt;/a&gt;</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="(global)" isDocumented="True">An easy-to-implement function library providing numeric operations to handle solutions to typical problems encountered in the field of geometry, including Bezier Curves, Linear Interpolation (Lerp), and Trigonometry. See the full project source at &lt;a target="_blank" href="https://github.com/danielanywhere/Geometry"&gt;https://github.com/danielanywhere/Geometry&lt;/a&gt;</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Geometry" isDocumented="True">An easy-to-implement function library providing numeric operations to handle solutions to typical problems encountered in the field of geometry, including Bezier Curves, Linear Interpolation (Lerp), and Trigonometry. See the full project source at &lt;a target="_blank" href="https://github.com/danielanywhere/Geometry"&gt;https://github.com/danielanywhere/Geometry&lt;/a&gt;</NamespaceSummaryItem>
     </NamespaceSummaries>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <WorkingPath>..\..\danielanywhere.github.io\Geometry\Working\</WorkingPath>

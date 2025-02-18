@@ -31,6 +31,8 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.1218.4115 | No breaking changes; Ellipse class has been added, with **FPoint[] FindIntersections(FPoint center, float radiusX, float radiusY, FLine line)**, which finds 0, 1, or 2 intersections between the edge of an ellipse and a line. |
+| 25.1207.4429 | No breaking changes; Updates to API documentation. |
 | 25.1206.4136 | No breaking changes; Repaired bug in **FLine.Intersect** that was causing minor inaccuracies. |
 | 25.1205.4515 | No breaking changes; Added **Translate** and **TranslateVector** methods to the **FLine** class. |
 | 25.1131.3500 | No breaking changes; Added the **FMatrix** and **FVector** classes from another internal library; **Translate** method has been added to the **FArea** class; **IsEmpty** method is now available on all geometric descriptor classes; **FArea** class now fully supports negative widths and heights. |

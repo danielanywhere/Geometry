@@ -8,7 +8,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Dans.Geometry.Library</PackageId>
     <Title>Dan's Geometry Library</Title>
-    <Version>25.1206.4136</Version>
+    <Version>25.1218.4115</Version>
     <Description>Dan's Geometry Library.</Description>
     <Copyright>Copyright(c) 2025. Daniel Patterson, MCSD (danielanywhere)</Copyright>
     <PackageProjectUrl>https://github.com/danielanywhere/Geometry</PackageProjectUrl>
@@ -16,6 +16,7 @@
     <PackageTags>geometry;geometric;trigonometry;trig;matrix;bezier</PackageTags>
     <Authors>Daniel Patterson, MCSD (danielanywhere)</Authors>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>

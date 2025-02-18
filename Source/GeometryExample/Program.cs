@@ -142,6 +142,105 @@ namespace GeometryExample
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* TestEllipseLineIntersection																						*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test the Ellipse / Line intersection.
+		/// </summary>
+		private static void TestEllipseLineIntersection()
+		{
+			FPoint center = new FPoint(303.786f, 226.643f);
+			FPoint[] intersections = null;
+			FLine line = new FLine(new FPoint()
+			{
+				X = 560.000f,
+				Y = 82.857f
+			}, new FPoint()
+			{
+				X = 654.286f,
+				Y = 220.000f
+			});
+			float radiusX = 228.143f;
+			float radiusY = 125.2855f;
+
+			Console.WriteLine("** Testing Ellipse / Line Intersection **");
+			Console.WriteLine("Test 1 of 3");
+			Console.WriteLine($" Center: {center.X}, {center.Y}");
+			Console.WriteLine($" Radius: {radiusX}, {radiusY}");
+			Console.WriteLine(" Line:");
+			Console.WriteLine($"  Point A: {line.PointA.X}, {line.PointA.Y}");
+			Console.WriteLine($"  Point B: {line.PointB.X}, {line.PointB.Y}");
+			intersections =
+				Ellipse.FindIntersections(center, radiusX, radiusY, line);
+			if(intersections.Length == 0)
+			{
+				Console.WriteLine("No intersections found...");
+			}
+			else
+			{
+				Console.WriteLine(" Intersections:");
+				foreach(FPoint pointItem in intersections)
+				{
+					Console.WriteLine($"  {pointItem.X}, {pointItem.Y}");
+				}
+			}
+			Console.WriteLine("Test 2 of 3");
+			center.X = 1278.786f;
+			center.Y = 218.786f;
+			line.PointA.X = center.X;
+			line.PointA.Y = center.Y;
+			line.PointB.X = 1374.072f;
+			line.PointB.Y = 356.929f;
+			Console.WriteLine($" Center: {center.X}, {center.Y}");
+			Console.WriteLine($" Radius: {radiusX}, {radiusY}");
+			Console.WriteLine(" Line:");
+			Console.WriteLine($"  Point A: {line.PointA.X}, {line.PointA.Y}");
+			Console.WriteLine($"  Point B: {line.PointB.X}, {line.PointB.Y}");
+			intersections =
+				Ellipse.FindIntersections(center, radiusX, radiusY, line);
+			if(intersections.Length == 0)
+			{
+				Console.WriteLine("No intersections found...");
+			}
+			else
+			{
+				Console.WriteLine(" Intersections:");
+				foreach(FPoint pointItem in intersections)
+				{
+					Console.WriteLine($"  {pointItem.X}, {pointItem.Y}");
+				}
+			}
+			Console.WriteLine("Test 3 of 3");
+			center.X = 300.958f;
+			center.Y = 620.826f;
+			line.PointA.X = 347.415f;
+			line.PointA.Y = 473.334f;
+			line.PointB.X = 489.178f;
+			line.PointB.Y = 730.685f;
+			Console.WriteLine($" Center: {center.X}, {center.Y}");
+			Console.WriteLine($" Radius: {radiusX}, {radiusY}");
+			Console.WriteLine(" Line:");
+			Console.WriteLine($"  Point A: {line.PointA.X}, {line.PointA.Y}");
+			Console.WriteLine($"  Point B: {line.PointB.X}, {line.PointB.Y}");
+			intersections =
+				Ellipse.FindIntersections(center, radiusX, radiusY, line);
+			if(intersections.Length == 0)
+			{
+				Console.WriteLine("No intersections found...");
+			}
+			else
+			{
+				Console.WriteLine(" Intersections:");
+				foreach(FPoint pointItem in intersections)
+				{
+					Console.WriteLine($"  {pointItem.X}, {pointItem.Y}");
+				}
+			}
+			Console.WriteLine("");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* TestFLineIntersect																										*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -428,6 +527,9 @@ namespace GeometryExample
 			List<FPoint> points = null;
 			float time = 0f;
 			int index = 0;
+
+			//	Test Ellipse / Line Intersection.
+			TestEllipseLineIntersection();
 
 			//	Test FLine Intersection.
 			TestFLineIntersect();
