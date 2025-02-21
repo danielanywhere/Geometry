@@ -31,6 +31,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.1221.4026 | No breaking changes; **FEllipse** class has been added as a first-class geometric primitive shape with built-in functions for cloning, transferring values between shapes, retrieving the bounding box of the shape, retrieving the focal points and the imaginary string length used to draw a perimeter in the real world, intersecting with lines, and plotting coordinates on the edge at an angle from center; **Ellipse** and its method **FindIntersections** have been marked as depreciated and will be removed in the near future, so please change your references to the identical **FEllipse.FindIntersections** method at your earliest convenience. |
 | 25.1218.4115 | No breaking changes; Ellipse class has been added, with **FPoint[] FindIntersections(FPoint center, float radiusX, float radiusY, FLine line)**, which finds 0, 1, or 2 intersections between the edge of an ellipse and a line. |
 | 25.1207.4429 | No breaking changes; Updates to API documentation. |
 | 25.1206.4136 | No breaking changes; Repaired bug in **FLine.Intersect** that was causing minor inaccuracies. |

@@ -142,6 +142,53 @@ namespace GeometryExample
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* TestEllipseCoordinateByAngle																					*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test the Ellipse edge coordinate by a few sample angles.
+		/// </summary>
+		private static void TestEllipseCoordinateByAngle()
+		{
+			float angle = 0f;
+			FArea box = null;
+			FPoint coordinate = null;
+			FEllipse ellipse = new FEllipse(
+				RandomFloatWhole(0f + 300f, 1920f - 300f),
+				RandomFloatWhole(0f + 300f, 1080f - 300f),
+				RandomFloatWhole(50f, 300f),
+				RandomFloatWhole(50f, 300f));
+			int index = 0;
+			Random random = new Random((int)DateTime.Now.Ticks);
+
+			box = FEllipse.BoundingBox(ellipse);
+
+			while(Math.Abs(ellipse.RadiusY - ellipse.RadiusX) < 40f)
+			{
+				ellipse.RadiusX = RandomFloatWhole(50f, 300f);
+				ellipse.RadiusY = RandomFloatWhole(50f, 300f);
+			}
+
+			Console.WriteLine("** Testing Ellipse Coordinate by Angle **");
+			Console.WriteLine(" Ellipse: " +
+				$"{ellipse.Center.X:0.###}, {ellipse.Center.Y:0.###}, " +
+				$"{ellipse.RadiusX:0.###}, {ellipse.RadiusY:0.###}");
+			Console.WriteLine(" Bounding Box: " +
+				$"{box.Left:0.###}, {box.Top:0.###}, " +
+				$"{box.Right:0.###}, {box.Bottom:0.###}");
+
+			for(index = 1; index < 11; index ++)
+			{
+				angle = random.NextSingle() * GeometryUtil.TwoPi;
+				coordinate = FEllipse.GetCoordinateAtAngle(ellipse, angle);
+				Console.WriteLine($"  Angle {index}: " +
+					$"{Trig.RadToDeg(angle)}deg. " +
+					$"X:{coordinate.X:0.###}, Y:{coordinate.Y:0.###}");
+			}
+
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* TestEllipseLineIntersection																						*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -171,7 +218,7 @@ namespace GeometryExample
 			Console.WriteLine($"  Point A: {line.PointA.X}, {line.PointA.Y}");
 			Console.WriteLine($"  Point B: {line.PointB.X}, {line.PointB.Y}");
 			intersections =
-				Ellipse.FindIntersections(center, radiusX, radiusY, line);
+				FEllipse.FindIntersections(center, radiusX, radiusY, line);
 			if(intersections.Length == 0)
 			{
 				Console.WriteLine("No intersections found...");
@@ -197,7 +244,7 @@ namespace GeometryExample
 			Console.WriteLine($"  Point A: {line.PointA.X}, {line.PointA.Y}");
 			Console.WriteLine($"  Point B: {line.PointB.X}, {line.PointB.Y}");
 			intersections =
-				Ellipse.FindIntersections(center, radiusX, radiusY, line);
+				FEllipse.FindIntersections(center, radiusX, radiusY, line);
 			if(intersections.Length == 0)
 			{
 				Console.WriteLine("No intersections found...");
@@ -223,7 +270,7 @@ namespace GeometryExample
 			Console.WriteLine($"  Point A: {line.PointA.X}, {line.PointA.Y}");
 			Console.WriteLine($"  Point B: {line.PointB.X}, {line.PointB.Y}");
 			intersections =
-				Ellipse.FindIntersections(center, radiusX, radiusY, line);
+				FEllipse.FindIntersections(center, radiusX, radiusY, line);
 			if(intersections.Length == 0)
 			{
 				Console.WriteLine("No intersections found...");
@@ -527,6 +574,9 @@ namespace GeometryExample
 			List<FPoint> points = null;
 			float time = 0f;
 			int index = 0;
+
+			//	Test Ellipse Coordinate by Angle.
+			TestEllipseCoordinateByAngle();
 
 			//	Test Ellipse / Line Intersection.
 			TestEllipseLineIntersection();

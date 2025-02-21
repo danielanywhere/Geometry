@@ -76,6 +76,13 @@ descriptor classes that can be used generically anywhere:
 -   **FArea**. Many of the same competencies as the more familiar
     RectangleF, but with support for negative area.
 
+-   **FEllpse**. A self-contained ellipse class with everything you need
+    for handling an ellipse, including returning the area or perimeter,
+    the bounding box of the shape, the focal points, the length of the
+    imaginary string used to physically draw an edge around the shape in
+    the real world, a coordinate on the edge at any angle, and
+    intersections on a line.
+
 -   **FLine**. A floating point line.
 
 -   **FMatrix2**. A 2x2 linear matrix.
@@ -122,7 +129,7 @@ reaching answers in different categories.
 
 -   **GeometryUtil Class**. Generally, the 'Util' class of my libraries
     provide base singleton values and static support methods to all of
-    the classes within the associated library but I never mark these as
+    the classes within the associated library, but I never mark these as
     internal in case they might be helpful to anyone else using the
     library.
 

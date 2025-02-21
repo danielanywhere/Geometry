@@ -61,91 +61,14 @@ namespace Geometry
 		/// Reference to the line being tested for intersection.
 		/// </param>
 		/// <returns>
-		/// Reference to an array of coordaintes where the line crosses the edge
+		/// Reference to an array of coordinates where the line crosses the edge
 		/// of the ellipse, if intersections were found. Otherwise, an empty array.
 		/// </returns>
+		[Obsolete("Please call FEllipse.FindIntersections instead.")]
 		public static FPoint[] FindIntersections(FPoint center, float radiusX,
 			float radiusY, FLine line)
 		{
-			double A = 0d;
-			double a = 0d;
-			double B = 0d;
-			double b = 0d;
-			double C = 0d;
-			double D = 0d;
-			double dx = 0d;
-			double dy = 0d;
-			double h = 0d;
-			double ix = 0d;
-			double iy = 0d;
-			double k = 0d;
-			FPoint point = null;
-			List<FPoint> result = new List<FPoint>();
-			double sqrtD = 0d;
-			double t = 0d;
-			double t1 = 0d;
-			double t2 = 0d;
-			double x1 = 0d;
-			double x2 = 0d;
-			double y1 = 0d;
-			double y2 = 0d;
-
-			if(center != null && radiusX != 0f && radiusY != 0f &&
-				!FLine.IsEmpty(line))
-			{
-				h = center.X;
-				k = center.Y;
-				a = radiusX;
-				b = radiusY;
-
-				x1 = line.PointA.X;
-				y1 = line.PointA.Y;
-				x2 = line.PointB.X;
-				y2 = line.PointB.Y;
-
-				dx = x2 - x1;
-				dy = y2 - y1;
-
-				// Quadratic coefficients
-				A = (dx * dx) / (a * a) + (dy * dy) / (b * b);
-				B = 2 * ((x1 - h) * dx / (a * a) + (y1 - k) * dy / (b * b));
-				C = ((x1 - h) * (x1 - h)) / (a * a) +
-					((y1 - k) * (y1 - k)) / (b * b) - 1d;
-
-				// Compute the discriminant
-				D = B * B - 4 * A * C;
-
-				if(D == 0d)
-				{
-					// One intersection (tangent)
-					t = -B / (2 * A);
-					ix = x1 + t * dx;
-					iy = y1 + t * dy;
-
-					result.Add(new FPoint((float)ix, (float)iy));
-				}
-				else if(D > 0d)
-				{
-					// Two intersections through ellipse, one of which may be
-					// imaginary.
-					sqrtD = Math.Sqrt(D);
-
-					t1 = (-B + sqrtD) / (2 * A);
-					t2 = (-B - sqrtD) / (2 * A);
-
-					point = new FPoint((float)(x1 + t1 * dx), (float)(y1 + t1 * dy));
-					if(FLine.IsPointOnLine(line, point))
-					{
-						result.Add(point);
-					}
-					point = new FPoint((float)(x1 + t2 * dx), (float)(y1 + t2 * dy));
-					if(FLine.IsPointOnLine(line, point))
-					{
-						result.Add(point);
-					}
-				}
-			}
-			return result.ToArray();
+			return FEllipse.FindIntersections(center, radiusX, radiusY, line, false);
 		}
 		//*-----------------------------------------------------------------------*
 
