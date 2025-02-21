@@ -553,6 +553,31 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetArea																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the area in the caller's ellipse.
+		/// </summary>
+		/// <param name="ellipse">
+		/// Reference to the ellipse to measure.
+		/// </param>
+		/// <returns>
+		/// The area of the ellipse.
+		/// </returns>
+		public static float GetArea(FEllipse ellipse)
+		{
+			float result = 0f;
+
+			if(ellipse != null)
+			{
+				result = (float)(Math.PI *
+					(double)ellipse.mRadiusX * (double)ellipse.mRadiusY);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* GetCoordinateAtAngle																									*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -579,6 +604,39 @@ namespace Geometry
 					(double)ellipse.mRadiusX * Math.Cos(angle));
 				result.Y = (float)((double)ellipse.mCenter.Y +
 					(double)ellipse.mRadiusY * Math.Sin(angle));
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetPerimeter																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the perimeter of the shape.
+		/// </summary>
+		/// <param name="ellipse">
+		/// Reference to the ellipse for which the perimeter will be returned.
+		/// </param>
+		/// <returns>
+		/// The perimeter of the ellipse.
+		/// </returns>
+		/// <remarks>
+		/// The perimeter of the ellipse is an approprimate value. This variation
+		/// was discovered by Srinivasa Ramanujan in the 1910s.
+		/// </remarks>
+		public static float GetPerimeter(FEllipse ellipse)
+		{
+			double a = 0f;
+			double b = 0f;
+			float result = 0f;
+
+			if(ellipse != null)
+			{
+				a = (double)ellipse.mRadiusX;
+				b = (double)ellipse.mRadiusY;
+				result = (float)(Math.PI * (3d * (a + b) -
+					Math.Sqrt((3d * a + b) * (a + 3d * b))));
 			}
 			return result;
 		}
