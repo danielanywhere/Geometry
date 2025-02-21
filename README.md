@@ -76,12 +76,12 @@ descriptor classes that can be used generically anywhere:
 -   **FArea**. Many of the same competencies as the more familiar
     RectangleF, but with support for negative area.
 
--   **FEllpse**. A self-contained ellipse class with everything you need
-    for handling an ellipse, including returning the area or perimeter,
-    the bounding box of the shape, the focal points, the length of the
-    imaginary string used to physically draw an edge around the shape in
-    the real world, a coordinate on the edge at any angle, and
-    intersections on a line.
+-   **FEllipse**. A self-contained ellipse class with everything you
+    need for handling an ellipse, including returning the area or
+    perimeter, the bounding box of the shape, the focal points, the
+    length of the imaginary string used to physically draw an edge
+    around the shape in the real world, a coordinate on the edge at any
+    angle, and intersections on a line.
 
 -   **FLine**. A floating point line.
 
