@@ -20,7 +20,7 @@ namespace Geometry
 	/// ((y - k)<sup>2</sup> / b<sup>2</sup>) = 1
 	/// </para>
 	/// <para>
-	/// ... where h and h are the center coordinate, a is the x radius, and b
+	/// ... where h and k are the center coordinate, a is the x radius, and b
 	/// is the y radius.
 	/// </para>
 	/// <para>

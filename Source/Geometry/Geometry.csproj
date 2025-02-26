@@ -13,7 +13,7 @@
     <Copyright>Copyright(c) 2025. Daniel Patterson, MCSD (danielanywhere)</Copyright>
     <PackageProjectUrl>https://github.com/danielanywhere/Geometry</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>geometry;geometric;trigonometry;trig;matrix;bezier</PackageTags>
+    <PackageTags>geometry;geometric;trigonometry;trig;matrix;bezier;ellipse</PackageTags>
     <Authors>Daniel Patterson, MCSD (danielanywhere)</Authors>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
