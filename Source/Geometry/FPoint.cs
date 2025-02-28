@@ -562,6 +562,33 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* Dot																																		*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the dot product of two points.
+		/// </summary>
+		/// <param name="value1">
+		/// Reference to the first point to compare.
+		/// </param>
+		/// <param name="value2">
+		/// Reference to the second point to compare.
+		/// </param>
+		/// <returns>
+		/// The dot product of the two input points.
+		/// </returns>
+		public static float Dot(FPoint value1, FPoint value2)
+		{
+			float result = 0f;
+
+			if(value1 != null && value2 != null)
+			{
+				result = value1.X * value2.X + value1.Y * value2.Y;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	Equals																																*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

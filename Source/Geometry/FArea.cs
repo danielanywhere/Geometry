@@ -603,6 +603,50 @@ namespace Geometry
 		}
 		//*-----------------------------------------------------------------------*
 
+		//*-----------------------------------------------------------------------*
+		//* GetLines																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return four lines representing the bounding edge of the provided area.
+		/// </summary>
+		/// <param name="area">
+		/// Reference to the area for which the lines will be returned.
+		/// </param>
+		/// <returns>
+		/// Reference to a list of four lines, if the area was legitimate and
+		/// non-empty. Otherwise, an empty array.
+		/// </returns>
+		/// <remarks>
+		/// In drawing space, the lines from this method are arranged in a
+		/// counter-clockwise progression from top-right, including the top, left,
+		/// bottom, then right sides.
+		/// </remarks>
+		public static List<FLine> GetLines(FArea area)
+		{
+			List<FLine> result = new List<FLine>();
+
+			if(!FArea.IsEmpty(area))
+			{
+				result = new List<FLine>
+				{
+					new FLine(
+						new FPoint(area.Right, area.Top),
+						new FPoint(area.Left, area.Top)),
+					new FLine(
+						new FPoint(area.Left, area.Top),
+						new FPoint(area.Left, area.Bottom)),
+					new FLine(
+						new FPoint(area.Left, area.Bottom),
+						new FPoint(area.Right, area.Bottom)),
+					new FLine(
+						new FPoint(area.Right, area.Bottom),
+						new FPoint(area.Right, area.Top))
+				};
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
 		////*-----------------------------------------------------------------------*
 		////* GetLocation																														*
 		////*-----------------------------------------------------------------------*
@@ -770,6 +814,39 @@ namespace Geometry
 					area.mRight == 0f &&
 					area.mTop == 0f &&
 					area.mBottom == 0f);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* IsPointAtCorner																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the provided point is at one of the
+		/// corners of the caller's rectangle.
+		/// </summary>
+		/// <param name="area">
+		/// Reference to the area to test for corner.
+		/// </param>
+		/// <param name="point">
+		/// Reference to the point to compare with corners.
+		/// </param>
+		/// <returns>
+		/// True if the caller's point is located at one of the corners of the
+		/// supplied area.
+		/// </returns>
+		public static bool IsPointAtCorner(FArea area, FPoint point)
+		{
+			bool result = false;
+
+			if(area != null && point != null)
+			{
+				result =
+					((area.Left == point.X && area.Top == point.Y) ||
+					(area.Right == point.X && area.Top == point.Y) ||
+					(area.Left == point.X && area.Bottom == point.Y) ||
+					(area.Right == point.X && area.Bottom == point.Y));
 			}
 			return result;
 		}

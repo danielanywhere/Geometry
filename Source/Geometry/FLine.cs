@@ -97,6 +97,128 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetClosestPoint																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the closest point between the caller's line and an arbitrary
+		/// point.
+		/// </summary>
+		/// <param name="line">
+		/// Reference to the line to be checked.
+		/// </param>
+		/// <param name="point">
+		/// Reference to the point to test for proximity.
+		/// </param>
+		/// <returns>
+		/// Reference to the closest point between the caller's line and an
+		/// arbitrary external point, if valid. Otherwise, null.
+		/// </returns>
+		public static FPoint GetClosestPoint(FLine line, FPoint point)
+		{
+			FPoint ab = null;
+			float abab = 0f;
+			FPoint ac = null;
+			float acab = 0f;
+			FPoint result = null;
+			float t = 0f;
+
+			if(!FLine.IsEmpty(line) && point != null)
+			{
+				ab = line.PointB - line.PointA;
+				ac = point - line.PointA;
+
+				abab = FPoint.Dot(ab, ab);
+				acab = FPoint.Dot(ac, ab);
+
+				if(abab != 0f)
+				{
+					t = acab / abab;
+				}
+
+				// Clamp t to ensure the closest point stays within the segment [A, B].
+				t = Math.Max(0, Math.Min(1, t));
+
+				result = line.PointA + ab * t;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetIntersectingLine																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a reference to the first line intersecting the caller's point
+		/// from the supplied list of lines.
+		/// </summary>
+		/// <param name="lines">
+		/// Reference to a list of lines, one or more of which might contain
+		/// the caller's point.
+		/// </param>
+		/// <param name="point">
+		/// Reference to the point to compare.
+		/// </param>
+		/// <returns>
+		/// Reference to the first line in the collection containing the caller's
+		/// point, if found. Otherwise, null.
+		/// </returns>
+		public static FLine GetIntersectingLine(List<FLine> lines, FPoint point)
+		{
+			FLine result = null;
+
+			if(lines?.Count > 0)
+			{
+				foreach(FLine lineItem in lines)
+				{
+					if(FLine.IsPointOnLine(lineItem, point))
+					{
+						result = lineItem;
+						break;
+					}
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetIntersectingLines																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a list of lines intersecting the caller's point
+		/// within the supplied list of lines.
+		/// </summary>
+		/// <param name="lines">
+		/// Reference to a list of lines, one or more of which might contain
+		/// the caller's point.
+		/// </param>
+		/// <param name="point">
+		/// Reference to the point to compare.
+		/// </param>
+		/// <returns>
+		/// Reference to a list of lines in the collection containing the
+		/// caller's point, if found. Otherwise, an empty list.
+		/// </returns>
+		public static List<FLine> GetIntersectingLines(List<FLine> lines,
+			FPoint point)
+		{
+			List<FLine> result = new List<FLine>();
+
+			if(lines?.Count > 0)
+			{
+				foreach(FLine lineItem in lines)
+				{
+					if(FLine.IsPointOnLine(lineItem, point))
+					{
+						result.Add(lineItem);
+					}
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	HasIntersection																												*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -348,6 +470,36 @@ namespace Geometry
 			{
 				result = (line.mPointA.X == 0f && line.mPointA.Y == 0f &&
 					line.mPointB.X == 0f && line.mPointB.Y == 0f);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* IsPointAtEnd																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the provided point is at one of the
+		/// ends of the specified line.
+		/// </summary>
+		/// <param name="line">
+		/// Reference to the line to test.
+		/// </param>
+		/// <param name="point">
+		/// The point to compare.
+		/// </param>
+		/// <returns>
+		/// True if the specified point is at one of the ends of the line.
+		/// </returns>
+		public static bool IsPointAtEnd(FLine line, FPoint point)
+		{
+			bool result = false;
+
+			if(line != null && point != null)
+			{
+				result =
+					((line.PointA.X == point.X && line.PointA.Y == point.Y) ||
+					(line.PointB.X == point.X && line.PointB.Y == point.Y));
 			}
 			return result;
 		}
