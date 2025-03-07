@@ -628,6 +628,58 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetLines																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a collection of discrete lines representing the supplied
+		/// ellipse.
+		/// </summary>
+		/// <param name="ellipse">
+		/// Reference to the ellipse to be represented.
+		/// </param>
+		/// <param name="pointCount">
+		/// The count of discrete points to represent in the shape.
+		/// </param>
+		/// <param name="rotation">
+		/// Optional angle of local shape rotatation, in radians.
+		/// </param>
+		/// <returns>
+		/// Reference to a collection of lines representing the provided ellipse,
+		/// in the resolution specified by pointCount.
+		/// </returns>
+		/// <remarks>
+		/// <para>
+		/// All of the lines are constructed from common adjoining points, which
+		/// allows you to move any point in the shape without breaking its
+		/// connection to either of its lines.
+		/// </para>
+		/// </remarks>
+		public static List<FLine> GetLines(FEllipse ellipse, int pointCount,
+			float rotation = 0f)
+		{
+			int count = 0;
+			int index = 0;
+			List<FPoint> points = null;
+			List<FLine> result = new List<FLine>();
+
+			if(ellipse != null && pointCount > 0)
+			{
+				points = GetVertices(ellipse, pointCount, rotation);
+				count = points.Count - 1;
+				if(count > -1)
+				{
+					for(index = 0; index < count; index++)
+					{
+						result.Add(new FLine(points[index], points[index + 1]));
+					}
+					result.Add(new FLine(points[count], points[0]));
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* GetPerimeter																													*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -693,6 +745,73 @@ namespace Geometry
 					//	Major X radius.
 					x = ellipse.mCenter.X - ellipse.mRadiusX;
 					result = (ellipse.mFocalPoint1.X - x) + (ellipse.mFocalPoint2.X - x);
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetVertices																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the vertices of the area.
+		/// </summary>
+		/// <param name="ellipse">
+		/// Reference to the ellipse whose vertices will be inspected.
+		/// </param>
+		/// <param name="pointCount">
+		/// Count of discrete points to enumerate.
+		/// </param>
+		/// <param name="rotation">
+		/// Optional angle of local shape rotatation, in radians.
+		/// </param>
+		/// <returns>
+		/// Reference to a list of floating-point points representing the vertices
+		/// of the area.
+		/// </returns>
+		/// <remarks>
+		/// When rotation is 0, the first point occurs on the
+		/// vector +X,0 from center.
+		/// </remarks>
+		public static List<FPoint> GetVertices(FEllipse ellipse, int pointCount,
+			float rotation = 0f)
+		{
+			float angle = 0f;
+			float count = 0f;
+			FPoint center = null;
+			float increment = 0f;
+			float index = 0f;
+			FPoint point = null;
+			List<FPoint> points = new List<FPoint>();
+			List<FPoint> result = new List<FPoint>();
+
+			if(ellipse != null && pointCount != 0)
+			{
+				count = (float)pointCount;
+				increment = GeometryUtil.TwoPi / count;
+				for(index = 0f; index < count; index++)
+				{
+					angle = index * increment;
+					points.Add(GetCoordinateAtAngle(ellipse, angle));
+				}
+				if(rotation == 0f)
+				{
+					result.AddRange(points);
+				}
+				else
+				{
+					//	Rotate the points around the local center.
+					center = FPoint.Clone(ellipse.Center);
+					//	Each point will need to be translated to origin,
+					//	rotated, then translated back to center.
+					foreach(FPoint pointItem in points)
+					{
+						FPoint.Translate(pointItem, FPoint.Invert(center));
+						point = FPoint.Rotate(pointItem, rotation);
+						FPoint.Translate(point, center);
+						result.Add(point);
+					}
 				}
 			}
 			return result;

@@ -220,6 +220,100 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetLine																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a rotated version of the supplied line.
+		/// </summary>
+		/// <param name="line">
+		/// Reference to the line to be rotated.
+		/// </param>
+		/// <param name="rotation">
+		/// Optional angle of local shape rotatation, in radians.
+		/// </param>
+		/// <returns>
+		/// Reference to the representation of the caller's line, rotated to the
+		/// specified rotation.
+		/// </returns>
+		public static FLine GetLine(FLine line, float rotation = 0f)
+		{
+			List<FPoint> points = null;
+			FLine result = new FLine();
+
+			if(line != null)
+			{
+				points = GetVertices(line, rotation);
+				if(points.Count == 2)
+				{
+					result.mPointA = points[0];
+					result.mPointB = points[1];
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetVertices																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the vertices of the line.
+		/// </summary>
+		/// <param name="line">
+		/// Reference to the line whose ends will be inspected.
+		/// </param>
+		/// <param name="rotation">
+		/// Optional angle of local shape rotatation, in radians.
+		/// </param>
+		/// <returns>
+		/// Reference to a list of floating-point points representing the vertices
+		/// of the line.
+		/// </returns>
+		public static List<FPoint> GetVertices(FLine line, float rotation = 0f)
+		{
+			FPoint center = null;
+			FPoint location = null;
+			FPoint point = null;
+			List<FPoint> result = new List<FPoint>();
+			FLine workingLine = null;
+
+			if(line != null)
+			{
+				if(rotation == 0f)
+				{
+					//	Vertices with no rotation is much faster.
+					result.AddRange(new FPoint[]
+					{
+						line.mPointA,
+						line.mPointB
+					});
+				}
+				else
+				{
+					//	Avoid affecting the caller's line object.
+					workingLine = Clone(line);
+					center = new FPoint(
+						workingLine.mPointA.X +
+							((workingLine.mPointB.X - workingLine.mPointA.X) / 2f),
+						workingLine.mPointA.Y +
+							((workingLine.mPointB.Y - workingLine.mPointA.Y) / 2f));
+					location = FPoint.Clone(workingLine.mPointA);
+					//	Translate to origin.
+					Translate(workingLine, FPoint.Invert(center));
+					//	Rotate and translate back.
+					point = FPoint.Rotate(workingLine.mPointA, rotation);
+					FPoint.Translate(point, center);
+					result.Add(point);
+					point = FPoint.Rotate(workingLine.mPointB, rotation);
+					FPoint.Translate(point, center);
+					result.Add(point);
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	HasIntersection																												*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

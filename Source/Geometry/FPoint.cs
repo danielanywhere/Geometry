@@ -641,6 +641,31 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* Invert																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Invert the values of the caller's coordinate.
+		/// </summary>
+		/// <param name="point">
+		/// Reference to the point to be inverted.
+		/// </param>
+		/// <returns>
+		/// Reference to the caller's point with inverted values.
+		/// </returns>
+		public static FPoint Invert(FPoint point)
+		{
+			FPoint result = new FPoint();
+
+			if(point != null)
+			{
+				result.mX = 0f - point.mX;
+				result.mY = 0f - point.mY;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* IsDifferent																														*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -882,6 +907,68 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* Rotate																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Rotate the caller's point around the origin.
+		/// </summary>
+		/// <param name="x">
+		/// The X value to be rotated.
+		/// </param>
+		/// <param name="y">
+		/// The Y value to be rotated.
+		/// </param>
+		/// <param name="angle">
+		/// The angle at which to rotate the point, in radians.
+		/// </param>
+		/// <returns>
+		/// Reference to a representation of the caller's point after being
+		/// rotated by the specified angle around the origin.
+		/// </returns>
+		public static FPoint Rotate(float x, float y, float angle)
+		{
+			FPoint result = new FPoint();
+
+			result.mX =
+				(float)((double)x * Math.Cos((double)angle) -
+					(double)y * Math.Sin((double)angle));
+			result.mY =
+				(float)((double)x * Math.Sin((double)angle) +
+					(double)y * Math.Cos((double)angle));
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Rotate the caller's point around the origin.
+		/// </summary>
+		/// <param name="point">
+		/// Reference to the point to be rotated.
+		/// </param>
+		/// <param name="angle">
+		/// The angle at which to rotate the point, in radians.
+		/// </param>
+		/// <returns>
+		/// Reference to a representation of the caller's point after being
+		/// rotated by the specified angle around the origin.
+		/// </returns>
+		public static FPoint Rotate(FPoint point, float angle)
+		{
+			FPoint result = new FPoint();
+
+			if(point != null)
+			{
+				result.mX =
+					(float)((double)point.mX * Math.Cos((double)angle) -
+						(double)point.mY * Math.Sin((double)angle));
+				result.mY =
+					(float)((double)point.mX * Math.Sin((double)angle) +
+						(double)point.mY * Math.Cos((double)angle));
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* Scale																																	*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -906,6 +993,28 @@ namespace Geometry
 				result.mY = point.mY * scale;
 			}
 			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Translate																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Translate the values of the caller's point by the provided offset.
+		/// </summary>
+		/// <param name="point">
+		/// Reference to the point to be translated.
+		/// </param>
+		/// <param name="offset">
+		/// Reference to the offset to apply to the point.
+		/// </param>
+		public static void Translate(FPoint point, FPoint offset)
+		{
+			if(point != null && offset != null)
+			{
+				point.mX += offset.mX;
+				point.mY += offset.mY;
+			}
 		}
 		//*-----------------------------------------------------------------------*
 

@@ -133,6 +133,94 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetLines																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a collection of lines representing the supplied path.
+		/// </summary>
+		/// <param name="path">
+		/// Reference to the path to be represented.
+		/// </param>
+		/// <param name="rotation">
+		/// Optional angle of local shape rotatation, in radians.
+		/// </param>
+		/// <returns>
+		/// Reference to a collection of lines representing the provided path.
+		/// </returns>
+		/// <remarks>
+		/// <para>
+		/// All of the lines are constructed from common adjoining points, which
+		/// allows you to move any point in the shape without breaking its
+		/// connection to either of its lines.
+		/// </para>
+		/// </remarks>
+		public static List<FLine> GetLines(FPath path, float rotation = 0f)
+		{
+			int count = 0;
+			int index = 0;
+			List<FPoint> points = null;
+			List<FLine> result = new List<FLine>();
+
+			if(path != null)
+			{
+				points = GetVertices(path, rotation);
+				count = points.Count - 1;
+				if(count > -1)
+				{
+					for(index = 0; index < count; index++)
+					{
+						result.Add(new FLine(points[index], points[index + 1]));
+					}
+					result.Add(new FLine(points[count], points[0]));
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetVertices																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the collection of vertices on the specified path.
+		/// </summary>
+		/// <param name="path">
+		/// Reference to the path to be inspected.
+		/// </param>
+		/// <param name="rotation">
+		/// Optional angle of local shape rotatation, in radians.
+		/// </param>
+		/// <returns>
+		/// Reference to a list of floating-point points representing the vertices
+		/// of the area.
+		/// </returns>
+		public static List<FPoint> GetVertices(FPath path, float rotation = 0f)
+		{
+			FPoint center = null;
+			FPoint point = null;
+			List<FPoint> result = new List<FPoint>();
+			FPath workingPath = null;
+
+			if(path != null)
+			{
+				//	Avoid touching the caller's object.
+				workingPath = FPath.Clone(path);
+				center = GetCenter(workingPath);
+				//	Translate to origin.
+				Translate(workingPath, FPoint.Invert(center));
+				//	Rotate and translate back.
+				foreach(FPoint pointItem in workingPath)
+				{
+					point = FPoint.Rotate(pointItem, rotation);
+					FPoint.Translate(point, center);
+					result.Add(point);
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* IsEmpty																																*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -342,6 +430,30 @@ namespace Geometry
 				result = path.Min(y => y.Y);
 			}
 			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Translate																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Translate all of the elements in the path by a uniform distance.
+		/// </summary>
+		/// <param name="path">
+		/// Reference to the path to be translated.
+		/// </param>
+		/// <param name="offset">
+		/// Reference by the axial values by which the path with be moved.
+		/// </param>
+		public static void Translate(FPath path, FPoint offset)
+		{
+			if(path != null && offset != null)
+			{
+				foreach(FPoint pointItem in path)
+				{
+					FPoint.Translate(pointItem, offset);
+				}
+			}
 		}
 		//*-----------------------------------------------------------------------*
 

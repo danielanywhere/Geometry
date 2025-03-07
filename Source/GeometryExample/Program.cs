@@ -372,6 +372,79 @@ namespace GeometryExample
 		}
 		//*-----------------------------------------------------------------------*
 
+		//*-----------------------------------------------------------------------*
+		//* TestShapeVertices																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test the vertices of some shapes.
+		/// </summary>
+		private static void TestShapeVertices()
+		{
+			FArea area = null;
+			FEllipse ellipse = null;
+			FLine line = null;
+			FPath path = null;
+			FPoint point = null;
+			List<FPoint> points = null;
+
+			Console.WriteLine("** Testing Shape Vertices **");
+
+			//	Area.
+			area = new FArea(314.550f, 343.889f, 466.488f, 236.685f);
+			Console.WriteLine($" Area: {area.Left:0.###}, {area.Top:0.###}, " +
+				$"{area.Width:0.###}, {area.Height:0.###}. Rotation: 15.5deg.");
+			points = FArea.GetVertices(area, Trig.DegToRad(15.5f));
+			foreach(FPoint pointItem in points)
+			{
+				Console.WriteLine($"  {pointItem.X:0.###}, {pointItem.Y:0.###}");
+			}
+			//	Ellipse.
+			ellipse = new FEllipse(1157.1425f, 228.5715f,
+				468.571f / 2f, 222.857f / 2f);
+			Console.WriteLine(
+				$" Ellipse: {ellipse.Center.X:0.###}, {ellipse.Center.Y:0.###}, " +
+				$"{ellipse.RadiusX:0.###}, {ellipse.RadiusY:0.###}. " +
+				"Rotation: -32deg.");
+			points = FEllipse.GetVertices(ellipse, 36, Trig.DegToRad(-32));
+			foreach(FPoint pointItem in points)
+			{
+				Console.WriteLine($"  {pointItem.X:0.###}, {pointItem.Y:0.###}");
+			}
+			//	Line.
+			line = new FLine(
+				new FPoint(1180.000f, 632.857f), new FPoint(1462.857f, 632.857f));
+			Console.WriteLine(
+				$" Line: {line.PointA.X:0.###}, {line.PointA.Y:0.###}, " +
+				$"{line.PointB.X:0.###}, {line.PointB.Y:0.###}. Rotation: 52.17deg.");
+			points = FLine.GetVertices(line, Trig.DegToRad(52.17f));
+			foreach(FPoint pointItem in points)
+			{
+				Console.WriteLine($"  {pointItem.X:0.###}, {pointItem.Y:0.###}");
+			}
+			//	Path.
+			path = new FPath()
+			{
+				new FPoint(1507.143f, 352.857f),
+				new FPoint(1767.143f, 755.714f),
+				new FPoint(1595.714f, 302.857f)
+			};
+			point = FPath.GetCenter(path);
+			Console.WriteLine(" Path. " +
+				$"Center: {point.X:0.###}, {point.Y:0.###}. Rotation: 12deg.:");
+			foreach(FPoint pointItem in path)
+			{
+				Console.WriteLine($"  {pointItem.X:0.###}, {pointItem.Y:0.###}");
+			}
+			points = FPath.GetVertices(path, Trig.DegToRad(12f));
+			Console.WriteLine("  Points:");
+			foreach(FPoint pointItem in points)
+			{
+				Console.WriteLine($"   {pointItem.X:0.###}, {pointItem.Y:0.###}");
+			}
+			Console.WriteLine("");
+		}
+		//*-----------------------------------------------------------------------*
+
 		//*************************************************************************
 		//*	Protected																															*
 		//*************************************************************************
@@ -574,6 +647,9 @@ namespace GeometryExample
 			List<FPoint> points = null;
 			float time = 0f;
 			int index = 0;
+
+			//	Test Shape Vertices.
+			TestShapeVertices();
 
 			//	Test Ellipse Coordinate by Angle.
 			TestEllipseCoordinateByAngle();

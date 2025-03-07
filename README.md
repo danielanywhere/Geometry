@@ -209,6 +209,16 @@ GDI+ dimensional objects, like Point, Rectangle, and others normally
 found in .NET system libraries like System.Drawing have been defined for
 generic public use with or without a statically typed graphics system.
 
+To see working examples of various uses of this library, see the
+**Source/GeometryExample** folder, where I add various tests and
+use-cases to a stand-alone application before publishing each version.
+
+If you would like to see a bigger-picture view of the library in daily
+use, review some of the source of my other GitHub project
+**danielanywhere/ShopTools**. That project uses Dan's Geometry Library
+do draw graphics, calculate distances, and perform a lot of the heavy
+lifting.
+
 For the full documentation of this library, you can access the API in
 HTML format at the associated GitHub user page library
 <https://danielanywhere.github.io/Geometry>.

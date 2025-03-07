@@ -613,23 +613,38 @@ namespace Geometry
 		/// <param name="area">
 		/// Reference to the area for which the lines will be returned.
 		/// </param>
+		/// <param name="rotation">
+		/// Optional angle of local shape rotatation, in radians.
+		/// </param>
 		/// <returns>
 		/// Reference to a list of four lines, if the area was legitimate and
 		/// non-empty. Otherwise, an empty array.
 		/// </returns>
 		/// <remarks>
+		/// <para>
 		/// In drawing space, the lines from this method are arranged in a
 		/// counter-clockwise progression from top-right, including the top, left,
 		/// bottom, then right sides.
+		/// </para>
+		/// <para>
+		/// All of the lines are constructed from common adjoining points, which
+		/// allows you to move any point in the shape without breaking its
+		/// connection to either of its lines.
+		/// </para>
 		/// </remarks>
-		public static List<FLine> GetLines(FArea area)
+		public static List<FLine> GetLines(FArea area, float rotation = 0f)
 		{
+			int index = 0;
+			List<FPoint> points = null;
 			List<FLine> result = new List<FLine>();
 
 			if(!FArea.IsEmpty(area))
 			{
-				result = new List<FLine>
+				if(rotation == 0f)
 				{
+					//	Non-rotated output is faster.
+					result.AddRange(new FLine[]
+					{
 					new FLine(
 						new FPoint(area.Right, area.Top),
 						new FPoint(area.Left, area.Top)),
@@ -642,7 +657,17 @@ namespace Geometry
 					new FLine(
 						new FPoint(area.Right, area.Bottom),
 						new FPoint(area.Right, area.Top))
-				};
+					});
+				}
+				else
+				{
+					points = GetVertices(area, rotation);
+					for(index = 0; index < 3; index ++)
+					{
+						result.Add(new FLine(points[index], points[index + 1]));
+					}
+					result.Add(new FLine(points[3], points[0]));
+				}
 			}
 			return result;
 		}
@@ -699,6 +724,76 @@ namespace Geometry
 		//	return result;
 		//}
 		////*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetVertices																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the vertices of the area.
+		/// </summary>
+		/// <param name="area">
+		/// Reference to the area whose vertices will be inspected.
+		/// </param>
+		/// <param name="rotation">
+		/// Optional angle of local shape rotatation, in radians.
+		/// </param>
+		/// <returns>
+		/// Reference to a list of floating-point points representing the vertices
+		/// of the area.
+		/// </returns>
+		public static List<FPoint> GetVertices(FArea area, float rotation = 0f)
+		{
+			FPoint center = null;
+			FPoint location = null;
+			FPoint point = null;
+			List<FPoint> result = new List<FPoint>();
+			FArea workingArea = null;
+
+			if(area != null)
+			{
+				if(rotation == 0f)
+				{
+					//	Vertices with no rotation is much faster.
+					result.AddRange(new FPoint[]
+					{
+						new FPoint(area.mRight, area.mTop),
+						new FPoint(area.mLeft, area.mTop),
+						new FPoint(area.mLeft, area.mBottom),
+						new FPoint(area.mRight, area.mBottom)
+					});
+				}
+				else
+				{
+					//	Avoid affecting the caller's area object.
+					workingArea = Clone(area);
+					center = new FPoint(
+						workingArea.mLeft + (workingArea.Width / 2f),
+						workingArea.mTop + (workingArea.Height / 2f));
+					location = new FPoint(workingArea.mLeft, workingArea.mTop);
+					//	Translate to origin.
+					Translate(workingArea, FPoint.Invert(center));
+					//	Rotate and translate back.
+					point =
+						FPoint.Rotate(workingArea.mRight, workingArea.mTop, rotation);
+					FPoint.Translate(point, center);
+					result.Add(point);
+					point =
+						FPoint.Rotate(workingArea.mLeft, workingArea.mTop, rotation);
+					FPoint.Translate(point, center);
+					result.Add(point);
+					point =
+						FPoint.Rotate(workingArea.mLeft, workingArea.mBottom, rotation);
+					FPoint.Translate(point, center);
+					result.Add(point);
+					point =
+						FPoint.Rotate(workingArea.mRight, workingArea.mBottom, rotation);
+					FPoint.Translate(point, center);
+					result.Add(point);
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//* HasVolume																															*
