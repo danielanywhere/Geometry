@@ -31,6 +31,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.2317.4012 | No breaking changes; The following methods have been added to improve intersection handling: **FArea.HasIntersection(FArea, FLine)**, **FArea.GetIntersections(FArea, FLine)**, **FArea.HasIntersection(FArea, FArea)**, and **FArea.GetIntersections(FArea, FArea)** |
 | 25.2307.4248 | No breaking changes; In **FArea**, optional rotation parameter has been added to the **GetLines()** method to allow rotation of the shape around its local center.; **GetVertices()** method has been added to these classes: **FArea**, **FEllipse**, **FLine**, **FPath**; **GetLines()** method has been added to these classes: **FEllipse**, **FPath**, **GetLine()** method has been added to the FLine class; **Translate()** method has been added to the **FPath** class; the following new methods were added to the **FPoint** class: **Invert**, **Rotate**, **Translate** |
 | 25.2303.4537 | One breaking change: The obsolete **Ellipse** utility class has been removed. Please use identical methods in the **FEllipse** class. |
 | 25.1228.4607 | No breaking changes; **FArea.GetLines(FArea area)** added; **FArea.IsPointAtCorner(FArea area, FPoint point)** added; **FLine.GetClosestPoint(FLine line, FPoint point)** added; **FLine.GetIntersectingLine(List<FLine> lines, FPoint point)** added; **FLine.GetIntersectingLines(List<FLine> lines, FPoint point)** added.; **FLine.IsPointAtEnd(FLine line, FPoint point)** added; **FPoint.Dot(FPoint value1, FPoint value2)** added |

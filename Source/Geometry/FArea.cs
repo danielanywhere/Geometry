@@ -605,6 +605,83 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetIntersections																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the intersections of two areas.
+		/// </summary>
+		/// <param name="area1">
+		/// Reference to the first area to be tested.
+		/// </param>
+		/// <param name="area2">
+		/// Reference to the second area to be tested.
+		/// </param>
+		/// <returns>
+		/// Reference to a list of points where the two areas intersect, if found.
+		/// Otherwise, an empty list.
+		/// </returns>
+		public static List<FPoint> GetIntersections(FArea area1, FArea area2)
+		{
+			List<FLine> lines1 = null;
+			List<FLine> lines2 = null;
+			FPoint point = null;
+			List<FPoint> result = new List<FPoint>();
+
+			if(area1 != null && area2 != null)
+			{
+				lines1 = GetLines(area1);
+				lines2 = GetLines(area2);
+				foreach(FLine line1Item in lines1)
+				{
+					foreach(FLine line2Item in lines2)
+					{
+						point = FLine.Intersect(line1Item, line2Item, false);
+						if(point != null)
+						{
+							result.Add(point);
+						}
+					}
+				}
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the intersections of a line with a rectangle.
+		/// </summary>
+		/// <param name="area">
+		/// Reference to the area to test.
+		/// </param>
+		/// <param name="line">
+		/// Reference to the line to test.
+		/// </param>
+		/// <returns>
+		/// Reference to a list of points where the supplied line intersects with
+		/// the specified rectangle, if found. Otherwise, an empty list.
+		/// </returns>
+		public static List<FPoint> GetIntersections(FArea area, FLine line)
+		{
+			List<FLine> lines = null;
+			FPoint point = null;
+			List<FPoint> result = new List<FPoint>();
+
+			if(area != null && line != null)
+			{
+				lines = GetLines(area);
+				foreach(FLine lineItem in lines)
+				{
+					point = FLine.Intersect(lineItem, line, false);
+					if(point != null)
+					{
+						result.Add(point);
+					}
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* GetLines																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -789,6 +866,86 @@ namespace Geometry
 						FPoint.Rotate(workingArea.mRight, workingArea.mBottom, rotation);
 					FPoint.Translate(point, center);
 					result.Add(point);
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* HasIntersection																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the first provided area intersects
+		/// with the second one.
+		/// </summary>
+		/// <param name="area1">
+		/// Reference to the first area to test.
+		/// </param>
+		/// <param name="area2">
+		/// Reference to the second area to test.
+		/// </param>
+		/// <returns>
+		/// True if the two areas intersect. Otherwise, false.
+		/// </returns>
+		public static bool HasIntersection(FArea area1, FArea area2)
+		{
+			List<FLine> lines1 = null;
+			List<FLine> lines2 = null;
+			bool result = false;
+
+			if(area1 != null && area2 != null)
+			{
+				lines1 = GetLines(area1);
+				lines2 = GetLines(area2);
+				foreach(FLine line1Item in lines1)
+				{
+					foreach(FLine line2Item in lines2)
+					{
+						if(FLine.HasIntersection(line1Item, line2Item, false))
+						{
+							result = true;
+							break;
+						}
+					}
+					if(result)
+					{
+						break;
+					}
+				}
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return a value indicating whether the specified area intersects with
+		/// the provided line.
+		/// </summary>
+		/// <param name="area">
+		/// Reference to the area to test.
+		/// </param>
+		/// <param name="line">
+		/// Reference to the line to test.
+		/// </param>
+		/// <returns>
+		/// True if the supplied line intersects with the given intersection.
+		/// Otherwise, false.
+		/// </returns>
+		public static bool HasIntersection(FArea area, FLine line)
+		{
+			List<FLine> lines = null;
+			bool result = false;
+
+			if(area != null && line != null)
+			{
+				lines = GetLines(area);
+				foreach(FLine lineItem in lines)
+				{
+					if(FLine.HasIntersection(lineItem, line, false))
+					{
+						result = true;
+						break;
+					}
 				}
 			}
 			return result;
