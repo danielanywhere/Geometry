@@ -41,6 +41,30 @@ namespace Geometry
 		//*	Public																																*
 		//*************************************************************************
 		//*-----------------------------------------------------------------------*
+		//* Clamp																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Clamp the supplied value within the allowed minimum and maximum values.
+		/// </summary>
+		/// <param name="value">
+		/// </param>
+		/// <param name="minimum">
+		/// The minimum allowable value.
+		/// </param>
+		/// <param name="maximum">
+		/// The maximum allowable value.
+		/// </param>
+		/// <returns>
+		/// The caller's clamped value.
+		/// </returns>
+		public static float Clamp(float value,
+			float minimum = 0, float maximum = 1)
+		{
+			return Math.Max(minimum, Math.Min(value, maximum));
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* GetValue																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
