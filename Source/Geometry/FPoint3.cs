@@ -19,10 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-
 using Newtonsoft.Json;
 
 using static Geometry.GeometryUtil;
@@ -30,20 +28,19 @@ using static Geometry.GeometryUtil;
 namespace Geometry
 {
 	//*-------------------------------------------------------------------------*
-	//*	FPoint																																	*
+	//*	FPoint3																																	*
 	//*-------------------------------------------------------------------------*
 	/// <summary>
-	/// Single-precision 2D point.
+	/// Single precision 3D point.
 	/// </summary>
 	/// <remarks>
 	/// This class exists to take advantage of first-class object behavior
-	/// during operation. It is similar in usage to the System.Windows.PointF,
-	/// but is accessible by reference wherever it is used. As a result, once
-	/// the item is assigned in a helper function, its members continue to
-	/// carry exactly the same information as the root instance until they
-	/// are changed.
+	/// during operation. It is is accessible by reference wherever it is used.
+	/// As a result, once the item is assigned in a helper function, its members
+	/// continue to carry exactly the same information as the root instance until
+	/// they are changed.
 	/// </remarks>
-	public class FPoint
+	public class FPoint3
 	{
 		//*************************************************************************
 		//*	Private																																*
@@ -60,7 +57,7 @@ namespace Geometry
 		/// <param name="e">
 		/// Float point event arguments.
 		/// </param>
-		protected virtual void OnCoordinateChanged(FloatPointEventArgs e)
+		protected virtual void OnCoordinateChanged(FloatPoint3EventArgs e)
 		{
 			CoordinateChanged?.Invoke(this, e);
 		}
@@ -73,14 +70,14 @@ namespace Geometry
 		//*	_Constructor																													*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Create a new Instance of the FPoint Item.
+		/// Create a new Instance of the FPoint3 Item.
 		/// </summary>
-		public FPoint()
+		public FPoint3()
 		{
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
-		/// Create a new Instance of the FPoint Item.
+		/// Create a new Instance of the FPoint3 Item.
 		/// </summary>
 		/// <param name="x">
 		/// X coordinate.
@@ -88,10 +85,14 @@ namespace Geometry
 		/// <param name="y">
 		/// Y coordinate.
 		/// </param>
-		public FPoint(float x, float y)
+		/// <param name="z">
+		/// Z coordinate.
+		/// </param>
+		public FPoint3(float x, float y, float z)
 		{
 			mX = x;
 			mY = y;
+			mZ = z;
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -100,18 +101,19 @@ namespace Geometry
 		/// <param name="source">
 		/// Reference to an instance of a FPoint to use for reference values.
 		/// </param>
-		public FPoint(FPoint source)
+		public FPoint3(FPoint3 source)
 		{
-			if (source != null)
+			if(source != null)
 			{
 				mX = source.X;
 				mY = source.Y;
+				mZ = source.Z;
 			}
 		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//* _Operator scalar * FPoint																							*
+		//* _Operator scalar * FPoint3																						*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return the result of a point multiplied by a scalar.
@@ -125,14 +127,15 @@ namespace Geometry
 		/// <returns>
 		/// Result of the multiplication.
 		/// </returns>
-		public static FPoint operator *(float scalar, FPoint point)
+		public static FPoint3 operator *(float scalar, FPoint3 point)
 		{
-			FPoint result = new FPoint();
+			FPoint3 result = new FPoint3();
 
 			if(point != null && scalar != 0f)
 			{
 				result.mX = scalar * point.mX;
 				result.mY = scalar * point.mY;
+				result.mZ = scalar * point.mZ;
 			}
 			return result;
 		}
@@ -149,21 +152,22 @@ namespace Geometry
 		/// <returns>
 		/// Result of the multiplication.
 		/// </returns>
-		public static FPoint operator *(FPoint point, float scalar)
+		public static FPoint3 operator *(FPoint3 point, float scalar)
 		{
-			FPoint result = new FPoint();
+			FPoint3 result = new FPoint3();
 
 			if(point != null && scalar != 0f)
 			{
 				result.mX = scalar * point.mX;
 				result.mY = scalar * point.mY;
+				result.mZ = scalar * point.mZ;
 			}
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//* _Operator FPoint + FPoint																							*
+		//* _Operator FPoint3 + FPoint3																						*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return the result of the values of two points added together.
@@ -177,26 +181,28 @@ namespace Geometry
 		/// <returns>
 		/// Result of the addition.
 		/// </returns>
-		public static FPoint operator +(FPoint pointA, FPoint pointB)
+		public static FPoint3 operator +(FPoint3 pointA, FPoint3 pointB)
 		{
-			FPoint result = new FPoint();
+			FPoint3 result = new FPoint3();
 
 			if(pointA != null)
 			{
 				result.mX = pointA.mX;
 				result.mY = pointA.mY;
+				result.mZ = pointA.mZ;
 			}
 			if(pointB != null)
 			{
 				result.mX += pointB.mX;
 				result.mY += pointB.mY;
+				result.mZ += pointB.mZ;
 			}
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//* _Operator FPoint - FPoint																							*
+		//* _Operator FPoint3 - FPoint3																						*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return the result of one point subtracted from another.
@@ -210,26 +216,28 @@ namespace Geometry
 		/// <returns>
 		/// Result of the subtraction.
 		/// </returns>
-		public static FPoint operator -(FPoint pointA, FPoint pointB)
+		public static FPoint3 operator -(FPoint3 pointA, FPoint3 pointB)
 		{
-			FPoint result = new FPoint();
+			FPoint3 result = new FPoint3();
 
 			if(pointA != null)
 			{
 				result.mX = pointA.mX;
 				result.mY = pointA.mY;
+				result.mZ = pointA.mZ;
 			}
 			if(pointB != null)
 			{
 				result.mX -= pointB.mX;
 				result.mY -= pointB.mY;
+				result.mZ -= pointB.mZ;
 			}
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	_Operator FPoint != FPoint																						*
+		//*	_Operator FPoint3 != FPoint3																					*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return a value indicating whether values of two points are not equal.
@@ -245,15 +253,15 @@ namespace Geometry
 		/// Otherwise, false.
 		/// </returns>
 		[DebuggerStepThrough]
-		public static bool operator !=(FPoint pointA, FPoint pointB)
+		public static bool operator !=(FPoint3 pointA, FPoint3 pointB)
 		{
 			bool result = true;
 
-			if ((object)pointA != null && (object)pointB != null)
+			if((object)pointA != null && (object)pointB != null)
 			{
 				result = !(pointA == pointB);
 			}
-			else if ((object)pointA == null && (object)pointB == null)
+			else if((object)pointA == null && (object)pointB == null)
 			{
 				result = false;
 			}
@@ -262,7 +270,7 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	_Operator FPoint == FPoint																						*
+		//*	_Operator FPoint3 == FPoint3																					*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return a value indicating whether values of two points are equal.
@@ -278,7 +286,7 @@ namespace Geometry
 		/// false.
 		/// </returns>
 		[DebuggerStepThrough]
-		public static bool operator ==(FPoint pointA, FPoint pointB)
+		public static bool operator ==(FPoint3 pointA, FPoint3 pointB)
 		{
 			bool result = true;
 
@@ -286,7 +294,8 @@ namespace Geometry
 			{
 				result = (
 					(pointA.mX == pointB.mX) &&
-					(pointA.mY == pointB.mY));
+					(pointA.mY == pointB.mY) &&
+					(pointA.mZ == pointB.mZ));
 			}
 			else if((object)pointA != null || (object)pointB != null)
 			{
@@ -295,150 +304,6 @@ namespace Geometry
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
-
-		////*-----------------------------------------------------------------------*
-		////*	_Implicit FPoint = SKPoint																						*
-		////*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Cast an SKPoint value to FPoint.
-		///// </summary>
-		///// <param name="value">
-		///// The point to convert.
-		///// </param>
-		//public static implicit operator FPoint(SKPoint value)
-		//{
-		//	FPoint rv = new FPoint();
-
-		//	if(value != null)
-		//	{
-		//		rv.mX = value.X;
-		//		rv.mY = value.Y;
-		//	}
-		//	return rv;
-		//}
-		////*-----------------------------------------------------------------------*
-
-		////*-----------------------------------------------------------------------*
-		////*	_Implicit FPoint = Point																							*
-		////*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Cast a Point value to FPoint.
-		///// </summary>
-		///// <param name="value">
-		///// The point to convert.
-		///// </param>
-		///// <remarks>
-		///// This operator is not available when compiling without GDI+.
-		///// </remarks>
-		//public static implicit operator FPoint(System.Drawing.Point value)
-		//{
-		//	FPoint result = new FPoint();
-
-		//	if(value.X != 0 || value.Y != 0)
-		//	{
-		//		result.mX = value.X;
-		//		result.mY = value.Y;
-		//	}
-		//	return result;
-		//}
-		////*-----------------------------------------------------------------------*
-
-		////*-----------------------------------------------------------------------*
-		////*	_Implicit FPoint = PointF																							*
-		////*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Cast a PointF value to FPoint.
-		///// </summary>
-		///// <param name="value">
-		///// The point to convert.
-		///// </param>
-		///// <remarks>
-		///// This operator is not available when compiling without GDI+.
-		///// </remarks>
-		//public static implicit operator FPoint(System.Drawing.PointF value)
-		//{
-		//	FPoint result = new FPoint();
-
-		//	if(value.X != 0f || value.Y != 0f)
-		//	{
-		//		result.mX = value.X;
-		//		result.mY = value.Y;
-		//	}
-		//	return result;
-		//}
-		////*-----------------------------------------------------------------------*
-
-		////*-----------------------------------------------------------------------*
-		////*	_Implicit Point = FPoint																							*
-		////*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Cast an FPoint value to Point.
-		///// </summary>
-		///// <param name="value">
-		///// The point to convert.
-		///// </param>
-		///// <remarks>
-		///// This operator is not available when compiling without GDI+.
-		///// </remarks>
-		//public static implicit operator Point(FPoint value)
-		//{
-		//	Point result = new Point();
-
-		//	if(value != null)
-		//	{
-		//		result.X = (int)value.mX;
-		//		result.Y = (int)value.mY;
-		//	}
-		//	return result;
-		//}
-		////*-----------------------------------------------------------------------*
-
-		////*-----------------------------------------------------------------------*
-		////*	_Implicit PointF = FPoint																							*
-		////*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Cast an FPoint value to PointF.
-		///// </summary>
-		///// <param name="value">
-		///// The point to convert.
-		///// </param>
-		///// <remarks>
-		///// This operator is not available when compiling without GDI+.
-		///// </remarks>
-		//public static implicit operator PointF(FPoint value)
-		//{
-		//	PointF result = PointF.Empty;
-
-		//	if(value != null)
-		//	{
-		//		result.X = value.mX;
-		//		result.Y = value.mY;
-		//	}
-		//	return result;
-		//}
-		////*-----------------------------------------------------------------------*
-
-		////*-----------------------------------------------------------------------*
-		////*	_Implicit SKPoint = FPoint																						*
-		////*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Cast an FPoint value to SKPoint.
-		///// </summary>
-		///// <param name="value">
-		///// The point to convert.
-		///// </param>
-		//public static implicit operator SKPoint(FPoint value)
-		//{
-		//	SKPoint rv = new SKPoint();
-
-		//	if(value != null)
-		//	{
-		//		rv.X = value.X;
-		//		rv.Y = value.Y;
-		//	}
-		//	return rv;
-		//}
-		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//* Clear																																	*
@@ -449,11 +314,11 @@ namespace Geometry
 		/// <param name="point">
 		/// Reference to the point to clear.
 		/// </param>
-		public static void Clear(FPoint point)
+		public static void Clear(FPoint3 point)
 		{
-			if (point != null && !point.mReadOnly)
+			if(point != null && !point.mReadOnly)
 			{
-				point.mX = point.mY = 0f;
+				point.mX = point.mY = point.mZ = 0f;
 			}
 		}
 		//*-----------------------------------------------------------------------*
@@ -472,56 +337,37 @@ namespace Geometry
 		/// are the same as those in the source, if a legitimate source was
 		/// provided. Otherwise, an empty FPoint.
 		/// </returns>
-		public static FPoint Clone(FPoint source)
+		public static FPoint3 Clone(FPoint3 source)
 		{
-			FPoint result = new FPoint();
+			FPoint3 result = new FPoint3();
 
 			if(source != null)
 			{
 				result.mReadOnly = source.mReadOnly;
 				result.mX = source.mX;
 				result.mY = source.mY;
+				result.mZ = source.mZ;
 			}
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
 
+		//	TODO: ClosestPoint(FPoint3 checkPoint, List<FArea3> areas)
+
 		//*-----------------------------------------------------------------------*
-		//* ClosestPoint																													*
+		//*	Color																																	*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Return the closest point to the check-point.
+		/// Private member for <see cref="Color">Color</see>.
 		/// </summary>
-		/// <param name="checkPoint">
-		/// The check point to which the closest point in the list will be found.
-		/// </param>
-		/// <param name="areas">
-		/// Reference to a list of areas whose points will be compared.
-		/// </param>
-		/// <returns>
-		/// A point corresponding to the location of the closest area in the
-		/// list.
-		/// </returns>
-		public static FPoint ClosestPoint(FPoint checkPoint, List<FArea> areas)
+		private FColor4 mColor = new FColor4(1f, 0f, 0f, 0f);
+		/// <summary>
+		/// Get/Set a reference to the color of this line.
+		/// </summary>
+		public FColor4 Color
 		{
-			List<float> distances = new List<float>();
-			int minIndex = -1;
-			float minValue = 0;
-			FPoint result = null;
-
-			if (checkPoint != null && areas?.Count > 0)
-			{
-				foreach (FArea areaItem in areas)
-				{
-					distances.Add(
-						Math.Abs(Trig.GetLineDistance(
-							checkPoint.mX, checkPoint.mY, areaItem.X, areaItem.Y)));
-				}
-				minValue = distances.Min();
-				minIndex = distances.IndexOf(minValue);
-				result = FArea.Location(areas[minIndex]);
-			}
-			return result;
+			get { return mColor; }
+			set { mColor = value; }
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -531,7 +377,7 @@ namespace Geometry
 		/// <summary>
 		/// Fired when a coordinate has changed.
 		/// </summary>
-		public event FloatPointEventHandler CoordinateChanged;
+		public event FloatPoint3EventHandler CoordinateChanged;
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
@@ -549,14 +395,15 @@ namespace Geometry
 		/// <returns>
 		/// Coordinate difference between two points.
 		/// </returns>
-		public static FPoint Delta(FPoint pointA, FPoint pointB)
+		public static FPoint3 Delta(FPoint3 pointA, FPoint3 pointB)
 		{
-			FPoint result = new FPoint();
+			FPoint3 result = new FPoint3();
 
-			if (pointA != null && pointB != null)
+			if(pointA != null && pointB != null)
 			{
 				result.mX = pointB.mX - pointA.mX;
 				result.mY = pointB.mY - pointA.mY;
+				result.mZ = pointB.mZ - pointA.mZ;
 			}
 			return result;
 		}
@@ -577,13 +424,15 @@ namespace Geometry
 		/// <returns>
 		/// The dot product of the two input points.
 		/// </returns>
-		public static float Dot(FPoint value1, FPoint value2)
+		public static float Dot(FPoint3 value1, FPoint3 value2)
 		{
 			float result = 0f;
 
 			if(value1 != null && value2 != null)
 			{
-				result = value1.X * value2.X + value1.Y * value2.Y;
+				result = (value1.X * value2.X) +
+					(value1.Y * value2.Y) +
+					(value1.Z * value2.Z);
 			}
 			return result;
 		}
@@ -607,9 +456,9 @@ namespace Geometry
 		{
 			bool result = false;
 
-			if (obj is FPoint @point)
+			if(obj is FPoint3 @point)
 			{
-				if (point.mX == mX && point.mY == mY)
+				if(point.mX == mX && point.mY == mY && point.mZ == mZ)
 				{
 					result = true;
 				}
@@ -636,6 +485,7 @@ namespace Geometry
 
 			result *= (factor + mX.GetHashCode());
 			result *= (factor + mY.GetHashCode());
+			result *= (factor + mZ.GetHashCode());
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
@@ -652,14 +502,15 @@ namespace Geometry
 		/// <returns>
 		/// Reference to the caller's point with inverted values.
 		/// </returns>
-		public static FPoint Invert(FPoint point)
+		public static FPoint3 Invert(FPoint3 point)
 		{
-			FPoint result = new FPoint();
+			FPoint3 result = new FPoint3();
 
 			if(point != null)
 			{
 				result.mX = 0f - point.mX;
 				result.mY = 0f - point.mY;
+				result.mZ = 0f - point.mZ;
 			}
 			return result;
 		}
@@ -680,16 +531,17 @@ namespace Geometry
 		/// <returns>
 		/// True if the two points are different. Otherwise, false.
 		/// </returns>
-		public static bool IsDifferent(FPoint pointA, FPoint pointB)
+		public static bool IsDifferent(FPoint3 pointA, FPoint3 pointB)
 		{
 			bool result = false;
 
-			if (pointA != null && pointB != null)
+			if(pointA != null && pointB != null)
 			{
 				result = pointA.mX != pointB.mX ||
-					pointA.mY != pointB.mY;
+					pointA.mY != pointB.mY ||
+					pointA.mZ != pointB.mZ;
 			}
-			else if (pointA != null || pointB != null)
+			else if(pointA != null || pointB != null)
 			{
 				result = true;
 			}
@@ -709,13 +561,13 @@ namespace Geometry
 		/// <returns>
 		/// True if the specified point is empty. Otherwise, false.
 		/// </returns>
-		public static bool IsEmpty(FPoint point)
+		public static bool IsEmpty(FPoint3 point)
 		{
 			bool result = true;
 
 			if(point != null)
 			{
-				result = (point.mX == 0f && point.mY == 0f);
+				result = (point.mX == 0f && point.mY == 0f && point.mZ == 0f);
 			}
 			return result;
 		}
@@ -733,14 +585,17 @@ namespace Geometry
 		/// <returns>
 		/// The absolute magnitude of the caller's point.
 		/// </returns>
-		public static float Magnitude(FPoint point)
+		public static float Magnitude(FPoint3 point)
 		{
 			float result = 0f;
 
 			if(point != null)
 			{
 				result = (float)Math.Sqrt(
-					(double)(point.mX * point.mX + point.mY * point.mY));
+					(double)(
+					point.mX * point.mX +
+					point.mY * point.mY +
+					point.mZ * point.mZ));
 			}
 			return result;
 		}
@@ -762,14 +617,15 @@ namespace Geometry
 		/// Reference to a point that represents the exact middle coordinate of the
 		/// caller's virtual line.
 		/// </returns>
-		public static FPoint MiddlePoint(FPoint pointA, FPoint pointB)
+		public static FPoint3 MiddlePoint(FPoint3 pointA, FPoint3 pointB)
 		{
-			FPoint result = new FPoint();
+			FPoint3 result = new FPoint3();
 
-			if (pointA != null && pointB != null)
+			if(pointA != null && pointB != null)
 			{
 				result.X = (pointA.X + pointB.X) / 2f;
 				result.Y = (pointA.Y + pointB.Y) / 2f;
+				result.Z = (pointA.Z + pointB.Z) / 2f;
 			}
 			return result;
 		}
@@ -791,12 +647,16 @@ namespace Geometry
 		/// <param name="dy">
 		/// Y distance from the original point.
 		/// </param>
+		/// <param name="dz">
+		/// Z distance from the original point.
+		/// </param>
 		/// <returns>
 		/// Reference to a new point at the specified offset from the original.
 		/// </returns>
-		public static FPoint Offset(FPoint point, float dx, float dy)
+		public static FPoint3 Offset(FPoint3 point, float dx, float dy, float dz)
 		{
-			FPoint result = new FPoint(point.mX + dx, point.mY + dy);
+			FPoint3 result =
+				new FPoint3(point.mX + dx, point.mY + dy, point.mZ + dz);
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
@@ -818,13 +678,14 @@ namespace Geometry
 		/// Newly created FPoint value representing the caller's input, if
 		/// that input was legal or allowNull was false. Otherwise, a null value.
 		/// </returns>
-		public static FPoint Parse(string coordinate, bool allowNull = false)
+		public static FPoint3 Parse(string coordinate, bool allowNull = false)
 		{
 			bool bX = false;
 			bool bY = false;
+			bool bZ = false;
 			int index = 0;
 			MatchCollection matches = null;
-			FPoint result = null;
+			FPoint3 result = null;
 			string text = "";
 
 			if(coordinate?.Length > 0)
@@ -835,7 +696,7 @@ namespace Geometry
 					//	JSON object.
 					try
 					{
-						result = JsonConvert.DeserializeObject<FPoint>(coordinate);
+						result = JsonConvert.DeserializeObject<FPoint3>(coordinate);
 					}
 					catch { }
 				}
@@ -845,7 +706,7 @@ namespace Geometry
 					matches = Regex.Matches(coordinate, ResourceMain.rxCoordinate);
 					if(matches.Count > 0)
 					{
-						result = new FPoint();
+						result = new FPoint3();
 						foreach(Match matchItem in matches)
 						{
 							text = GetValue(matchItem, "label").ToLower();
@@ -858,6 +719,10 @@ namespace Geometry
 								case "y":
 									result.mY = ToFloat(GetValue(matchItem, "number"));
 									bY = true;
+									break;
+								case "z":
+									result.mZ = ToFloat(GetValue(matchItem, "number"));
+									bZ = true;
 									break;
 								default:
 									switch(index)
@@ -876,6 +741,13 @@ namespace Geometry
 												bY = true;
 											}
 											break;
+										case 2:
+											if(!bZ)
+											{
+												result.mZ = ToFloat(GetValue(matchItem, "number"));
+												bZ = true;
+											}
+											break;
 									}
 									break;
 							}
@@ -886,7 +758,7 @@ namespace Geometry
 			}
 			if(result == null && !allowNull)
 			{
-				result = new FPoint();
+				result = new FPoint3();
 			}
 			return result;
 		}
@@ -919,24 +791,59 @@ namespace Geometry
 		/// <param name="y">
 		/// The Y value to be rotated.
 		/// </param>
-		/// <param name="angle">
-		/// The angle at which to rotate the point, in radians.
+		/// <param name="z">
+		/// The Z value to be rotated.
+		/// </param>
+		/// <param name="thetaX">
+		/// The angle at which to rotate the point around the X axis, in radians.
+		/// </param>
+		/// <param name="thetaY">
+		/// The angle at which to rotate the point around the Y axis, in radians.
+		/// </param>
+		/// <param name="thetaZ">
+		/// The angle at which to rotate the point around the Z axis, in radians.
 		/// </param>
 		/// <returns>
 		/// Reference to a representation of the caller's point after being
-		/// rotated by the specified angle around the origin.
+		/// rotated by the specified angles around the origin.
 		/// </returns>
-		public static FPoint Rotate(float x, float y, float angle)
+		public static FPoint3 Rotate(float x, float y, float z,
+			float thetaX, float thetaY, float thetaZ)
 		{
-			FPoint result = new FPoint();
+			FMatrix3 mxX = new FMatrix3()
+			{
+				Values = new float[,]
+				{
+					{ 1f, 0f, 0f },
+					{ 0f, (float)Math.Cos(thetaX), 0f - (float)Math.Sin(thetaX) },
+					{ 0f, (float)Math.Sin(thetaX), (float)Math.Cos(thetaX) }
+				}
+			};
+			FMatrix3 mxY = new FMatrix3()
+			{
+				Values = new float[,]
+				{
+					{ (float)Math.Cos(thetaY), 0f, (float)Math.Sin(thetaY) },
+					{ 0f, 1f, 0f },
+					{ 0f - (float)Math.Sin(thetaY), 0f, (float)Math.Cos(thetaY) }
+				}
+			};
+			FMatrix3 mxZ = new FMatrix3()
+			{
+				Values = new float[,]
+				{
+					{ (float)Math.Cos(thetaZ), 0f - (float)Math.Sin(thetaZ), 0f },
+					{ (float)Math.Sin(thetaZ), (float)Math.Cos(thetaZ), 0f },
+					{ 0f, 0f, 1f }
+				},
+			};
+			FVector3 point = new FVector3(x, y, z);
 
-			result.mX =
-				(float)((double)x * Math.Cos((double)angle) -
-					(double)y * Math.Sin((double)angle));
-			result.mY =
-				(float)((double)x * Math.Sin((double)angle) +
-					(double)y * Math.Cos((double)angle));
-			return result;
+			point = FMatrix3.Multiply(mxZ, point);
+			point = FMatrix3.Multiply(mxY, point);
+			point = FMatrix3.Multiply(mxX, point);
+
+			return point;
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -945,27 +852,59 @@ namespace Geometry
 		/// <param name="point">
 		/// Reference to the point to be rotated.
 		/// </param>
-		/// <param name="angle">
-		/// The angle at which to rotate the point, in radians.
+		/// <param name="thetaX">
+		/// The angle at which to rotate the point on the X axis, in radians.
+		/// </param>
+		/// <param name="thetaY">
+		/// The angle at which to rotate the point on the Y axis, in radians.
+		/// </param>
+		/// <param name="thetaZ">
+		/// The angle at which to rotate the point on the Z axis, in radians.
 		/// </param>
 		/// <returns>
 		/// Reference to a representation of the caller's point after being
 		/// rotated by the specified angle around the origin.
 		/// </returns>
-		public static FPoint Rotate(FPoint point, float angle)
+		public static FPoint3 Rotate(FPoint3 point,
+			float thetaX, float thetaY, float thetaZ)
 		{
-			FPoint result = new FPoint();
+			FMatrix3 mxX = new FMatrix3()
+			{
+				Values = new float[,]
+				{
+					{ 1f, 0f, 0f },
+					{ 0f, (float)Math.Cos(thetaX), 0f - (float)Math.Sin(thetaX) },
+					{ 0f, (float)Math.Sin(thetaX), (float)Math.Cos(thetaX) }
+				}
+			};
+			FMatrix3 mxY = new FMatrix3()
+			{
+				Values = new float[,]
+				{
+					{ (float)Math.Cos(thetaY), 0f, (float)Math.Sin(thetaY) },
+					{ 0f, 1f, 0f },
+					{ 0f - (float)Math.Sin(thetaY), 0f, (float)Math.Cos(thetaY) }
+				}
+			};
+			FMatrix3 mxZ = new FMatrix3()
+			{
+				Values = new float[,]
+				{
+					{ (float)Math.Cos(thetaZ), 0f - (float)Math.Sin(thetaZ), 0f },
+					{ (float)Math.Sin(thetaZ), (float)Math.Cos(thetaZ), 0f },
+					{ 0f, 0f, 1f }
+				},
+			};
+			FVector3 localPoint = null;
 
 			if(point != null)
 			{
-				result.mX =
-					(float)((double)point.mX * Math.Cos((double)angle) -
-						(double)point.mY * Math.Sin((double)angle));
-				result.mY =
-					(float)((double)point.mX * Math.Sin((double)angle) +
-						(double)point.mY * Math.Cos((double)angle));
+				localPoint = point;
+				localPoint = FMatrix3.Multiply(mxZ, localPoint);
+				localPoint = FMatrix3.Multiply(mxY, localPoint);
+				localPoint = FMatrix3.Multiply(mxX, localPoint);
 			}
-			return result;
+			return localPoint;
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -984,16 +923,39 @@ namespace Geometry
 		/// <returns>
 		/// Reference to the uniformly scaled point.
 		/// </returns>
-		public static FPoint Scale(FPoint point, float scale)
+		public static FPoint3 Scale(FPoint3 point, float scale)
 		{
-			FPoint result = new FPoint();
+			FPoint3 result = new FPoint3();
 
-			if (point != null)
+			if(point != null)
 			{
 				result.mX = point.mX * scale;
 				result.mY = point.mY * scale;
+				result.mZ = point.mZ * scale;
 			}
 			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	ToString																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the string representation of this item.
+		/// </summary>
+		/// <returns>
+		/// String representation of the values of this point.
+		/// </returns>
+		public override string ToString()
+		{
+			StringBuilder result = new StringBuilder();
+
+			result.Append($"{mX:0.000}");
+			result.Append(',');
+			result.Append($"{mY:0.000}");
+			result.Append(',');
+			result.Append($"{mZ:0.000}");
+			return result.ToString();
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -1009,12 +971,13 @@ namespace Geometry
 		/// <param name="offset">
 		/// Reference to the offset to apply to the point.
 		/// </param>
-		public static void Translate(FPoint point, FPoint offset)
+		public static void Translate(FPoint3 point, FPoint3 offset)
 		{
 			if(point != null && offset != null)
 			{
 				point.mX += offset.mX;
 				point.mY += offset.mY;
+				point.mZ += offset.mZ;
 			}
 		}
 		//*-----------------------------------------------------------------------*
@@ -1031,7 +994,7 @@ namespace Geometry
 		/// <param name="target">
 		/// Reference to the target point that will receive the values.
 		/// </param>
-		public static void TransferValues(FPoint source, FPoint target)
+		public static void TransferValues(FPoint3 source, FPoint3 target)
 		{
 			if(source != null && target != null && !target.mReadOnly)
 			{
@@ -1040,6 +1003,7 @@ namespace Geometry
 				//	return the newly created value.
 				target.mX = source.mX;
 				target.mY = source.mY;
+				target.mZ = source.mZ;
 			}
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
@@ -1055,12 +1019,17 @@ namespace Geometry
 		/// <param name="y">
 		/// Y coordinate to assign.
 		/// </param>
-		public static void TransferValues(FPoint target, float x, float y)
+		/// <param name="z">
+		/// Z coordinate to assign.
+		/// </param>
+		public static void TransferValues(FPoint3 target,
+			float x, float y, float z)
 		{
 			if(target != null && !target.mReadOnly)
 			{
 				target.mX = x;
 				target.mY = y;
+				target.mZ = z;
 			}
 		}
 		//*-----------------------------------------------------------------------*
@@ -1080,16 +1049,16 @@ namespace Geometry
 			{
 				float original = mX;
 
-				if (!mReadOnly)
+				if(!mReadOnly)
 				{
 					mX = value;
-					if (original != value)
+					if(original != value)
 					{
 						OnCoordinateChanged(
-							new FloatPointEventArgs()
+							new FloatPoint3EventArgs()
 							{
-								OriginalValue = new FPoint(original, mY),
-								NewValue = new FPoint(value, mY)
+								OriginalValue = new FPoint3(original, mY, mZ),
+								NewValue = new FPoint3(value, mY, mZ)
 							});
 					}
 				}
@@ -1112,16 +1081,16 @@ namespace Geometry
 			{
 				float original = mY;
 
-				if (!mReadOnly)
+				if(!mReadOnly)
 				{
 					mY = value;
-					if (original != value)
+					if(original != value)
 					{
 						OnCoordinateChanged(
-							new FloatPointEventArgs()
+							new FloatPoint3EventArgs()
 							{
-								OriginalValue = new FPoint(mX, original),
-								NewValue = new FPoint(mX, value)
+								OriginalValue = new FPoint3(mX, original, mZ),
+								NewValue = new FPoint3(mX, value, mZ)
 							});
 					}
 				}
@@ -1130,93 +1099,34 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	ToString																															*
+		//*	Z																																			*
 		//*-----------------------------------------------------------------------*
+		private float mZ = 0f;
 		/// <summary>
-		/// Return the string representation of this item.
+		/// Get/Set the y coordinate.
 		/// </summary>
-		/// <returns>
-		/// String representation of the values of this point.
-		/// </returns>
-		public override string ToString()
+		[JsonProperty(Order = 1)]
+		public float Z
 		{
-			StringBuilder result = new StringBuilder();
-
-			result.Append($"{mX:0.000}");
-			result.Append(',');
-			result.Append($"{mY:0.000}");
-			return result.ToString();
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	Zero																																	*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Zero the values of the specified point.
-		/// </summary>
-		/// <param name="point">
-		/// Reference to the point to be modified.
-		/// </param>
-		public static void Zero(FPoint point)
-		{
-			if (!point.mReadOnly)
+			get { return mZ; }
+			set
 			{
-				point.mX = 0.0f;
-				point.mY = 0.0f;
+				float original = mZ;
+
+				if(!mReadOnly)
+				{
+					mZ = value;
+					if(original != value)
+					{
+						OnCoordinateChanged(
+							new FloatPoint3EventArgs()
+							{
+								OriginalValue = new FPoint3(mX, mY, original),
+								NewValue = new FPoint3(mX, mY, value)
+							});
+					}
+				}
 			}
-		}
-		//*-----------------------------------------------------------------------*
-
-	}
-	//*-------------------------------------------------------------------------*
-
-	//*-------------------------------------------------------------------------*
-	//*	FPointCollection																												*
-	//*-------------------------------------------------------------------------*
-	/// <summary>
-	/// Collection of FPoint Items.
-	/// </summary>
-	public class FPointCollection : List<FPoint>
-	{
-		//*************************************************************************
-		//*	Private																																*
-		//*************************************************************************
-		//*************************************************************************
-		//*	Protected																															*
-		//*************************************************************************
-		//*************************************************************************
-		//*	Public																																*
-		//*************************************************************************
-		//*-----------------------------------------------------------------------*
-		//* Add																																		*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Add an item to the collection.
-		/// </summary>
-		/// <param name="item">
-		/// Reference to the item to add.
-		/// </param>
-		public new void Add(FPoint item)
-		{
-			if(item != null && !mReadOnly)
-			{
-				base.Add(item);
-			}
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	ReadOnly																															*
-		//*-----------------------------------------------------------------------*
-		private bool mReadOnly = false;
-		/// <summary>
-		/// Get/Set a value indicating whether this item is read-only.
-		/// </summary>
-		public bool ReadOnly
-		{
-			get { return mReadOnly; }
-			set { mReadOnly = value; }
 		}
 		//*-----------------------------------------------------------------------*
 

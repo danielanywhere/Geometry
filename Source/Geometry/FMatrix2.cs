@@ -148,15 +148,15 @@ namespace Geometry
 		/// <param name="point">
 		/// Reference to the point to be rotated.
 		/// </param>
-		/// <param name="angle">
+		/// <param name="theta">
 		/// The angle by which to rotate the point, in radians.
 		/// </param>
 		/// <returns>
 		/// The rotated point, relative to 0,0.
 		/// </returns>
-		public static FPoint Rotate(FPoint point, float angle)
+		public static FPoint Rotate(FPoint point, float theta)
 		{
-			return Rotate((FVector2)point, angle);
+			return Rotate((FVector2)point, theta);
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -165,21 +165,21 @@ namespace Geometry
 		/// <param name="point">
 		/// Reference to the vector to be rotated.
 		/// </param>
-		/// <param name="angle">
+		/// <param name="theta">
 		/// The angle by which to rotate the point, in radians.
 		/// </param>
 		/// <returns>
 		/// The rotated point, relative to 0,0.
 		/// </returns>
-		public static FVector2 Rotate(FVector2 point, float angle)
+		public static FVector2 Rotate(FVector2 point, float theta)
 		{
 			FMatrix2 matrix = new FMatrix2();
 			FVector2 result = new FVector2();
 
-			matrix.Values[0, 0] = (float)Math.Cos(angle);
-			matrix.Values[0, 1] = (float)(0d - Math.Sin(angle));
-			matrix.Values[1, 0] = (float)Math.Sin(angle);
-			matrix.Values[1, 1] = (float)Math.Cos(angle);
+			matrix.Values[0, 0] = (float)Math.Cos(theta);
+			matrix.Values[0, 1] = (float)(0d - Math.Sin(theta));
+			matrix.Values[1, 0] = (float)Math.Sin(theta);
+			matrix.Values[1, 1] = (float)Math.Cos(theta);
 
 			result = Multiply(matrix, point);
 			return result;

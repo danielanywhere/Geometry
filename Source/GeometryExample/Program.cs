@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http.Headers;
+using System.Linq;
 using System.Text;
 
 using Geometry;
@@ -39,6 +39,52 @@ namespace GeometryExample
 		//*************************************************************************
 		//*	Private																																*
 		//*************************************************************************
+		////*-----------------------------------------------------------------------*
+		////* GetMatrixString																												*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Return the string representation of the provided system numerics
+		///// 4x4 matrix.
+		///// </summary>
+		///// <param name="matrix">
+		///// Reference to a 4x4 matrix from System.Numerics.
+		///// </param>
+		///// <returns>
+		///// The string representation of the current value of the provided
+		///// matrix.
+		///// </returns>
+		//private static string GetMatrixString(System.Numerics.Matrix4x4 matrix)
+		//{
+		//	StringBuilder builder = new StringBuilder();
+
+		//	builder.Append("{ ");
+		//	builder.Append($"{matrix.M11:0.000}, ");
+		//	builder.Append($"{matrix.M12:0.000}, ");
+		//	builder.Append($"{matrix.M13:0.000}, ");
+		//	builder.Append($"{matrix.M14:0.000}");
+		//	builder.AppendLine(" },");
+		//	builder.Append("{ ");
+		//	builder.Append($"{matrix.M21:0.000}, ");
+		//	builder.Append($"{matrix.M22:0.000}, ");
+		//	builder.Append($"{matrix.M23:0.000}, ");
+		//	builder.Append($"{matrix.M24:0.000}");
+		//	builder.AppendLine(" },");
+		//	builder.Append("{ ");
+		//	builder.Append($"{matrix.M31:0.000}, ");
+		//	builder.Append($"{matrix.M32:0.000}, ");
+		//	builder.Append($"{matrix.M33:0.000}, ");
+		//	builder.Append($"{matrix.M34:0.000}");
+		//	builder.AppendLine(" },");
+		//	builder.Append("{ ");
+		//	builder.Append($"{matrix.M41:0.000}, ");
+		//	builder.Append($"{matrix.M42:0.000}, ");
+		//	builder.Append($"{matrix.M43:0.000}, ");
+		//	builder.Append($"{matrix.M44:0.000}");
+		//	builder.Append(" }");
+		//	return builder.ToString();
+		//}
+		////*-----------------------------------------------------------------------*
+
 		//*-----------------------------------------------------------------------*
 		//* TestArcBoundingBox																										*
 		//*-----------------------------------------------------------------------*
@@ -119,6 +165,29 @@ namespace GeometryExample
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* RandomFloat																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a random single point floating point value within the specified
+		/// range.
+		/// </summary>
+		/// <param name="minimum">
+		/// The minimum allowable value in the range.
+		/// </param>
+		/// <param name="maximum">
+		/// The maximum allowable value in the range.
+		/// </param>
+		/// <returns>
+		/// A random floating point value in the requested range.
+		/// </returns>
+		private static float RandomFloat(float minimum, float maximum)
+		{
+			Random random = new Random((int)DateTime.Now.Ticks);
+			return ConvertRange(0f, 1f, minimum, maximum, random.NextSingle());
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* RandomFloatWhole																											*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -138,6 +207,303 @@ namespace GeometryExample
 		{
 			Random random = new Random((int)DateTime.Now.Ticks);
 			return ((float)random.Next((int)minimum, (int)maximum));
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Test3DCamera																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test Camera3D operations.
+		/// </summary>
+		private static void Test3DCamera()
+		{
+
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Test3DLineProjection																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test the screen projection of a 3D line.
+		/// </summary>
+		private static void Test3DLineProjection()
+		{
+			Camera3D camera = new Camera3D()
+			{
+				Position = new FPoint3(18.715f, 11.05f, -9.3556f),
+				LookAt = new FPoint3(5f, 0f, -0.36511f)
+			};
+			FLine line2 = null;
+			FLine3 line3 = new FLine3(
+				new FPoint3(0f, 0f, 0f),
+				new FPoint3(10f, 0f, 0f),
+				new FColor4(1f, 1f, 0f, 0f));
+
+			Console.WriteLine("** Testing 3D Line Projection **");
+
+			Console.WriteLine("Camera:");
+			Console.WriteLine($"  LookAt:   {camera.LookAt}");
+			Console.WriteLine($"  Position: {camera.Position}");
+			Console.WriteLine($"  UpAxis:   {camera.UpAxis}");
+
+			Console.WriteLine(" 3D Line:");
+			Console.WriteLine($"  {line3.PointA}, ");
+			Console.WriteLine($"  {line3.PointB}");
+
+			line2 = camera.ProjectToScreen(line3);
+			if(line2 != null)
+			{
+				Console.WriteLine(" Display Line:");
+				Console.WriteLine($"  {line2.PointA}");
+				Console.WriteLine($"  {line2.PointB}");
+			}
+			else
+			{
+				Console.WriteLine(" Display Line was not in view...");
+			}
+			Console.WriteLine("");
+
+			Console.WriteLine(" 3D Line:");
+			line3 = new FLine3(
+				new FPoint3(0f, 0f, 2f),
+				new FPoint3(10f, 0f, 2f),
+				new FColor4(1f, 1f, 0f, 0f));
+			Console.WriteLine($"  {line3.PointA}, ");
+			Console.WriteLine($"  {line3.PointB}");
+
+			line2 = camera.ProjectToScreen(line3);
+			if(line2 != null)
+			{
+				Console.WriteLine(" Display Line:");
+				Console.WriteLine($"  {line2.PointA}");
+				Console.WriteLine($"  {line2.PointB}");
+			}
+			else
+			{
+				Console.WriteLine(" Display Line was not in view...");
+			}
+			Console.WriteLine("");
+
+			Console.WriteLine(" 3D Line:");
+			line3 = new FLine3(
+				new FPoint3(0f, 0f, 8f),
+				new FPoint3(10f, 0f, 8f),
+				new FColor4(1f, 1f, 0f, 0f));
+			Console.WriteLine($"  {line3.PointA}, ");
+			Console.WriteLine($"  {line3.PointB}");
+
+			line2 = camera.ProjectToScreen(line3);
+			if(line2 != null)
+			{
+				Console.WriteLine(" Display Line:");
+				Console.WriteLine($"  {line2.PointA}");
+				Console.WriteLine($"  {line2.PointB}");
+			}
+			else
+			{
+				Console.WriteLine(" Display Line was not in view...");
+			}
+			Console.WriteLine("");
+
+			Console.WriteLine(" 3D Line:");
+			line3 = new FLine3(
+				new FPoint3(0f, 1f, 8f),
+				new FPoint3(10f, 1f, 8f),
+				new FColor4(1f, 1f, 0f, 0f));
+			Console.WriteLine($"  {line3.PointA}, ");
+			Console.WriteLine($"  {line3.PointB}");
+
+			line2 = camera.ProjectToScreen(line3);
+			if(line2 != null)
+			{
+				Console.WriteLine(" Display Line:");
+				Console.WriteLine($"  {line2.PointA}");
+				Console.WriteLine($"  {line2.PointB}");
+			}
+			else
+			{
+				Console.WriteLine(" Display Line was not in view...");
+			}
+			Console.WriteLine("");
+
+			Console.WriteLine("");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Test3DProjection																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test basic 3D projection.
+		/// </summary>
+		/// <remarks>
+		/// In this version, the distance of the camera viewfinder from the eye is
+		/// calculated from the angle of half of the X field of view and an
+		/// opposite distance of 0.5, allowing for a total range of -1 to +1.
+		/// X+ is right, Y+ is up, and Z+ is distance from the eye. The x field
+		/// of view is 60 degrees and the y field of view 33.75 degrees to
+		/// approximate the screen ratio of 1920 x 1080, which is the output
+		/// area. The stated camera position and rotational orientation is the
+		/// position of the eye directly in world space and the offset of the
+		/// viewfinder is considered to be that at which the X field of view
+		/// will stretch from -1 to +1. The camera rotates only on the X and Y
+		/// axes to prevent view roll.
+		/// </remarks>
+		private static void Test3DProjection()
+		{
+			double camHorzDist = 0f;
+			FVector3 camLookAt = null;
+			FVector3 camPosition = null;
+			FVector3 camRotation = null;
+			FVector3 direction = null;
+			int displayHeight = 1080;
+			int displayWidth = 1920;
+			float dispH = (float)displayHeight;
+			float dispHHalf = dispH / 2f;
+			float dispW = (float)displayWidth;
+			float dispWHalf = dispW / 2f;
+			//float distFar = 10f;
+			//float distNear = 1f;
+			float distViewfinder = 0f;
+			float fovX = 60f;
+			float fovY = 0f;
+			FVector3 projectedPoint = null;
+			float ratio = 0f;
+			FVector3 sightAngle = null;
+			FVector3 subject = null;
+			double subjHorzDist = 0f;
+			float viewDown = 0f;
+			float viewLeft = 0f;
+			float viewRight = 0f;
+			float viewUp = 0f;
+			float vXHalf = 0f;
+			float vYHalf = 0f;
+			int x = 0;
+			int y = 0;
+
+			Console.WriteLine("** Testing Direct World Projection **");
+
+			ratio = (float)displayHeight / (float)displayWidth;
+			fovY = fovX * ratio;
+			vXHalf = Trig.DegToRad(fovX / 2f);
+			vYHalf = Trig.DegToRad(fovY / 2f);
+			distViewfinder = Trig.GetLineAdjFromAngOpp(vXHalf, 0.5f);
+
+			camPosition = new FVector3(10f, 6f, -10f);
+			camLookAt = new FVector3(6.5f, 0f, 0.5f);
+
+			//	Rotate the camera to look at the LookAt value.
+			direction = camLookAt - camPosition;
+			camHorzDist = (float)Math.Sqrt(
+				(double)direction.X * (double)direction.X +
+				(double)direction.Z * (double)direction.Z);
+			camRotation = new FVector3(
+				(float)Math.Atan2((double)direction.Y, camHorzDist),
+				(float)Math.Atan2((double)direction.X, (double)direction.Z), 0f);
+			//	Prepare the viewport edges for quick comparison.
+			viewLeft = camRotation.Y - vXHalf;
+			viewRight = camRotation.Y + vXHalf;
+			viewUp = camRotation.X + vYHalf;
+			viewDown = camRotation.X - vYHalf;
+
+			Console.WriteLine($" Camera Position: {camPosition}");
+			Console.WriteLine($" Camera Look at:  {camLookAt}");
+			Console.WriteLine($" Camera Rotation: {camRotation}");
+
+			subject = new FVector3(0f, 0f, 0f);
+			Console.WriteLine($" Subject:         {subject}");
+
+			direction = subject - camPosition;
+			subjHorzDist = Math.Sqrt(
+				(double)direction.X * (double)direction.X +
+				(double)direction.Z * (double)direction.Z);
+			sightAngle = new FVector3(
+				(float)Math.Atan2((double)direction.Y, subjHorzDist),
+				(float)Math.Atan2((double)direction.X, (double)direction.Z), 0f);
+
+			Console.WriteLine($"  Ortho dist:{direction}");
+			Console.WriteLine($"  Sight raw: {sightAngle}");
+			sightAngle.X -= camRotation.X;
+			sightAngle.Y -= camRotation.Y;
+			Console.WriteLine($"  Sight fix: {sightAngle}");
+
+			////	In the sight angle, the rotation on X relates to the position on Y.
+			//if(sightAngle.X >= viewDown && sightAngle.X <= viewUp &&
+			//	sightAngle.Y >= viewLeft && sightAngle.Y <= viewRight)
+			//{
+			//	//	The subject is in view.
+			//	Console.WriteLine("  Subject in view.");
+
+				//	Project the point to the viewfinder.
+				projectedPoint = new FVector3()
+				{
+					//	X position from rotation on Y.
+					X = Trig.GetLineOppFromAngAdj(sightAngle.Y, distViewfinder),
+					//	Y position from rotation on X.
+					Y = Trig.GetLineOppFromAngAdj(sightAngle.X, distViewfinder)
+				};
+				Console.WriteLine($"  Projected: {projectedPoint}");
+				//	Convert the projected point to the screen.
+				x = (int)(dispWHalf + (dispWHalf * projectedPoint.X));
+				y = (int)(dispHHalf + (dispHHalf * -projectedPoint.Y));
+				Console.WriteLine($"  Screen:    {x}, {y}");
+			//}
+			//else
+			//{
+			//	Console.WriteLine("  Subject not in view.");
+			//}
+			Console.WriteLine("");
+
+			subject = new FVector3(10f, 0f, 0f);
+			Console.WriteLine($" Subject:         {subject}");
+
+			direction = subject - camPosition;
+			subjHorzDist = Math.Sqrt(
+				(double)direction.X * (double)direction.X +
+				(double)direction.Z * (double)direction.Z);
+			sightAngle = new FVector3(
+				(float)Math.Atan2((double)direction.Y, (double)direction.Z),
+				(float)Math.Atan2((double)direction.X, (double)direction.Z),
+				0f);
+
+			Console.WriteLine($"  Ortho dist:{direction}");
+			Console.WriteLine($"  Sight raw: {sightAngle}");
+			sightAngle.X -= camRotation.X;
+			sightAngle.Y -= camRotation.Y;
+			Console.WriteLine($"  Sight fix: {sightAngle}");
+
+			//	In the sight angle, the rotation on X relates to the position on Y.
+			//if(sightAngle.X >= viewDown && sightAngle.X <= viewUp &&
+			//	sightAngle.Y >= viewLeft && sightAngle.Y <= viewRight)
+			//{
+			//	//	The subject is in view.
+			//	Console.WriteLine("  Subject in view.");
+
+				//	Project the point to the viewfinder.
+				projectedPoint = new FVector3()
+				{
+					//	X position from rotation on Y.
+					X = Trig.GetLineOppFromAngAdj(sightAngle.Y, distViewfinder),
+					//	Y position from rotation on X.
+					Y = Trig.GetLineOppFromAngAdj(sightAngle.X, distViewfinder)
+				};
+				Console.WriteLine($"  Projected: {projectedPoint}");
+				//	Convert the projected point to the screen.
+				x = (int)(dispWHalf + (dispWHalf * projectedPoint.X));
+				y = (int)(dispHHalf + (dispHHalf * -projectedPoint.Y));
+				Console.WriteLine($"  Screen:    {x}, {y}");
+			//}
+			//else
+			//{
+			//	Console.WriteLine("  Subject not in view.");
+			//}
+
+			Console.WriteLine("");
+
+
+
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -352,9 +718,15 @@ namespace GeometryExample
 		/// </summary>
 		private static void TestMatrix3()
 		{
+
 			FPoint point = new FPoint(
 				RandomFloatWhole(0f, 1920f),
 				RandomFloatWhole(0f, 1080f));
+			FPoint3 point3 = new FPoint3(
+				RandomFloat(-1f, 1f),
+				RandomFloat(-5f, 5f),
+				0.1f
+				);
 
 			Console.WriteLine("** Testing FMatrix3 **");
 			Console.WriteLine("Transform view with top left anchor to bottom left.");
@@ -368,7 +740,104 @@ namespace GeometryExample
 
 			Console.WriteLine(
 				$" Transformed point (bottom left anchor): {point.X:0}, {point.Y:0}");
+
 			Console.WriteLine("");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestMatrix4																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test FMatrix 4 operations.
+		/// </summary>
+		private static void TestMatrix4()
+		{
+			FMatrix4 matrix = null;
+			FVector3 vectorSource = new FVector3(1f, 0f, 0f);
+			FVector3 vectorTarget = null;
+
+			Console.WriteLine("** Testing FMatrix4 **");
+
+			Console.WriteLine($"Vector Source: {vectorSource}");
+
+			Console.WriteLine(" Test Rotate Source Z: 45deg");
+			matrix = FMatrix4.GetRotationMatrixYawPitchRoll(0f, 0f,
+				Trig.DegToRad(45f), AxisType.Z);
+			vectorTarget = FMatrix4.Multiply(matrix, vectorSource);
+			Console.WriteLine(" Blender: 0.707, 0.707, 0.000...");
+			Console.WriteLine($" Rotated value: {vectorTarget}");
+
+			Console.WriteLine(" Test Rotate Source Y: 45deg");
+			matrix = FMatrix4.GetRotationMatrixYawPitchRoll(0f,
+				Trig.DegToRad(45f), 0f, AxisType.Z);
+			vectorTarget = FMatrix4.Multiply(matrix, vectorSource);
+			Console.WriteLine(" Blender: 0.707, 0.000, -0.707...");
+			Console.WriteLine($" Rotated value: {vectorTarget}");
+
+			Console.WriteLine(" Test Rotate Source X: 45deg");
+			matrix = FMatrix4.GetRotationMatrixYawPitchRoll(
+				Trig.DegToRad(45f), 0f, 0f, AxisType.Z);
+			vectorTarget = FMatrix4.Multiply(matrix, vectorSource);
+			Console.WriteLine(" Blender: 1.000, 0.000, 0.000...");
+			Console.WriteLine($" Rotated value: {vectorTarget}");
+
+			Console.WriteLine(" Test Compound Rotation (Z-up: Z, X, Y, 45, 45, 45)");
+			matrix = FMatrix4.GetRotationMatrixYawPitchRoll(
+				Trig.DegToRad(45f), Trig.DegToRad(45f), Trig.DegToRad(45f),
+				AxisType.Z);
+			vectorTarget = FMatrix4.Multiply(matrix, vectorSource);
+			Console.WriteLine(" Blender: 0.500, 0.500, -0.707...");
+			Console.WriteLine($" Rotated value: {vectorTarget}");
+			Console.WriteLine("You can that on this rotation in Blender, " +
+				"there is no movement on X, indicating that the order is X, Y, Z");
+			Console.WriteLine(
+				"To test this hyptothesis, rotation values of 10, 20, 30 were " +
+				"used and the FMatrix4.GetRotationMatrix was set\r\n" +
+				"to XYZ order...");
+
+			Console.WriteLine(" Test Compound Rotation (Z-up: X, Y, Z, 10, 20, 30)");
+			matrix = FMatrix4.GetRotationMatrix(
+				Trig.DegToRad(10f), Trig.DegToRad(20f), Trig.DegToRad(30f),
+				AxisOrderEnum.XYZ);
+			vectorTarget = FMatrix4.Multiply(matrix, vectorSource);
+			Console.WriteLine(" Blender: 0.814, 0.470, -0.342...");
+			Console.WriteLine($" Rotated value: {vectorTarget}");
+
+			vectorSource = new FVector3(25f, 30f, 40f);
+			Console.WriteLine($"Vector Source: {vectorSource}");
+
+			Console.WriteLine(" Test Scale (10, 20, 30)");
+			matrix = FMatrix4.GetScaleMatrix(10f, 20, 30f);
+			vectorTarget = FMatrix4.Multiply(matrix, vectorSource);
+			Console.WriteLine(" Expected value: 250.000, 600.000, 1200.000");
+			Console.WriteLine($" Scaled value: {vectorTarget}");
+
+			vectorSource = vectorTarget;
+			Console.WriteLine($"Vector Source: {vectorSource}");
+
+			Console.WriteLine(" Test Translation (-110, -177, 222)");
+			matrix = FMatrix4.GetTranslationMatrix(-110f, -177f, 222f);
+			vectorTarget = FMatrix4.Multiply(matrix, vectorSource);
+			Console.WriteLine(" Expected value: 140.000, 423.000, 1422.000");
+			Console.WriteLine($" Translated value: {vectorTarget}");
+
+			Console.WriteLine(" Test determinant of:");
+			Console.WriteLine("  4,  3,  2, 2");
+			Console.WriteLine("  0,  1, -3, 3");
+			Console.WriteLine("  0, -1,  3, 3");
+			Console.WriteLine("  0,  3,  1, 1");
+			matrix = new FMatrix4(new float[,]
+			{
+				{ 4f, 3f, 2f, 2f },
+				{ 0f, 1f, -3f, 3f },
+				{ 0f, -1f, 3f, 3f },
+				{ 0f, 3f, 1f, 1f }
+			});
+			Console.WriteLine(" Expected: -240");
+			Console.WriteLine($" Determinant: {FMatrix4.GetDeterminant(matrix)}");
+			Console.WriteLine("");
+
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -648,6 +1117,18 @@ namespace GeometryExample
 			float time = 0f;
 			int index = 0;
 
+			//	Test FMatrix3 operations.
+			TestMatrix3();
+
+			//	Test FMatrix4 operations.
+			TestMatrix4();
+
+			//	Test basic 3D projection.
+			Test3DProjection();
+
+			//	Test 3D line projection.
+			Test3DLineProjection();
+
 			//	Test Shape Vertices.
 			TestShapeVertices();
 
@@ -662,9 +1143,6 @@ namespace GeometryExample
 
 			//	Test FLine TranslateVector.
 			TestFLineTranslateVector();
-
-			//	Test FMatrix3 operations.
-			TestMatrix3();
 
 			//	Test Arc bounding boxes.
 			TestArcBoundingBox();

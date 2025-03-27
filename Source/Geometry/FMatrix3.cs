@@ -49,16 +49,121 @@ namespace Geometry
 		//*	_Constructor																													*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Create a new Instance of the FMatrix3 Item.
+		/// Create a new instance of the FMatrix3 item.
 		/// </summary>
 		public FMatrix3()
 		{
 			mValues = new float[,]
 			{
-				{ 1, 0, 0 },
-				{ 0, 1, 0 },
-				{ 0, 0, 1 }
+				{ 1f, 0f, 0f },
+				{ 0f, 1f, 0f },
+				{ 0f, 0f, 1f }
 			};
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Create a new instance of the FMatrix3 item.
+		/// </summary>
+		/// <param name="matrix">
+		/// Reference to a set of values to load, arranged as three rows of three.
+		/// </param>
+		public FMatrix3(float[,] matrix) : this()
+		{
+			int x = 0;
+			int y = 0;
+
+			if(matrix != null &&
+				matrix.GetLength(0) == 3 && matrix.GetLength(1) == 3)
+			{
+				for(y = 0; y < 3; y++)
+				{
+					//	Row.
+					for(x = 0; x < 3; x++)
+					{
+						//	Column.
+						mValues[y, x] = matrix[y, x];
+					}
+				}
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetDeterminant																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the 3x3 determinant of the caller's value set, using no
+		/// pre-checks.
+		/// </summary>
+		/// <param name="a1">
+		/// Row 1 column 1 value.
+		/// </param>
+		/// <param name="a2">
+		/// Row 1 column 2 value.
+		/// </param>
+		/// <param name="a3">
+		/// Row 1 column 3 value.
+		/// </param>
+		/// <param name="b1">
+		/// Row 2 column 1 value.
+		/// </param>
+		/// <param name="b2">
+		/// Row 2 column 2 value.
+		/// </param>
+		/// <param name="b3">
+		/// Row 2 column 3 value.
+		/// </param>
+		/// <param name="c1">
+		/// Row 3 column 1 value.
+		/// </param>
+		/// <param name="c2">
+		/// Row 3 column 2 vlaue.
+		/// </param>
+		/// <param name="c3">
+		/// Row 3 column 3 value.
+		/// </param>
+		/// <returns>
+		/// The determinant of the 3 x 3 set of values.
+		/// </returns>
+		public static float GetDeterminant(
+			float a1, float a2, float a3,
+			float b1, float b2, float b3,
+			float c1, float c2, float c3)
+		{
+			float result =
+				a1 * (b2 * c3 - b3 * c2) -
+				a2 * (b1 * c3 - b3 * c1) +
+				a3 * (b1 * c2 - b2 * c1);
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the 3x3 determinant of the caller's value set, using no
+		/// pre-checks.
+		/// </summary>
+		/// <param name="values">
+		/// Reference to a two dimensional array of values representing the content
+		/// of the matrix.
+		/// </param>
+		/// <returns>
+		/// The determinant of the 3 x 3 set of values.
+		/// </returns>
+		public static float GetDeterminant(float[,] values)
+		{
+			float result = 0f;
+
+			if(values?.Length > 0 &&
+				values.GetLength(0) == 3 && values.GetLength(1) == 3)
+			{
+				result =
+					values[0, 0] *
+						(values[1, 1] * values[2, 2] - values[1, 2] * values[2, 1]) -
+					values[0, 1] *
+						(values[1, 0] * values[2, 2] - values[1, 2] * values[2, 0]) +
+					values[0, 2] *
+						(values[1, 0] * values[2, 1] - values[1, 1] * values[2, 0]);
+			}
+			return result;
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -139,47 +244,319 @@ namespace Geometry
 		//*	Rotate																																*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Rotate the 2D point by a specified angle, in radians.
+		/// Rotate the 3D point by a specified angle, in radians.
 		/// </summary>
 		/// <param name="point">
 		/// Reference to the point to be rotated.
 		/// </param>
-		/// <param name="angle">
-		/// The angle by which to rotate the point, in radians.
+		/// <param name="thetaX">
+		/// The angle around the X axis by which to rotate the point, in radians.
+		/// </param>
+		/// <param name="thetaY">
+		/// The angle around the Y axis by which to rotate the point, in radians.
+		/// </param>
+		/// <param name="thetaZ">
+		/// The angle around the Z axis by which to rotate the point, in radians.
+		/// </param>
+		/// <param name="upAxis">
+		/// The optional 'up' direction axis used to help determine which axis is
+		/// yaw.
 		/// </param>
 		/// <returns>
-		/// The rotated 2D point, relative to 0,0.
+		/// The rotated 3D point, relative to 0,0,0.
 		/// </returns>
-		public static FPoint Rotate(FPoint point, float angle)
+		/// <remarks>
+		/// <para>
+		/// The order of rotations is Yaw, Pitch, Roll, with the UpDirection
+		/// helping to distinguish which axis is Yaw.
+		/// </para>
+		/// <para>
+		/// Yaw, pitch and roll are descriptions from the perspective of the pilot.
+		/// <list type="bullet">
+		/// <item>Yaw is left/right turning rotation with a constant
+		/// horizon.</item>
+		/// <item>Pitch is forward/back rotation.</item>
+		/// <item>Roll is wingtip left/right rotation.</item>
+		/// </list>
+		/// </para>
+		/// </remarks>
+		public static FPoint3 Rotate(FPoint3 point,
+			float thetaX, float thetaY, float thetaZ,
+			AxisType upAxis = AxisType.Z)
 		{
-			return Rotate((FVector2)point, angle);
+			FPoint3 result = null;
+
+			if(point != null)
+			{
+				result = FPoint3.Clone(point);
+				switch(upAxis)
+				{
+					case AxisType.X:
+						if(thetaX != 0f)
+						{
+							result = RotateX(result, thetaX);
+						}
+						if(thetaZ != 0f)
+						{
+							result = RotateZ(result, thetaZ);
+						}
+						if(thetaY != 0f)
+						{
+							result = RotateY(result, thetaY);
+						}
+						break;
+					case AxisType.Y:
+						if(thetaY != 0f)
+						{
+							result = RotateY(result, thetaY);
+						}
+						if(thetaX != 0f)
+						{
+							result = RotateX(result, thetaX);
+						}
+						if(thetaZ != 0f)
+						{
+							result = RotateZ(result, thetaZ);
+						}
+						break;
+					case AxisType.Z:
+					default:
+						if(thetaZ != 0f)
+						{
+							result = RotateZ(result, thetaZ);
+						}
+						if(thetaX != 0f)
+						{
+							result = RotateX(result, thetaX);
+						}
+						if(thetaY != 0f)
+						{
+							result = RotateY(result, thetaY);
+						}
+						break;
+				}
+			}
+			return result;
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
-		/// Rotate the 2D vector by a specified angle, in radians.
+		/// Rotate the 3D point by a specified angle, in radians.
 		/// </summary>
 		/// <param name="point">
-		/// Reference to the vector to be rotated.
+		/// Reference to the point to be rotated.
 		/// </param>
-		/// <param name="angle">
-		/// The angle by which to rotate the point, in radians.
+		/// <param name="theta">
+		/// The angles around the X, Y, and Z axis by which to rotate the point, in
+		/// radians.
+		/// </param>
+		/// <param name="upAxis">
+		/// The optional 'up' direction axis used to help determine which axis is
+		/// yaw.
 		/// </param>
 		/// <returns>
-		/// The rotated 2D point, relative to 0,0.
+		/// The rotated 3D point, relative to 0,0,0.
 		/// </returns>
-		public static FVector3 Rotate(FVector2 point, float angle)
+		/// <remarks>
+		/// <para>
+		/// The order of rotations is Yaw, Pitch, Roll, with the UpDirection
+		/// helping to distinguish which axis is Yaw.
+		/// </para>
+		/// <para>
+		/// Yaw, pitch and roll are descriptions from the perspective of the pilot.
+		/// <list type="bullet">
+		/// <item>Yaw is left/right turning rotation with a constant
+		/// horizon.</item>
+		/// <item>Pitch is forward/back rotation.</item>
+		/// <item>Roll is wingtip left/right rotation.</item>
+		/// </list>
+		/// </para>
+		/// </remarks>
+		public static FPoint3 Rotate(FPoint3 point,
+			FVector3 theta, AxisType upAxis = AxisType.Z)
 		{
-			FMatrix3 matrix = new FMatrix3();
-			FVector3 result = new FVector3();
-			FVector3 source = new FVector3();
+			FPoint3 result = null;
 
-			matrix.Values[0, 0] = (float)Math.Cos(angle);
-			matrix.Values[0, 1] = (float)(0d - Math.Sin(angle));
-			matrix.Values[1, 0] = (float)Math.Sin(angle);
-			matrix.Values[1, 1] = (float)Math.Cos(angle);
-			source.Values = new float[] { point.Values[0], point.Values[1], 1f };
+			if(point != null && theta != null)
+			{
+				result = Rotate(point, theta.X, theta.Y, theta.Z, upAxis);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
 
-			result = Multiply(matrix, source);
+		//*-----------------------------------------------------------------------*
+		//*	RotateX																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Rotate the point by the specified angle and return the new value to
+		/// the caller.
+		/// </summary>
+		/// <param name="point">
+		/// Point containing the source value to rotate.
+		/// </param>
+		/// <param name="theta">
+		/// The angle of rotation to apply to the axis, in radians.
+		/// </param>
+		/// <returns>
+		/// New point containing the rotated coordinates.
+		/// </returns>
+		public static FPoint3 RotateX(FPoint3 point, float theta)
+		{
+			return (FPoint3)RotateX((FVector3)point, theta);
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Rotate the vector by the specified angle and return the new value to
+		/// the caller.
+		/// </summary>
+		/// <param name="vector">
+		/// Vector containing the source value to rotate.
+		/// </param>
+		/// <param name="theta">
+		/// The angle of rotation to apply to the axis, in radians.
+		/// </param>
+		/// <returns>
+		/// New vector containing the rotated coordinates.
+		/// </returns>
+		public static FVector3 RotateX(FVector3 vector, float theta)
+		{
+			float asi = 0f;
+			float cos = 0f;
+			FMatrix3 matrix = null;
+			FVector3 result = new FVector3(vector);
+			float sin = 0f;
+
+			if(vector != null && theta != 0f)
+			{
+				cos = (float)Math.Cos((double)theta);
+				sin = (float)Math.Sin((double)theta);
+				asi = 0f - sin;
+				matrix = new FMatrix3(new float[,]
+				{
+					{ 1f, 0f,  0f },
+					{ 0f, cos, asi },
+					{ 0f, sin, cos }
+				});
+				result = FMatrix3.Multiply(matrix, vector);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	RotateY																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Rotate the point by the specified angle and return the new value to
+		/// the caller.
+		/// </summary>
+		/// <param name="point">
+		/// Point containing the source value to rotate.
+		/// </param>
+		/// <param name="theta">
+		/// The angle of rotation to apply to the axis, in radians.
+		/// </param>
+		/// <returns>
+		/// New vector containing the rotated coordinates.
+		/// </returns>
+		public static FPoint3 RotateY(FPoint3 point, float theta)
+		{
+			return (FPoint3)RotateY((FVector3)point, theta);
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Rotate the vector by the specified angle and return the new value to
+		/// the caller.
+		/// </summary>
+		/// <param name="vector">
+		/// Vector containing the source value to rotate.
+		/// </param>
+		/// <param name="theta">
+		/// The angle of rotation to apply to the axis, in radians.
+		/// </param>
+		/// <returns>
+		/// New vector containing the rotated coordinates.
+		/// </returns>
+		public static FVector3 RotateY(FVector3 vector, float theta)
+		{
+			float asi = 0f;
+			float cos = 0f;
+			FMatrix3 matrix = null;
+			FVector3 result = new FVector3(vector);
+			float sin = 0f;
+
+			if(vector != null && theta != 0f)
+			{
+				cos = (float)Math.Cos((double)theta);
+				sin = (float)Math.Sin((double)theta);
+				asi = 0f - sin;
+				matrix = new FMatrix3(new float[,]
+				{
+					{ cos, 0f, sin },
+					{ 0f,  1f, 0f  },
+					{ asi, 0f, cos }
+				});
+				result = FMatrix3.Multiply(matrix, vector);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	RotateZ																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Rotate the opint by the specified angle and return the new value to
+		/// the caller.
+		/// </summary>
+		/// <param name="point">
+		/// Point containing the source value to rotate.
+		/// </param>
+		/// <param name="theta">
+		/// The angle of rotation to apply to the axis, in radians.
+		/// </param>
+		/// <returns>
+		/// New vector containing the rotated coordinates.
+		/// </returns>
+		public static FPoint3 RotateZ(FPoint3 point, float theta)
+		{
+			return (FPoint3)RotateZ((FVector3)point, theta);
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Rotate the vector by the specified angle and return the new value to
+		/// the caller.
+		/// </summary>
+		/// <param name="vector">
+		/// Vector containing the source value to rotate.
+		/// </param>
+		/// <param name="theta">
+		/// The angle of rotation to apply to the axis, in radians.
+		/// </param>
+		/// <returns>
+		/// New vector containing the rotated coordinates.
+		/// </returns>
+		public static FVector3 RotateZ(FVector3 vector, float theta)
+		{
+			float asi = 0f;
+			float cos = 0f;
+			FMatrix3 matrix = null;
+			FVector3 result = new FVector3(vector);
+			float sin = 0f;
+
+			if(vector != null && theta != 0f)
+			{
+				cos = (float)Math.Cos((double)theta);
+				sin = (float)Math.Sin((double)theta);
+				asi = 0f - sin;
+				matrix = new FMatrix3(new float[,]
+				{
+					{ cos, asi, 0f },
+					{ sin, cos, 0f },
+					{ 0f,  0f,  1f }
+				});
+				result = FMatrix3.Multiply(matrix, vector);
+			}
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
@@ -220,12 +597,16 @@ namespace Geometry
 		{
 			FMatrix3 matrix = new FMatrix3();
 			FVector3 result = new FVector3();
-			FVector3 source = new FVector3();
+			FVector3 source = null;
 
-			matrix.Values[0, 0] = scale.Values[0];
-			matrix.Values[1, 1] = scale.Values[1];
-			source.Values = new float[] { point.Values[0], point.Values[1], 1f };
-			result = Multiply(matrix, source);
+			if(point != null && scale != null)
+			{
+				matrix.Values[0, 0] = scale.Values[0];
+				matrix.Values[1, 1] = scale.Values[1];
+				source = new FVector3();
+				source.Values = new float[] { point.Values[0], point.Values[1], 1f };
+				result = Multiply(matrix, source);
+			}
 			return result;
 		}
 		//*-----------------------------------------------------------------------*

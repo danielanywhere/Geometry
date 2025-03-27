@@ -47,6 +47,7 @@ namespace Geometry
 		/// Clamp the supplied value within the allowed minimum and maximum values.
 		/// </summary>
 		/// <param name="value">
+		/// The value to clamp.
 		/// </param>
 		/// <param name="minimum">
 		/// The minimum allowable value.
@@ -61,6 +62,42 @@ namespace Geometry
 			float minimum = 0, float maximum = 1)
 		{
 			return Math.Max(minimum, Math.Min(value, maximum));
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* ConvertRange																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Convert a value from one range to another.
+		/// </summary>
+		/// <param name="sourceStart">
+		/// The starting value of the source range.
+		/// </param>
+		/// <param name="sourceEnd">
+		/// The ending value of the source range.
+		/// </param>
+		/// <param name="targetStart">
+		/// The starting value of the target range.
+		/// </param>
+		/// <param name="targetEnd">
+		/// The ending value of the target range.
+		/// </param>
+		/// <param name="value">
+		/// The value to convert.
+		/// </param>
+		/// <returns>
+		/// The representation of the caller's source value in the target range.
+		/// </returns>
+		public static float ConvertRange(float sourceStart, float sourceEnd,
+			float targetStart, float targetEnd, float value)
+		{
+			double newDiff = (double)targetEnd - (double)targetStart;
+			double originalDiff = (double)sourceEnd - (double)sourceStart;
+			double ratio = (originalDiff != 0d ? newDiff / originalDiff : 1d);
+
+			return (float)(((double)value - (double)sourceStart) *
+				ratio / originalDiff + (double)targetStart);
 		}
 		//*-----------------------------------------------------------------------*
 

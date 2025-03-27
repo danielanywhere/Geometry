@@ -63,8 +63,14 @@ namespace Geometry
 		/// </param>
 		public FLine(FPoint pointA, FPoint pointB)
 		{
-			mPointA = pointA;
-			mPointB = pointB;
+			if(pointA != null)
+			{
+				mPointA = pointA;
+			}
+			if(pointB != null)
+			{
+				mPointB = pointB;
+			}
 		}
 		//*-----------------------------------------------------------------------*
 

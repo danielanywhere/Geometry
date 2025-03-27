@@ -1,5 +1,9 @@
 # Geometry Library
 
+**NEW! Simple 3D projection of lines and points!** Create a Camera3D,
+set its Position and LookAt properties, then feed it points and lines
+from world space all day long.
+
 An easy-to-implement function library providing numeric operations to
 handle solutions to typical problems encountered in the field of
 geometry, including Bezier Curves, Linear Interpolation (Lerp), and
@@ -51,20 +55,21 @@ Sincerely,
 
 Geometry is a surprisingly persistent companion in my work. Time and
 again, I find myself tackling scenarios where geometric functionality is
-not just helpful - it’s essential. Whether it’s converting vectors to
-absolute coordinates, calculating the length of a guy wire with a
-Bézier-shaped sag, or determining the number of passes required for a
-mill bit to clear an area bounded by a polyline, geometry is always at
-the core of the solution. These repeated encounters inspired me to
-develop and maintain this geometric function library.
+not just helpful - it’s essential. Whether it’s displaying a line
+illustration projected in 3D, converting vectors to absolute
+coordinates, calculating the length of a guy wire with a Bézier-shaped
+sag, or determining the number of passes required for a mill bit to
+clear an area bounded by a polyline, geometry is always at the core of
+the solution. These repeated encounters inspired me to develop and
+maintain this geometric function library.
 
 This library has a long history, originating in 1997 when I first
-created it in the VBA scripting language to extend Microsoft Excel’s
-capabilities through their Office Automation extensions. It quickly
-became evident that its utility extended far beyond those early roots,
-prompting me to convert the library to C# in 2001. Since then, it has
-been an integral tool in my internal .NET projects, continuously
-evolving to meet new challenges.
+created a version of it in the VBA scripting language to extend
+Microsoft Excel’s capabilities through their Office Automation
+extensions. It quickly became evident that its utility extended far
+beyond those early roots, prompting me to convert the library to C# in
+2001. Since then, it has been an integral tool in my internal .NET
+projects, continuously evolving to meet new challenges.
 
 <p>&nbsp;</p>
 
@@ -76,6 +81,8 @@ descriptor classes that can be used generically anywhere:
 -   **FArea**. Many of the same competencies as the more familiar
     RectangleF, but with support for negative area.
 
+-   **FColor4**. An RGBA color holder.
+
 -   **FEllipse**. A self-contained ellipse class with everything you
     need for handling an ellipse, including returning the area or
     perimeter, the bounding box of the shape, the focal points, the
@@ -85,13 +92,21 @@ descriptor classes that can be used generically anywhere:
 
 -   **FLine**. A floating point line.
 
+-   **FLine3**. A three-dimensional single precision floating point
+    line.
+
 -   **FMatrix2**. A 2x2 linear matrix.
 
 -   **FMatrix3**. A 3x3 affine matrix.
 
+-   **FMatrix4**. A 4x4 affine matrix.
+
 -   **FPath**. Collection of single floating-point points.
 
--   **FPoint**. A single floating-point coordinate.
+-   **FPoint**. A single precision floating-point coordinate.
+
+-   **FPoint3**. A three-dimensional single precision floating-point
+    coordinate.
 
 -   **FScale**. A single floating-point scaling value.
 
@@ -102,6 +117,9 @@ descriptor classes that can be used generically anywhere:
 
 -   **FVector3**. A single floating-point 3-position array vector for
     use with matrix operations.
+
+-   **FVector4**. A single precision floating-point4-position array
+    vector for use with 4x4 matrix operations and other tasks.
 
 Our geometric descriptors differ from others on two main features.
 First, all of our geometric descriptors are first-class objects, which
@@ -122,6 +140,20 @@ reaching answers in different categories.
     identifying points along any type of Bézier curve. Whether your
     focus is precision or speed, this class delivers both, enabling
     quick and efficient calculations even for complex curves.
+
+-   **Camera3D**. A tiny, tiny, tiny 3D camera, performing all of its
+    operations in raw trigonometric functions, making it capable of 100x
+    CPU performance over current 3D systems. This renderer differs from
+    the status quo in two major areas: 1) All vertices are assumed to be
+    pre-positioned in their world locations and states, and 2) The
+    camera is moved to its stated location to view the world as it is,
+    as opposed to moving the entire world in front of a stationary
+    camera, as is generally accepted practice. Together, this set of
+    changes in philosophy reduce what would otherwise be a giant 3D
+    library to just a handful of lines of code, as you can see inside.
+    The catch on using it? Only individual 3D points and lines are
+    rendered so far. You are invited to get involved if you would like
+    to see this performance potential explode into the mainstream.
 
 -   **Circle Class**. Provides intuitive tools and methods for analyzing
     and interacting with circles, including slice-based angles, bounding
@@ -216,7 +248,7 @@ use-cases to a stand-alone application before publishing each version.
 If you would like to see a bigger-picture view of the library in daily
 use, review some of the source of my other GitHub project
 **danielanywhere/ShopTools**. That project uses Dan's Geometry Library
-do draw graphics, calculate distances, and perform a lot of the heavy
+to draw graphics, calculate distances, and perform a lot of the heavy
 lifting.
 
 For the full documentation of this library, you can access the API in

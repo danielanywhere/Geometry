@@ -22,6 +22,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
+
 namespace Geometry
 {
 	//*-------------------------------------------------------------------------*
@@ -35,6 +37,15 @@ namespace Geometry
 		//*************************************************************************
 		//*	Private																																*
 		//*************************************************************************
+		/// <summary>
+		/// The constant X index in a vector.
+		/// </summary>
+		private const int vX = 0;
+		/// <summary>
+		/// The constant Y index in a vector.
+		/// </summary>
+		private const int vY = 1;
+
 		//*************************************************************************
 		//*	Protected																															*
 		//*************************************************************************
@@ -130,6 +141,41 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* Clone																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a deep clone of the caller's vector.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to clone.
+		/// </param>
+		/// <returns>
+		/// Reference to the deep clone of the caller's value, if eligible.
+		/// Otherwise, a blank FVector2.
+		/// </returns>
+		public static FVector2 Clone(FVector2 vector)
+		{
+			int count = 0;
+			int index = 0;
+			FVector2 result = new FVector2();
+
+			if(vector != null)
+			{
+				count = vector.mValues.Length;
+				if(result.mValues.Length != count)
+				{
+					result.mValues = new float[count];
+				}
+				for(index = 0; index < count; index++)
+				{
+					result.mValues[index] = vector.mValues[index];
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* IsEmpty																																*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -169,10 +215,39 @@ namespace Geometry
 		/// <summary>
 		/// Get/Set a reference to the base array of values.
 		/// </summary>
+		[JsonIgnore]
 		public float[] Values
 		{
 			get { return mValues; }
 			set { mValues = value; }
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	X																																			*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Get/Set the X coordinate of this value.
+		/// </summary>
+		[JsonProperty(Order = 0)]
+		public float X
+		{
+			get { return mValues[vX]; }
+			set { mValues[vX] = value; }
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	Y																																			*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Get/Set the Y coordinate of this value.
+		/// </summary>
+		[JsonProperty(Order = 1)]
+		public float Y
+		{
+			get { return mValues[vY]; }
+			set { mValues[vY] = value; }
 		}
 		//*-----------------------------------------------------------------------*
 
