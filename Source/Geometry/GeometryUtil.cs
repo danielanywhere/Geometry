@@ -174,6 +174,88 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* ReverseSourcePolarity																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Apply the reverse polarity of the source value to the target value,
+		/// returning the new target value.
+		/// </summary>
+		/// <param name="source">
+		/// Source value whose reverse polarity will be applied.
+		/// </param>
+		/// <param name="target">
+		/// Target whose value will be polarized.
+		/// </param>
+		/// <returns>
+		/// A value representing the caller's target value to which the reverse
+		/// polarity of the source has been applied.
+		/// </returns>
+		public static float ReverseSourcePolarity(float source, float target)
+		{
+			float result = target;
+
+			if(source > 0f)
+			{
+				//	Target polarity will be negative.
+				if(target > 0f)
+				{
+					result = 0f - target;
+				}
+			}
+			else
+			{
+				//	Target polarity will be positive.
+				if(target < 0f)
+				{
+					result = 0f - target;
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* SourcePolarity																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Apply the polarity of the source value to the target value,
+		/// returning the new target value.
+		/// </summary>
+		/// <param name="source">
+		/// Source value whose polarity will be applied.
+		/// </param>
+		/// <param name="target">
+		/// Target whose value will be polarized.
+		/// </param>
+		/// <returns>
+		/// A value representing the caller's target value to which the
+		/// polarity of the source has been applied.
+		/// </returns>
+		public static float SourcePolarity(float source, float target)
+		{
+			float result = target;
+
+			if(source > 0f)
+			{
+				//	Target polarity will be positive.
+				if(target < 0f)
+				{
+					result = 0f - target;
+				}
+			}
+			else
+			{
+				//	Target polarity will be negative.
+				if(target > 0f)
+				{
+					result = 0f - target;
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* ToFloat																																*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

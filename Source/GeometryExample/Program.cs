@@ -353,157 +353,86 @@ namespace GeometryExample
 		/// </remarks>
 		private static void Test3DProjection()
 		{
-			double camHorzDist = 0f;
-			FVector3 camLookAt = null;
-			FVector3 camPosition = null;
-			FVector3 camRotation = null;
-			FVector3 direction = null;
-			int displayHeight = 1080;
-			int displayWidth = 1920;
-			float dispH = (float)displayHeight;
-			float dispHHalf = dispH / 2f;
-			float dispW = (float)displayWidth;
-			float dispWHalf = dispW / 2f;
-			//float distFar = 10f;
-			//float distNear = 1f;
-			float distViewfinder = 0f;
-			float fovX = 60f;
-			float fovY = 0f;
-			FVector3 projectedPoint = null;
-			float ratio = 0f;
-			FVector3 sightAngle = null;
-			FVector3 subject = null;
-			double subjHorzDist = 0f;
-			float viewDown = 0f;
-			float viewLeft = 0f;
-			float viewRight = 0f;
-			float viewUp = 0f;
-			float vXHalf = 0f;
-			float vYHalf = 0f;
-			int x = 0;
-			int y = 0;
+			Camera3D camera = null;
+			int index = 0;
+			FPoint point2 = null;
+			List<FPoint3> points = new List<FPoint3>();
+			int row = 0;
+			int rowCount = 0;
 
 			Console.WriteLine("** Testing Direct World Projection **");
+			Console.WriteLine(" Basic Camera Test");
+			camera = new Camera3D()
+			{
+				DisplayWidth = 690,
+				DisplayHeight = 359,
+				LookAt = new FPoint3()
+			};
+			camera.Position = new FPoint3(1500f, 1500f, -1000f);
 
-			ratio = (float)displayHeight / (float)displayWidth;
-			fovY = fovX * ratio;
-			vXHalf = Trig.DegToRad(fovX / 2f);
-			vYHalf = Trig.DegToRad(fovY / 2f);
-			distViewfinder = Trig.GetLineAdjFromAngOpp(vXHalf, 0.5f);
+			float[,] items = new float[,]
+			{
+			{-1301.750f,0.000f,609.600f},
+			{-1301.750f,0.000f,-609.600f},
+			{1301.750f,0.000f,-609.600f},
+			{1301.750f,0.000f,609.600f},
 
-			camPosition = new FVector3(10f, 6f, -10f);
-			camLookAt = new FVector3(6.5f, 0f, 0.5f);
+			{-1301.750f,0.010f,609.600f},
+			{1301.750f,0.010f,609.600f},
+			{-1301.750f,0.010f,457.200f},
+			{1301.750f,0.010f,457.200f},
+			{-1301.750f,0.010f,304.800f},
+			{1301.750f,0.010f,304.800f},
+			{-1301.750f,0.010f,152.400f},
+			{1301.750f,0.010f,152.400f},
+			{-1301.750f,0.010f,0.000f},
+			{1301.750f,0.010f,0.000f},
+			{-1301.750f,0.010f,-152.400f},
+			{1301.750f,0.010f,-152.400f},
+			{-1301.750f,0.010f,-304.800f},
+			{1301.750f,0.010f,-304.800f},
+			{-1301.750f,0.010f,-457.200f},
+			{1301.750f,0.010f,-457.200f},
+			{-1301.750f,0.010f,-609.600f},
+			{1301.750f,0.010f,-609.600f},
 
-			//	Rotate the camera to look at the LookAt value.
-			direction = camLookAt - camPosition;
-			camHorzDist = (float)Math.Sqrt(
-				(double)direction.X * (double)direction.X +
-				(double)direction.Z * (double)direction.Z);
-			camRotation = new FVector3(
-				(float)Math.Atan2((double)direction.Y, camHorzDist),
-				(float)Math.Atan2((double)direction.X, (double)direction.Z), 0f);
-			//	Prepare the viewport edges for quick comparison.
-			viewLeft = camRotation.Y - vXHalf;
-			viewRight = camRotation.Y + vXHalf;
-			viewUp = camRotation.X + vYHalf;
-			viewDown = camRotation.X - vYHalf;
+			{-1301.750f,0.010f,609.600f},
+			{-1301.750f,0.010f,-609.600f},
+			{-976.313f,0.010f,609.600f},
+			{-976.313f,0.010f,-609.600f},
+			{-650.875f,0.010f,609.600f},
+			{-650.875f,0.010f,-609.600f},
+			{-325.438f,0.010f,609.600f},
+			{-325.438f,0.010f,-609.600f},
+			{0.000f,0.010f,609.600f},
+			{0.000f,0.010f,-609.600f},
+			{325.438f,0.010f,609.600f},
+			{325.438f,0.010f,-609.600f},
+			{650.875f,0.010f,609.600f},
+			{650.875f,0.010f,-609.600f},
+			{976.313f,0.010f,609.600f},
+			{976.313f,0.010f,-609.600f},
+			{1301.750f,0.010f,609.600f},
+			{1301.750f,0.010f,-609.600f}
 
-			Console.WriteLine($" Camera Position: {camPosition}");
-			Console.WriteLine($" Camera Look at:  {camLookAt}");
-			Console.WriteLine($" Camera Rotation: {camRotation}");
+			};
 
-			subject = new FVector3(0f, 0f, 0f);
-			Console.WriteLine($" Subject:         {subject}");
+			points.Clear();
+			rowCount = items.GetLength(0);
+			for(row = 0; row < rowCount; row ++)
+			{
+				points.Add(new FPoint3(items[row, 0], items[row, 1], items[row, 2]));
+			}
 
-			direction = subject - camPosition;
-			subjHorzDist = Math.Sqrt(
-				(double)direction.X * (double)direction.X +
-				(double)direction.Z * (double)direction.Z);
-			sightAngle = new FVector3(
-				(float)Math.Atan2((double)direction.Y, subjHorzDist),
-				(float)Math.Atan2((double)direction.X, (double)direction.Z), 0f);
-
-			Console.WriteLine($"  Ortho dist:{direction}");
-			Console.WriteLine($"  Sight raw: {sightAngle}");
-			sightAngle.X -= camRotation.X;
-			sightAngle.Y -= camRotation.Y;
-			Console.WriteLine($"  Sight fix: {sightAngle}");
-
-			////	In the sight angle, the rotation on X relates to the position on Y.
-			//if(sightAngle.X >= viewDown && sightAngle.X <= viewUp &&
-			//	sightAngle.Y >= viewLeft && sightAngle.Y <= viewRight)
-			//{
-			//	//	The subject is in view.
-			//	Console.WriteLine("  Subject in view.");
-
-				//	Project the point to the viewfinder.
-				projectedPoint = new FVector3()
-				{
-					//	X position from rotation on Y.
-					X = Trig.GetLineOppFromAngAdj(sightAngle.Y, distViewfinder),
-					//	Y position from rotation on X.
-					Y = Trig.GetLineOppFromAngAdj(sightAngle.X, distViewfinder)
-				};
-				Console.WriteLine($"  Projected: {projectedPoint}");
-				//	Convert the projected point to the screen.
-				x = (int)(dispWHalf + (dispWHalf * projectedPoint.X));
-				y = (int)(dispHHalf + (dispHHalf * -projectedPoint.Y));
-				Console.WriteLine($"  Screen:    {x}, {y}");
-			//}
-			//else
-			//{
-			//	Console.WriteLine("  Subject not in view.");
-			//}
+			index = 0;
+			foreach(FPoint3 pointItem in points)
+			{
+				point2 = camera.ProjectToScreen(pointItem);
+				Console.WriteLine($" {index.ToString().PadLeft(2, '0')}. " +
+					$"{point2.X:0}, {point2.Y:0}");
+				index++;
+			}
 			Console.WriteLine("");
-
-			subject = new FVector3(10f, 0f, 0f);
-			Console.WriteLine($" Subject:         {subject}");
-
-			direction = subject - camPosition;
-			subjHorzDist = Math.Sqrt(
-				(double)direction.X * (double)direction.X +
-				(double)direction.Z * (double)direction.Z);
-			sightAngle = new FVector3(
-				(float)Math.Atan2((double)direction.Y, (double)direction.Z),
-				(float)Math.Atan2((double)direction.X, (double)direction.Z),
-				0f);
-
-			Console.WriteLine($"  Ortho dist:{direction}");
-			Console.WriteLine($"  Sight raw: {sightAngle}");
-			sightAngle.X -= camRotation.X;
-			sightAngle.Y -= camRotation.Y;
-			Console.WriteLine($"  Sight fix: {sightAngle}");
-
-			//	In the sight angle, the rotation on X relates to the position on Y.
-			//if(sightAngle.X >= viewDown && sightAngle.X <= viewUp &&
-			//	sightAngle.Y >= viewLeft && sightAngle.Y <= viewRight)
-			//{
-			//	//	The subject is in view.
-			//	Console.WriteLine("  Subject in view.");
-
-				//	Project the point to the viewfinder.
-				projectedPoint = new FVector3()
-				{
-					//	X position from rotation on Y.
-					X = Trig.GetLineOppFromAngAdj(sightAngle.Y, distViewfinder),
-					//	Y position from rotation on X.
-					Y = Trig.GetLineOppFromAngAdj(sightAngle.X, distViewfinder)
-				};
-				Console.WriteLine($"  Projected: {projectedPoint}");
-				//	Convert the projected point to the screen.
-				x = (int)(dispWHalf + (dispWHalf * projectedPoint.X));
-				y = (int)(dispHHalf + (dispHHalf * -projectedPoint.Y));
-				Console.WriteLine($"  Screen:    {x}, {y}");
-			//}
-			//else
-			//{
-			//	Console.WriteLine("  Subject not in view.");
-			//}
-
-			Console.WriteLine("");
-
-
-
 		}
 		//*-----------------------------------------------------------------------*
 

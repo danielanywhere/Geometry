@@ -18,7 +18,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using System.Text;
+
+using static Geometry.GeometryUtil;
 
 //	TODO: Wire the value change events of the Position and LookAt properties.
 
@@ -37,16 +40,22 @@ namespace Geometry
 		//*	Private																																*
 		//*************************************************************************
 		private float mAspectRatio = 0f;
+		private FVector3 mCamDistance = null;
+		private FVector3 mCamForward = null;
+		private FVector3 mCamUp = null;
+		private FVector3 mCamRight = null;
 		private float mDisplayHeightHalf = 0f;
 		private float mDisplayWidthHalf = 0f;
 		private float mFieldOfViewY = 0f;
-		private float mViewfinderDistance = 0f;
+		private float mViewfinderDistanceX = 0f;
+		private float mViewfinderDistanceY = 0f;
 		private float mViewfinderDown = 0f;
 		private float mViewfinderLeft = 0f;
 		private float mViewfinderRight = 0f;
 		private float mViewfinderUp = 0f;
 		private float mViewfinderXHalf = 0f;
 		private float mViewfinderYHalf = 0f;
+		private FVector3 mWorldUp = null;
 
 		//*************************************************************************
 		//*	Protected																															*
@@ -55,8 +64,8 @@ namespace Geometry
 		//* ConvertCameraToWorld																									*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Convert the caller's camera-oriented vector to one matching the
-		/// selected world setting.
+		/// Used internally to convert the caller's camera-oriented vector to one
+		/// matching the selected world setting.
 		/// </summary>
 		/// <param name="vector">
 		/// Reference to the vector to be converted.
@@ -117,8 +126,8 @@ namespace Geometry
 		//* ConvertWorldToCamera																									*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Convert the caller's world-oriented vector to one matching the
-		/// selected camera setting.
+		/// Used internally to convert the caller's world-oriented vector to one
+		/// matching the selected camera setting.
 		/// </summary>
 		/// <param name="vector">
 		/// Reference to the vector to be converted.
@@ -179,7 +188,7 @@ namespace Geometry
 		//* UpdateDisplay																													*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Update the display-related settings.
+		/// Update the internal display-related settings.
 		/// </summary>
 		protected virtual void UpdateDisplay()
 		{
@@ -195,7 +204,8 @@ namespace Geometry
 			mFieldOfViewY = mFieldOfView * mAspectRatio;
 			mViewfinderXHalf = Trig.DegToRad(mFieldOfView / 2f);
 			mViewfinderYHalf = Trig.DegToRad(mFieldOfViewY / 2f);
-			mViewfinderDistance = Trig.GetLineAdjFromAngOpp(mViewfinderXHalf, 0.5f);
+			mViewfinderDistanceX = Trig.GetLineAdjFromAngOpp(mViewfinderXHalf, 0.5f);
+			mViewfinderDistanceY = Trig.GetLineAdjFromAngOpp(mViewfinderYHalf, 0.5f);
 			mDisplayWidthHalf = (float)mDisplayWidth / 2f;
 			mDisplayHeightHalf = (float)mDisplayHeight / 2f;
 		}
@@ -209,8 +219,10 @@ namespace Geometry
 		/// </summary>
 		protected virtual void UpdatePositions()
 		{
-			FVector3 direction = null;
+			FVector3 camUpPreset = null;
+			float forwardLeak = 0f;
 			double horizontalDistance = 0d;
+			double verticalDistance = 0d;
 
 			mLookAtInternal = ConvertWorldToCamera(mLookAt);
 			mPositionInternal = ConvertWorldToCamera(mPosition);
@@ -218,13 +230,16 @@ namespace Geometry
 			switch(mRotationMode)
 			{
 				case ObjectRotationMode.LookAt:
-					direction = mLookAtInternal - mPositionInternal;
+					mCamDistance = mLookAtInternal - mPositionInternal;
 					horizontalDistance = Math.Sqrt(
-						(double)direction.X * (double)direction.X +
-						(double)direction.Z * (double)direction.Z);
+						(double)mCamDistance.X * (double)mCamDistance.X +
+						(double)mCamDistance.Z * (double)mCamDistance.Z);
+					verticalDistance = Math.Sqrt(
+						(double)mCamDistance.Y * (double)mCamDistance.Y +
+						(double)mCamDistance.Z * (double)mCamDistance.Z);
 					mRotationInternal = new FVector3(
-						(float)Math.Atan2((double)direction.Y, horizontalDistance),
-						(float)Math.Atan2((double)direction.X, (double)direction.Z), 0f);
+						(float)Math.Atan2((double)mCamDistance.Y, horizontalDistance),
+						(float)Math.Atan2((double)mCamDistance.X, verticalDistance), 0f);
 					break;
 				case ObjectRotationMode.EulerRotation:
 				default:
@@ -232,6 +247,7 @@ namespace Geometry
 						Trig.DegToRad(mRotation.X),
 						Trig.DegToRad(mRotation.Y),
 						Trig.DegToRad(mRotation.Z));
+					//	TODO: Calculate the new LookAt from the rotation.
 					break;
 			}
 			//	Prepare the viewport edges for quick comparison.
@@ -240,6 +256,20 @@ namespace Geometry
 			mViewfinderUp = mRotationInternal.X + mViewfinderYHalf;
 			mViewfinderDown = mRotationInternal.X - mViewfinderYHalf;
 
+			//	Create the perspective camera basis.
+			mCamForward = FVector3.Normalize(mCamDistance);
+			mWorldUp = new FVector3(0f, 1f, 0f);
+			if(Math.Abs(FVector3.DotProduct(mCamForward, mWorldUp)) > 0.99)
+			{
+				//	If near-vertical forward occurs, switch perspective.
+				mWorldUp = new FVector3(0f, 0f, 1f);
+			}
+			mCamRight =
+				FVector3.Normalize(FVector3.CrossProduct(mWorldUp, mCamForward));
+			camUpPreset =
+				FVector3.Normalize(FVector3.CrossProduct(mCamForward, mCamRight));
+			forwardLeak = FVector3.DotProduct(camUpPreset, mCamForward);
+			mCamUp = FVector3.Normalize(camUpPreset - (mCamForward * forwardLeak));
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -450,56 +480,15 @@ namespace Geometry
 		/// </returns>
 		public FLine ProjectToScreen(FLine3 line)
 		{
-			FVector3 direction = null;
-			double horizontalDistance = 0d;
-			FVector3 projectedPoint = null;
 			FLine result = null;
-			FVector3 sightAngle = null;
 
 			if(line != null)
 			{
-				projectedPoint = new FVector3();
-				result = new FLine();
-				//	Point A.
-				direction = line.PointA - mPositionInternal;
-				horizontalDistance = Math.Sqrt(
-					(double)direction.X * (double)direction.X +
-					(double)direction.Z * (double)direction.Z);
-				sightAngle = new FVector3(
-					(float)Math.Atan2((double)direction.Y, horizontalDistance),
-					(float)Math.Atan2((double)direction.X, (double)direction.Z), 0f);
-				sightAngle.X -= mRotationInternal.X;
-				sightAngle.Y -= mRotationInternal.Y;
-				//	X position from rotation on Y.
-				projectedPoint.X =
-					Trig.GetLineOppFromAngAdj(sightAngle.Y, mViewfinderDistance);
-				//	Y position from rotation on X.
-				projectedPoint.Y =
-					Trig.GetLineOppFromAngAdj(sightAngle.X, mViewfinderDistance);
-				result.PointA.X =
-					mDisplayWidthHalf + (mDisplayWidthHalf * projectedPoint.X);
-				result.PointA.Y =
-					mDisplayHeightHalf + (mDisplayHeightHalf * -projectedPoint.Y);
-				//	Point B.
-				direction = line.PointB - mPositionInternal;
-				horizontalDistance = Math.Sqrt(
-					(double)direction.X * (double)direction.X +
-					(double)direction.Z * (double)direction.Z);
-				sightAngle = new FVector3(
-					(float)Math.Atan2((double)direction.Y, horizontalDistance),
-					(float)Math.Atan2((double)direction.X, (double)direction.Z), 0f);
-				sightAngle.X -= mRotationInternal.X;
-				sightAngle.Y -= mRotationInternal.Y;
-				//	X position from rotation on Y.
-				projectedPoint.X =
-					Trig.GetLineOppFromAngAdj(sightAngle.Y, mViewfinderDistance);
-				//	Y position from rotation on X.
-				projectedPoint.Y =
-					Trig.GetLineOppFromAngAdj(sightAngle.X, mViewfinderDistance);
-				result.PointB.X =
-					mDisplayWidthHalf + (mDisplayWidthHalf * projectedPoint.X);
-				result.PointB.Y =
-					mDisplayHeightHalf + (mDisplayHeightHalf * -projectedPoint.Y);
+				result = new FLine()
+				{
+					PointA = ProjectToScreen(line.PointA),
+					PointB = ProjectToScreen(line.PointB)
+				};
 			}
 
 			return result;
@@ -509,44 +498,47 @@ namespace Geometry
 		/// Project the provided 3D point to a 2D version that can be displayed on
 		/// the caller's display.
 		/// </summary>
-		/// <param name="point">
+		/// <param name="subject">
 		/// Reference to the point to be projected to 2D.
 		/// </param>
 		/// <returns>
 		/// Reference to a two dimensional point compatible with display on the
 		/// caller's screen, if valid. Otherwise, null.
 		/// </returns>
-		public FPoint ProjectToScreen(FPoint3 point)
+		public FPoint ProjectToScreen(FPoint3 subject)
 		{
-			FVector3 direction = null;
-			double horizontalDistance = 0d;
-			FVector3 projectedPoint = null;
-			FPoint result = null;
-			FVector3 sightAngle = null;
+			double camX = 0d;
+			double camY = 0d;
+			double camZ = 0d;
+			double normX = 0d;
+			double normY = 0d;
+			FPoint result = new FPoint();
+			double scaleX = 0d;
+			double scaleY = 0d;
+			FVector3 toSubject = null;
 
-			if(point != null)
+			if(subject != null)
 			{
-				direction = point - mPositionInternal;
-				horizontalDistance = Math.Sqrt(
-					(double)direction.X * (double)direction.X +
-					(double)direction.Z * (double)direction.Z);
-				sightAngle = new FVector3(
-					(float)Math.Atan2((double)direction.Y, horizontalDistance),
-					(float)Math.Atan2((double)direction.X, (double)direction.Z), 0f);
-				sightAngle.X -= mRotationInternal.X;
-				sightAngle.Y -= mRotationInternal.Y;
-				projectedPoint = new FVector3()
-				{
-					//	X position from rotation on Y.
-					X = Trig.GetLineOppFromAngAdj(sightAngle.Y, mViewfinderDistance),
-					//	Y position from rotation on X.
-					Y = Trig.GetLineOppFromAngAdj(sightAngle.X, mViewfinderDistance)
-				};
-				result = new FPoint()
-				{
-					X = mDisplayWidthHalf + (mDisplayWidthHalf * projectedPoint.X),
-					Y = mDisplayHeightHalf + (mDisplayHeightHalf * -projectedPoint.Y)
-				};
+				// Vector from camera to subject.
+				toSubject = subject - mPositionInternal;
+
+				camX = FVector3.DotProduct(toSubject, mCamRight);
+				camY = FVector3.DotProduct(toSubject, mCamUp);
+				camZ = FVector3.DotProduct(toSubject, mCamForward);
+
+				scaleX = 1.0d / Math.Tan((double)mViewfinderXHalf);
+				scaleY = scaleX * mAspectRatio;
+
+				//	Normalized projection.
+				normX = (camX / camZ) * scaleX;
+				normY = (camY / camZ) * scaleY;
+
+				//	Convert to screen space.
+				result.X = (float)(((double)mDisplayWidth / 2.0d) +
+					(normX * ((double)mDisplayWidth / 2.0d)));
+				result.Y = (float)(((double)mDisplayHeight / 2.0d) -
+					(normY * ((double)mDisplayHeight / 2.0d))); // Y inverted
+
 			}
 			return result;
 		}

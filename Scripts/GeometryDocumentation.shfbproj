@@ -36,7 +36,7 @@
       <DocumentationSource sourceFile="..\Source\Geometry\bin\Release\netstandard2.0\Geometry.dll" />
     </DocumentationSources>
     <HelpTitle>Dan&amp;#39%3bs Geometry Library</HelpTitle>
-    <HelpFileVersion>25.2327.4545</HelpFileVersion>
+    <HelpFileVersion>25.2330.3855</HelpFileVersion>
     <NamingMethod>MemberName</NamingMethod>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <RootNamespaceContainer>False</RootNamespaceContainer>
