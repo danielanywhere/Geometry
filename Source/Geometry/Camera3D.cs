@@ -15,9 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  * 
  */
+#define NoShowTrace
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -222,6 +224,10 @@ namespace Geometry
 			FVector3 camUpPreset = null;
 			float forwardLeak = 0f;
 			double horizontalDistance = 0d;
+			float length = 0f;
+			float nudgeEpsilon = 0.01f;
+			//float upDotForward = 0f;
+			//FVector3 upProj = null;
 			double verticalDistance = 0d;
 
 			mLookAtInternal = ConvertWorldToCamera(mLookAt);
@@ -257,6 +263,26 @@ namespace Geometry
 			mViewfinderDown = mRotationInternal.X - mViewfinderYHalf;
 
 			//	Create the perspective camera basis.
+			//	Hack.
+			length =
+				FVector3.Length(FVector3.Mask(mCamDistance, "x")) * nudgeEpsilon;
+			if(Math.Abs(mCamDistance.X) < length)
+			{
+				mCamDistance.X = SourcePolarity(mCamDistance.Z, length);
+			}
+			length =
+				FVector3.Length(FVector3.Mask(mCamDistance, "z")) * nudgeEpsilon;
+			if(Math.Abs(mCamDistance.Z) < length)
+			{
+				mCamDistance.Z = SourcePolarity(mCamDistance.X, length);
+			}
+			length =
+				FVector3.Length(FVector3.Mask(mCamDistance, "y")) * nudgeEpsilon;
+			if(Math.Abs(mCamDistance.Y) < length)
+			{
+				mCamDistance.Y = SourcePolarity(mCamDistance.Z, length);
+			}
+			//	/Hack.
 			mCamForward = FVector3.Normalize(mCamDistance);
 			mWorldUp = new FVector3(0f, 1f, 0f);
 			if(Math.Abs(FVector3.DotProduct(mCamForward, mWorldUp)) > 0.99)
@@ -270,6 +296,14 @@ namespace Geometry
 				FVector3.Normalize(FVector3.CrossProduct(mCamForward, mCamRight));
 			forwardLeak = FVector3.DotProduct(camUpPreset, mCamForward);
 			mCamUp = FVector3.Normalize(camUpPreset - (mCamForward * forwardLeak));
+#if ShowTrace
+			Trace.WriteLine($"Cam Forward: {{{mCamForward}}},");
+			Trace.WriteLine($"Cam Right:   {{{mCamRight}}},");
+			Trace.WriteLine($"Cam Up Raw:  {{{camUpPreset}}},");
+			Trace.WriteLine($"Forard leak: {forwardLeak:0.000},");
+			Trace.WriteLine($"Cam Up Adj:  {{{mCamUp}}},");
+			Trace.WriteLine("");
+#endif
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -471,23 +505,35 @@ namespace Geometry
 		/// Project the provided 3D line to a 2D version that can be displayed on
 		/// the caller's display.
 		/// </summary>
-		/// <param name="line">
+		/// <param name="subject">
 		/// Reference to the line to be projected to 2D.
 		/// </param>
 		/// <returns>
 		/// Reference to a two dimensional line compatible with display on the
 		/// caller's screen, if valid. Otherwise, null.
 		/// </returns>
-		public FLine ProjectToScreen(FLine3 line)
+		public FLine ProjectToScreen(FLine3 subject
+#if ShowTrace
+			, bool trace = false
+#endif
+			)
 		{
 			FLine result = null;
 
-			if(line != null)
+			if(subject != null)
 			{
 				result = new FLine()
 				{
-					PointA = ProjectToScreen(line.PointA),
-					PointB = ProjectToScreen(line.PointB)
+					PointA = ProjectToScreen(subject.PointA
+#if ShowTrace
+						, trace, "PointA"
+#endif
+					),
+					PointB = ProjectToScreen(subject.PointB
+#if ShowTrace
+						, trace, "PointB"
+#endif
+						)
 				};
 			}
 
@@ -505,11 +551,19 @@ namespace Geometry
 		/// Reference to a two dimensional point compatible with display on the
 		/// caller's screen, if valid. Otherwise, null.
 		/// </returns>
-		public FPoint ProjectToScreen(FPoint3 subject)
+		public FPoint ProjectToScreen(FPoint3 subject
+#if ShowTrace
+			, bool trace = false,
+			string traceShapeName = ""
+#endif
+			)
 		{
 			double camX = 0d;
 			double camY = 0d;
 			double camZ = 0d;
+#if ShowTrace
+			string name = "";
+#endif
 			double normX = 0d;
 			double normY = 0d;
 			FPoint result = new FPoint();
@@ -534,12 +588,29 @@ namespace Geometry
 				normY = (camY / camZ) * scaleY;
 
 				//	Convert to screen space.
-				result.X = (float)(((double)mDisplayWidth / 2.0d) +
-					(normX * ((double)mDisplayWidth / 2.0d)));
-				result.Y = (float)(((double)mDisplayHeight / 2.0d) -
-					(normY * ((double)mDisplayHeight / 2.0d))); // Y inverted
+				result.X = (float)(((double)mDisplayWidth * 0.5d) +
+					(normX * ((double)mDisplayWidth * 0.5d)));
+				result.Y = (float)(((double)mDisplayHeight * 0.5d) -
+					(normY * ((double)mDisplayHeight * 0.5d)));
 
 			}
+#if ShowTrace
+			if(trace)
+			{
+				if(traceShapeName?.Length > 0)
+				{
+					name = traceShapeName;
+				}
+				Trace.WriteLine($" {name}CamX: {camX:0.000},");
+				Trace.WriteLine($" {name}CamY: {camY:0.000},");
+				Trace.WriteLine($" {name}CamZ: {camZ:0.000},");
+				Trace.WriteLine($" {name}ScaleX: {scaleX:0.000},");
+				Trace.WriteLine($" {name}ScaleY: {scaleY:0.000},");
+				Trace.WriteLine($" {name}NormX: {normX:0.000},");
+				Trace.WriteLine($" {name}NormY: {normX:0.000},");
+				Trace.WriteLine("");
+			}
+#endif
 			return result;
 		}
 		//*-----------------------------------------------------------------------*

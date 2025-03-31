@@ -43,6 +43,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.2331.4041 | Bug-fix only; A minor hack has been added on **Camera3D** that nudges the camera slightly to avoid zero-crossing mishaps between Camera and LookAt positions. |
 | 25.2330.3855 | Bug-fix only; **Camera3D.ProjectToScreen(x)** functions have been repaired and tested. |
 | 25.2327.4545 | No breaking changes; Basic low-level 3D rendering has been added, along with the classes Camera3D, FColor4, FLine3, FMatrix4, FPoint3, and FVector4. Project to screen support currently includes FPoint3 (3D point) and FLine3 (3D line), with many more coming in the near future. |
 | 25.2317.4012 | No breaking changes; The following methods have been added to improve intersection handling: **FArea.HasIntersection(FArea, FLine)**, **FArea.GetIntersections(FArea, FLine)**, **FArea.HasIntersection(FArea, FArea)**, and **FArea.GetIntersections(FArea, FArea)** |

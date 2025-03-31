@@ -1180,7 +1180,7 @@ namespace Geometry
 			if(vector != null)
 			{
 				length = Length(vector);
-				if(length != 0.0)
+				if(length != 0.0f)
 				{
 					result.mValues[0] = vector.mValues[0] / length;
 					result.mValues[1] = vector.mValues[1] / length;
