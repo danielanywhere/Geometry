@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Direct3D.D3D12" Version="1.716.1-preview" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Geometry\Geometry.csproj" />
   </ItemGroup>
 
