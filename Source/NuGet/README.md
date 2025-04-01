@@ -43,6 +43,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.2401.4023 | Bug-fix only; A **Camera3D** can now be orbited around a subject, crossing look-at lines on  the horizontal and vertical planes without an orientation. The hack from the previous version has been removed and replaced with the logic to avoid a flipping condition. Please keep in mind this camera implements an "always up" style of view, relative to its local Y axis. When passing from one side of the look-at X or Z planes, the view will flip to keep the camera upright for that relationship. |
 | 25.2331.4041 | Bug-fix only; A minor hack has been added on **Camera3D** that nudges the camera slightly to avoid zero-crossing mishaps between Camera and LookAt positions. |
 | 25.2330.3855 | Bug-fix only; **Camera3D.ProjectToScreen(x)** functions have been repaired and tested. |
 | 25.2327.4545 | No breaking changes; Basic low-level 3D rendering has been added, along with the classes Camera3D, FColor4, FLine3, FMatrix4, FPoint3, and FVector4. Project to screen support currently includes FPoint3 (3D point) and FLine3 (3D line), with many more coming in the near future. |

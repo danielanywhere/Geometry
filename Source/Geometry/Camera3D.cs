@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.SymbolStore;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -224,10 +225,6 @@ namespace Geometry
 			FVector3 camUpPreset = null;
 			float forwardLeak = 0f;
 			double horizontalDistance = 0d;
-			float length = 0f;
-			float nudgeEpsilon = 0.01f;
-			//float upDotForward = 0f;
-			//FVector3 upProj = null;
 			double verticalDistance = 0d;
 
 			mLookAtInternal = ConvertWorldToCamera(mLookAt);
@@ -263,29 +260,9 @@ namespace Geometry
 			mViewfinderDown = mRotationInternal.X - mViewfinderYHalf;
 
 			//	Create the perspective camera basis.
-			//	Hack.
-			length =
-				FVector3.Length(FVector3.Mask(mCamDistance, "x")) * nudgeEpsilon;
-			if(Math.Abs(mCamDistance.X) < length)
-			{
-				mCamDistance.X = SourcePolarity(mCamDistance.Z, length);
-			}
-			length =
-				FVector3.Length(FVector3.Mask(mCamDistance, "z")) * nudgeEpsilon;
-			if(Math.Abs(mCamDistance.Z) < length)
-			{
-				mCamDistance.Z = SourcePolarity(mCamDistance.X, length);
-			}
-			length =
-				FVector3.Length(FVector3.Mask(mCamDistance, "y")) * nudgeEpsilon;
-			if(Math.Abs(mCamDistance.Y) < length)
-			{
-				mCamDistance.Y = SourcePolarity(mCamDistance.Z, length);
-			}
-			//	/Hack.
 			mCamForward = FVector3.Normalize(mCamDistance);
 			mWorldUp = new FVector3(0f, 1f, 0f);
-			if(Math.Abs(FVector3.DotProduct(mCamForward, mWorldUp)) > 0.99)
+			if(Math.Abs(FVector3.DotProduct(mCamForward, mWorldUp)) > 0.99999f)
 			{
 				//	If near-vertical forward occurs, switch perspective.
 				mWorldUp = new FVector3(0f, 0f, 1f);
@@ -294,8 +271,19 @@ namespace Geometry
 				FVector3.Normalize(FVector3.CrossProduct(mWorldUp, mCamForward));
 			camUpPreset =
 				FVector3.Normalize(FVector3.CrossProduct(mCamForward, mCamRight));
-			forwardLeak = FVector3.DotProduct(camUpPreset, mCamForward);
-			mCamUp = FVector3.Normalize(camUpPreset - (mCamForward * forwardLeak));
+			if(camUpPreset.Equals(mCamForward))
+			{
+				//	The camera is directly to the right or the left of look-at.
+#if ShowTrace
+				Trace.WriteLine("Camera3D.UpdatePositions. Break here...");
+#endif
+				mCamUp = FVector3.Invert(FVector3.Normalize(FVector3.CrossProduct(mCamRight, mCamForward)));
+			}
+			else
+			{
+				forwardLeak = FVector3.DotProduct(camUpPreset, mCamForward);
+				mCamUp = FVector3.Normalize(camUpPreset - (mCamForward * forwardLeak));
+			}
 #if ShowTrace
 			Trace.WriteLine($"Cam Forward: {{{mCamForward}}},");
 			Trace.WriteLine($"Cam Right:   {{{mCamRight}}},");
@@ -501,6 +489,24 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 		//* ProjectToScreen																												*
 		//*-----------------------------------------------------------------------*
+#if ShowTrace
+		/// <summary>
+		/// Project the provided 3D line to a 2D version that can be displayed on
+		/// the caller's display.
+		/// </summary>
+		/// <param name="subject">
+		/// Reference to the line to be projected to 2D.
+		/// </param>
+		/// <param name="trace">
+		/// Value indicating whether trace output should be rendered for this
+		/// call.
+		/// </param>
+		/// <returns>
+		/// Reference to a two dimensional line compatible with display on the
+		/// caller's screen, if valid. Otherwise, null.
+		/// </returns>
+		public FLine ProjectToScreen(FLine3 subject, bool trace = false)
+#else
 		/// <summary>
 		/// Project the provided 3D line to a 2D version that can be displayed on
 		/// the caller's display.
@@ -512,11 +518,8 @@ namespace Geometry
 		/// Reference to a two dimensional line compatible with display on the
 		/// caller's screen, if valid. Otherwise, null.
 		/// </returns>
-		public FLine ProjectToScreen(FLine3 subject
-#if ShowTrace
-			, bool trace = false
+		public FLine ProjectToScreen(FLine3 subject)
 #endif
-			)
 		{
 			FLine result = null;
 
@@ -540,6 +543,29 @@ namespace Geometry
 			return result;
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+#if ShowTrace
+		/// <summary>
+		/// Project the provided 3D point to a 2D version that can be displayed on
+		/// the caller's display.
+		/// </summary>
+		/// <param name="subject">
+		/// Reference to the point to be projected to 2D.
+		/// </param>
+		/// <param name="trace">
+		/// Value indicating whether trace output should be rendered for this
+		/// call.
+		/// </param>
+		/// <param name="traceShapeName">
+		/// Optional name of the shape for which the trace is being generated.
+		/// Ignored if trace == false.
+		/// </param>
+		/// <returns>
+		/// Reference to a two dimensional point compatible with display on the
+		/// caller's screen, if valid. Otherwise, null.
+		/// </returns>
+		public FPoint ProjectToScreen(FPoint3 subject, bool trace = false,
+			string traceShapeName = "")
+#else
 		/// <summary>
 		/// Project the provided 3D point to a 2D version that can be displayed on
 		/// the caller's display.
@@ -551,12 +577,8 @@ namespace Geometry
 		/// Reference to a two dimensional point compatible with display on the
 		/// caller's screen, if valid. Otherwise, null.
 		/// </returns>
-		public FPoint ProjectToScreen(FPoint3 subject
-#if ShowTrace
-			, bool trace = false,
-			string traceShapeName = ""
+		public FPoint ProjectToScreen(FPoint3 subject)
 #endif
-			)
 		{
 			double camX = 0d;
 			double camY = 0d;
@@ -607,7 +629,9 @@ namespace Geometry
 				Trace.WriteLine($" {name}ScaleX: {scaleX:0.000},");
 				Trace.WriteLine($" {name}ScaleY: {scaleY:0.000},");
 				Trace.WriteLine($" {name}NormX: {normX:0.000},");
-				Trace.WriteLine($" {name}NormY: {normX:0.000},");
+				Trace.WriteLine($" {name}NormY: {normY:0.000},");
+				Trace.WriteLine($" {name}ScreenX: {result.X:0.000}, ");
+				Trace.WriteLine($" {name}ScreenY: {result.Y:0.000}, ");
 				Trace.WriteLine("");
 			}
 #endif

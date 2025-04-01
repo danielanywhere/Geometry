@@ -611,6 +611,40 @@ namespace Geometry
 				value.mValues[vY] == this.mValues[vY] &&
 				value.mValues[vZ] == this.mValues[vZ]);
 		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return a value indicating whether the values in the supplied vector
+		/// are equal to the specified elemental associations.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to be compared.
+		/// </param>
+		/// <param name="x">
+		/// The X value to compare.
+		/// </param>
+		/// <param name="y">
+		/// The Y value to compare.
+		/// </param>
+		/// <param name="z">
+		/// The Z value to compare.
+		/// </param>
+		/// <returns>
+		/// Value indicating whether the axis values are equal to those found in
+		/// the caller's supplied vector.
+		/// </returns>
+		public static bool Equals(FVector3 vector, float x, float y, float z)
+		{
+			bool result = false;
+
+			if(vector != null)
+			{
+				result = vector.mValues[vX] == x &&
+					vector.mValues[vY] == y &&
+					vector.mValues[vZ] == z;
+			}
+
+			return result;
+		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
