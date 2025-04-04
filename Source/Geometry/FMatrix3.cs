@@ -292,10 +292,6 @@ namespace Geometry
 				switch(upAxis)
 				{
 					case AxisType.X:
-						if(thetaX != 0f)
-						{
-							result = RotateX(result, thetaX);
-						}
 						if(thetaZ != 0f)
 						{
 							result = RotateZ(result, thetaZ);
@@ -303,13 +299,13 @@ namespace Geometry
 						if(thetaY != 0f)
 						{
 							result = RotateY(result, thetaY);
+						}
+						if(thetaX != 0f)
+						{
+							result = RotateX(result, thetaX);
 						}
 						break;
 					case AxisType.Y:
-						if(thetaY != 0f)
-						{
-							result = RotateY(result, thetaY);
-						}
 						if(thetaX != 0f)
 						{
 							result = RotateX(result, thetaX);
@@ -317,14 +313,14 @@ namespace Geometry
 						if(thetaZ != 0f)
 						{
 							result = RotateZ(result, thetaZ);
+						}
+						if(thetaY != 0f)
+						{
+							result = RotateY(result, thetaY);
 						}
 						break;
 					case AxisType.Z:
 					default:
-						if(thetaZ != 0f)
-						{
-							result = RotateZ(result, thetaZ);
-						}
 						if(thetaX != 0f)
 						{
 							result = RotateX(result, thetaX);
@@ -332,6 +328,10 @@ namespace Geometry
 						if(thetaY != 0f)
 						{
 							result = RotateY(result, thetaY);
+						}
+						if(thetaZ != 0f)
+						{
+							result = RotateZ(result, thetaZ);
 						}
 						break;
 				}

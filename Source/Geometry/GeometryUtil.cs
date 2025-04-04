@@ -215,6 +215,54 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* SignEqual																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the signs are equal between
+		/// values A and B.
+		/// </summary>
+		/// <param name="valueA">
+		/// First value to compare.
+		/// </param>
+		/// <param name="valueB">
+		/// Second value to compare.
+		/// </param>
+		/// <returns>
+		/// True if the signs of the numbers are the same. Otherwise, false.
+		/// </returns>
+		public static bool SignEqual(float valueA, float valueB)
+		{
+			return (
+				(valueA >= 0f && valueB >= 0f) ||
+				(valueA < 0f && valueB < 0f));
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* SignNotEqual																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the signs are unequal between
+		/// values A and B.
+		/// </summary>
+		/// <param name="valueA">
+		/// First value to compare.
+		/// </param>
+		/// <param name="valueB">
+		/// Second value to compare.
+		/// </param>
+		/// <returns>
+		/// True if the signs of the numbers are different. Otherwise, false.
+		/// </returns>
+		public static bool SignNotEqual(float valueA, float valueB)
+		{
+			return (
+				(valueA > 0f && valueB < 0f) ||
+				(valueA < 0f && valueB > 0f));
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* SourcePolarity																												*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

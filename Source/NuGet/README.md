@@ -43,6 +43,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.2404.4129 | **CameraOrtho**, a tiny orthographic camera with the same direct world-to-screen projection capability as its sibling **Camera3D**, has been introduced in this version; **Camera3D.ProjectToScreen** now accepts coordinates in the caller's own world orientation, automatically translating them prior to rendering; Rotation axis order has been rearranged in **FMatrix3.Rotate(.., AxisType)** to reflect the correct outcomes for various up-axes; **FPoint3** can now be implicitly created from **FPoint** to support operations where a transition from 2D to 3D takes place; **Linear.Lerp** overloads have been added for **FPoint3** and **FVector3**. |
 | 25.2401.4023 | Bug-fix only; A **Camera3D** can now be orbited around a subject, crossing look-at lines on  the horizontal and vertical planes without an orientation flip. The hack from the previous version has been removed and replaced with the logic to avoid a flipping condition. Please keep in mind this camera implements an "always up" style of view, relative to its local Y axis. When passing from one side of the look-at X or Z planes, the view will flip to keep the camera upright for that relationship. |
 | 25.2331.4041 | Bug-fix only; A minor hack has been added on **Camera3D** that nudges the camera slightly to avoid zero-crossing mishaps between Camera and LookAt positions. |
 | 25.2330.3855 | Bug-fix only; **Camera3D.ProjectToScreen(x)** functions have been repaired and tested. |

@@ -20,23 +20,20 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 
 using static Geometry.GeometryUtil;
 
-//	TODO: Wire the value change events of the Position and LookAt properties.
-
 namespace Geometry
 {
 	//*-------------------------------------------------------------------------*
-	//*	Camera3D																																*
+	//*	CameraOrtho																															*
 	//*-------------------------------------------------------------------------*
 	/// <summary>
-	/// A primitive 3D camera for transforming points in 3D global space to 2D
-	/// drawing space.
+	/// Orthographic 3D camera.
 	/// </summary>
-	public class Camera3D
+	public class CameraOrtho
 	{
 		//*************************************************************************
 		//*	Private																																*
@@ -48,15 +45,16 @@ namespace Geometry
 		private FVector3 mCamRight = null;
 		private float mDisplayHeightHalf = 0f;
 		private float mDisplayWidthHalf = 0f;
-		private float mFieldOfViewY = 0f;
-		private float mViewfinderDistanceX = 0f;
-		private float mViewfinderDistanceY = 0f;
-		private float mViewfinderDown = 0f;
-		private float mViewfinderLeft = 0f;
-		private float mViewfinderRight = 0f;
-		private float mViewfinderUp = 0f;
-		private float mViewfinderXHalf = 0f;
-		private float mViewfinderYHalf = 0f;
+		//private float mFieldOfViewY = 0f;
+		private float mTargetObjectHeight = 1f;
+		//private float mViewfinderDistanceX = 0f;
+		//private float mViewfinderDistanceY = 0f;
+		//private float mViewfinderDown = 0f;
+		//private float mViewfinderLeft = 0f;
+		//private float mViewfinderRight = 0f;
+		//private float mViewfinderUp = 0f;
+		//private float mViewfinderXHalf = 0f;
+		//private float mViewfinderYHalf = 0f;
 		private FVector3 mWorldUp = null;
 
 		//*************************************************************************
@@ -203,13 +201,14 @@ namespace Geometry
 			{
 				mAspectRatio = 0f;
 			}
-			mFieldOfViewY = mFieldOfView * mAspectRatio;
-			mViewfinderXHalf = Trig.DegToRad(mFieldOfView / 2f);
-			mViewfinderYHalf = Trig.DegToRad(mFieldOfViewY / 2f);
-			mViewfinderDistanceX = Trig.GetLineAdjFromAngOpp(mViewfinderXHalf, 0.5f);
-			mViewfinderDistanceY = Trig.GetLineAdjFromAngOpp(mViewfinderYHalf, 0.5f);
+			//mFieldOfViewY = mFieldOfView * mAspectRatio;
+			//mViewfinderXHalf = Trig.DegToRad(mFieldOfView / 2f);
+			//mViewfinderYHalf = Trig.DegToRad(mFieldOfViewY / 2f);
+			//mViewfinderDistanceX = Trig.GetLineAdjFromAngOpp(mViewfinderXHalf, 0.5f);
+			//mViewfinderDistanceY = Trig.GetLineAdjFromAngOpp(mViewfinderYHalf, 0.5f);
 			mDisplayWidthHalf = (float)mDisplayWidth / 2f;
 			mDisplayHeightHalf = (float)mDisplayHeight / 2f;
+			mTargetObjectHeight = mTargetObjectWidth * mAspectRatio;
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -252,11 +251,11 @@ namespace Geometry
 					//	TODO: Calculate the new LookAt from the rotation.
 					break;
 			}
-			//	Prepare the viewport edges for quick comparison.
-			mViewfinderLeft = mRotationInternal.Y - mViewfinderXHalf;
-			mViewfinderRight = mRotationInternal.Y + mViewfinderXHalf;
-			mViewfinderUp = mRotationInternal.X + mViewfinderYHalf;
-			mViewfinderDown = mRotationInternal.X - mViewfinderYHalf;
+			////	Prepare the viewport edges for quick comparison.
+			//mViewfinderLeft = mRotationInternal.Y - mViewfinderXHalf;
+			//mViewfinderRight = mRotationInternal.Y + mViewfinderXHalf;
+			//mViewfinderUp = mRotationInternal.X + mViewfinderYHalf;
+			//mViewfinderDown = mRotationInternal.X - mViewfinderYHalf;
 
 			//	Create the perspective camera basis.
 			mCamForward = FVector3.Normalize(mCamDistance);
@@ -270,6 +269,10 @@ namespace Geometry
 				FVector3.Normalize(FVector3.CrossProduct(mWorldUp, mCamForward));
 			camUpPreset =
 				FVector3.Normalize(FVector3.CrossProduct(mCamForward, mCamRight));
+			if(SignEqual(camUpPreset.Y, mCamDistance.Y))
+			{
+				camUpPreset.Y = 0f - camUpPreset.Y;
+			}
 			if(camUpPreset.Equals(mCamForward))
 			{
 				//	The camera is directly to the right or the left of look-at.
@@ -297,18 +300,6 @@ namespace Geometry
 		//*************************************************************************
 		//*	Public																																*
 		//*************************************************************************
-		//*-----------------------------------------------------------------------*
-		//*	_Constructor																													*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Create a new instance of the Camera3D Item.
-		/// </summary>
-		public Camera3D()
-		{
-			UpdateDisplay();
-			UpdatePositions();
-		}
-		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//*	DisplayHeight																													*
@@ -352,26 +343,26 @@ namespace Geometry
 		}
 		//*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//*	FieldOfView																														*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Private member for <see cref="FieldOfView">FieldOfView</see>.
-		/// </summary>
-		private float mFieldOfView = 60f;
-		/// <summary>
-		/// Get/Set the camera's field of view, in degrees.
-		/// </summary>
-		public float FieldOfView
-		{
-			get { return mFieldOfView; }
-			set
-			{
-				mFieldOfView = value;
-				UpdateDisplay();
-			}
-		}
-		//*-----------------------------------------------------------------------*
+		////*-----------------------------------------------------------------------*
+		////*	FieldOfView																														*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Private member for <see cref="FieldOfView">FieldOfView</see>.
+		///// </summary>
+		//private float mFieldOfView = 60f;
+		///// <summary>
+		///// Get/Set the camera's field of view, in degrees.
+		///// </summary>
+		//public float FieldOfView
+		//{
+		//	get { return mFieldOfView; }
+		//	set
+		//	{
+		//		mFieldOfView = value;
+		//		UpdateDisplay();
+		//	}
+		//}
+		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//*	Handedness																														*
@@ -581,12 +572,12 @@ namespace Geometry
 		{
 			double camX = 0d;
 			double camY = 0d;
-			double camZ = 0d;
+			//double camZ = 0d;
 #if ShowTrace
 			string name = "";
 #endif
-			double normX = 0d;
-			double normY = 0d;
+			//double normX = 0d;
+			//double normY = 0d;
 			FPoint result = new FPoint();
 			double scaleX = 0d;
 			double scaleY = 0d;
@@ -600,20 +591,19 @@ namespace Geometry
 
 				camX = FVector3.DotProduct(toSubject, mCamRight);
 				camY = FVector3.DotProduct(toSubject, mCamUp);
-				camZ = FVector3.DotProduct(toSubject, mCamForward);
+				//camZ = FVector3.DotProduct(toSubject, mCamForward);
 
-				scaleX = 1.0d / Math.Tan((double)mViewfinderXHalf);
-				scaleY = scaleX * mAspectRatio;
+				//scaleX = 1.0d / Math.Tan((double)mViewfinderXHalf);
+				//scaleY = scaleX * mAspectRatio;
 
-				//	Normalized projection.
-				normX = (camX / camZ) * scaleX;
-				normY = (camY / camZ) * scaleY;
+				scaleX = camX / ((double)mTargetObjectWidth * 0.5d);
+				scaleY = camY / ((double)mTargetObjectHeight * 0.5d);
 
 				//	Convert to screen space.
 				result.X = (float)(((double)mDisplayWidth * 0.5d) +
-					(normX * ((double)mDisplayWidth * 0.5d)));
+					(scaleX * ((double)mDisplayWidth * 0.5d)));
 				result.Y = (float)(((double)mDisplayHeight * 0.5d) -
-					(normY * ((double)mDisplayHeight * 0.5d)));
+					(scaleY * ((double)mDisplayHeight * 0.5d)));
 
 			}
 #if ShowTrace
@@ -625,11 +615,11 @@ namespace Geometry
 				}
 				Trace.WriteLine($" {name}CamX: {camX:0.000},");
 				Trace.WriteLine($" {name}CamY: {camY:0.000},");
-				Trace.WriteLine($" {name}CamZ: {camZ:0.000},");
+				//Trace.WriteLine($" {name}CamZ: {camZ:0.000},");
 				Trace.WriteLine($" {name}ScaleX: {scaleX:0.000},");
 				Trace.WriteLine($" {name}ScaleY: {scaleY:0.000},");
-				Trace.WriteLine($" {name}NormX: {normX:0.000},");
-				Trace.WriteLine($" {name}NormY: {normY:0.000},");
+				//Trace.WriteLine($" {name}NormX: {normX:0.000},");
+				//Trace.WriteLine($" {name}NormY: {normY:0.000},");
 				Trace.WriteLine($" {name}ScreenX: {result.X:0.000}, ");
 				Trace.WriteLine($" {name}ScreenY: {result.Y:0.000}, ");
 				Trace.WriteLine("");
@@ -674,6 +664,28 @@ namespace Geometry
 		{
 			get { return mRotationMode; }
 			set { mRotationMode = value; }
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	TargetObjectWidth																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Private member for <see cref="TargetObjectWidth">
+		/// TargetObjectWidth</see>.
+		/// </summary>
+		private float mTargetObjectWidth = 1f;
+		/// <summary>
+		/// Get/Set the maximum target object width.
+		/// </summary>
+		public float TargetObjectWidth
+		{
+			get { return mTargetObjectWidth; }
+			set
+			{
+				mTargetObjectWidth = value;
+				UpdateDisplay();
+			}
 		}
 		//*-----------------------------------------------------------------------*
 

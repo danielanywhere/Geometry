@@ -128,6 +128,70 @@ namespace Geometry
 			}
 			return result;
 		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the triple linear interpolation of the values between start and
+		/// end points representing the specified progress as a value between 0 and
+		/// 1.
+		/// </summary>
+		/// <param name="start">
+		/// Reference to the start point to be considered.
+		/// </param>
+		/// <param name="end">
+		/// Reference to the end point to be considered.
+		/// </param>
+		/// <param name="progress">
+		/// Current progress value.
+		/// </param>
+		/// <returns>
+		/// The linear interpolated point value between start and end, as indicated
+		/// by the progress value.
+		/// </returns>
+		public static FPoint3 Lerp(FPoint3 start, FPoint3 end,
+			float progress)
+		{
+			FPoint3 result = new FPoint3();
+
+			if(start != null && end != null)
+			{
+				result.X = Lerp(start.X, end.X, progress);
+				result.Y = Lerp(start.Y, end.Y, progress);
+				result.Z = Lerp(start.Z, end.Z, progress);
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the triple linear interpolation of the values between start and
+		/// end points representing the specified progress as a value between 0 and
+		/// 1.
+		/// </summary>
+		/// <param name="start">
+		/// Reference to the start point to be considered.
+		/// </param>
+		/// <param name="end">
+		/// Reference to the end point to be considered.
+		/// </param>
+		/// <param name="progress">
+		/// Current progress value.
+		/// </param>
+		/// <returns>
+		/// The linear interpolated point value between start and end, as indicated
+		/// by the progress value.
+		/// </returns>
+		public static FVector3 Lerp(FVector3 start, FVector3 end,
+			float progress)
+		{
+			FVector3 result = new FVector3();
+
+			if(start != null && end != null)
+			{
+				result.Values[0] = Lerp(start.Values[0], end.Values[0], progress);
+				result.Values[1] = Lerp(start.Values[2], end.Values[2], progress);
+				result.Values[2] = Lerp(start.Values[3], end.Values[3], progress);
+			}
+			return result;
+		}
 		//*-----------------------------------------------------------------------*
 
 	}

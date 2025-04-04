@@ -7,12 +7,12 @@
     <UserSecretsId>951381aa-9161-4492-9e42-7bce18a07442</UserSecretsId>
     <PackageId>Dans.Geometry.Library</PackageId>
     <Title>Dan's Geometry Library</Title>
-    <Version>25.2401.4023</Version>
+    <Version>25.2404.4129</Version>
     <Description>Dan's Geometry Library.</Description>
     <Copyright>Copyright(c) 2025. Daniel Patterson, MCSD (danielanywhere)</Copyright>
     <PackageProjectUrl>https://github.com/danielanywhere/Geometry</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>geometry;geometric;trigonometry;trig;matrix;bezier;ellipse;2D;3D;projection</PackageTags>
+    <PackageTags>geometry;geometric;trigonometry;trig;matrix;bezier;ellipse;2D;3D;projection;perspective;orthographic</PackageTags>
     <Authors>Daniel Patterson, MCSD (danielanywhere)</Authors>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>

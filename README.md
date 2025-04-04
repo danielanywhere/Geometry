@@ -1,8 +1,8 @@
 # Geometry Library
 
-**NEW! Simple 3D projection of lines and points!** Create a Camera3D,
-set its Position and LookAt properties, then feed it points and lines
-from world space all day long.
+**NEW! Simple 3D projection of lines and points!** Create a Camera3D or
+CameraOrtho, set its Position and LookAt properties, then feed it points
+and lines from world space all day long.
 
 An easy-to-implement function library providing numeric operations to
 handle solutions to typical problems encountered in the field of
@@ -154,6 +154,13 @@ reaching answers in different categories.
     The catch on using it? Only individual 3D points and lines are
     rendered so far. You are invited to get involved if you would like
     to see this performance potential explode into the mainstream.
+
+-   **CameraOrtho**. An orthographic sibling to the tiny 3D camera, and
+    nearly identical in operation, except for the projection stage. The
+    main difference in preparation between the perspective Camera3D and
+    the orthographic CameraOrtho is that in CameraOrtho, you specify a
+    TargetObjectWidth, in host units, instead of a horizontal
+    FieldOfView, in degrees.
 
 -   **Circle Class**. Provides intuitive tools and methods for analyzing
     and interacting with circles, including slice-based angles, bounding

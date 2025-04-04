@@ -113,6 +113,39 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	_Implicit FPoint3 = FPoint																						*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Cast the FPoint instance to a FPoint3.
+		/// </summary>
+		/// <param name="value">
+		/// Reference to the 2D point to convert.
+		/// </param>
+		/// <returns>
+		/// Reference to the newly created 3D copy of the caller's 2D point, if
+		/// valid. Otherwise, an empty point.
+		/// </returns>
+		public static implicit operator FPoint3(FPoint value)
+		{
+			FPoint3 result = null;
+
+			if(value != null)
+			{
+				result = new FPoint3()
+				{
+					mX = value.X,
+					mY = value.Y
+				};
+			}
+			if(result == null)
+			{
+				result = new FPoint3();
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* _Operator scalar * FPoint3																						*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
