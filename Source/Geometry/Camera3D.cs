@@ -394,9 +394,9 @@ namespace Geometry
 		/// converted to the camera orientation prior to projection.
 		/// </para>
 		/// <para>
-		/// In a right-handed world orientation, viewing the XZ plane,
+		/// In a right-handed world orientation, viewing the XZ plane in 2D,
 		/// the Z axis increases in a downward direction. In contrast, in a
-		/// left-handed world orientation, viewing the XZ plane, the Z axis
+		/// left-handed world orientation, viewing the XZ plane in 2D, the Z axis
 		/// increases in an upward direction.
 		/// </para>
 		/// <para><b>More Information</b></para>
@@ -443,7 +443,7 @@ namespace Geometry
 		/// in world coordinates.
 		/// </summary>
 		/// <remarks>
-		/// Although the internal camera is transposed using a Y-up right-handed
+		/// Although the internal camera is transposed using a Y-up left-handed
 		/// system, all of the positions are expressed in the host's world system
 		/// to avoid any confusion.
 		/// </remarks>
@@ -474,7 +474,7 @@ namespace Geometry
 		/// coordinates.
 		/// </summary>
 		/// <remarks>
-		/// Although the internal camera is transposed using a Y-up right-handed
+		/// Although the internal camera is transposed using a Y-up left-handed
 		/// system, all of the positions are expressed in the host's world system
 		/// to avoid any confusion.
 		/// </remarks>
