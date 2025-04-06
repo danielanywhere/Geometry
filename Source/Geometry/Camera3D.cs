@@ -270,6 +270,10 @@ namespace Geometry
 				FVector3.Normalize(FVector3.CrossProduct(mWorldUp, mCamForward));
 			camUpPreset =
 				FVector3.Normalize(FVector3.CrossProduct(mCamForward, mCamRight));
+			if(SignEqual(camUpPreset.Y, mCamDistance.Y))
+			{
+				camUpPreset.Y = 0f - camUpPreset.Y;
+			}
 			if(camUpPreset.Equals(mCamForward))
 			{
 				//	The camera is directly to the right or the left of look-at.
@@ -603,11 +607,14 @@ namespace Geometry
 				camZ = FVector3.DotProduct(toSubject, mCamForward);
 
 				scaleX = 1.0d / Math.Tan((double)mViewfinderXHalf);
-				scaleY = scaleX * mAspectRatio;
+				scaleY = 1.0d / Math.Tan((double)mViewfinderYHalf);
 
 				//	Normalized projection.
-				normX = (camX / camZ) * scaleX;
-				normY = (camY / camZ) * scaleY;
+				if(camZ != 0d)
+				{
+					normX = (camX / camZ) * scaleX;
+					normY = (camY / camZ) * scaleY;
+				}
 
 				//	Convert to screen space.
 				result.X = (float)(((double)mDisplayWidth * 0.5d) +

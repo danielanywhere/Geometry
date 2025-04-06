@@ -649,6 +649,51 @@ namespace Geometry
 		}
 		//*-----------------------------------------------------------------------*
 
+		//*-----------------------------------------------------------------------*
+		//* GetVertices																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a list of vertices for a circle of the specified size centered
+		/// at the provided location.
+		/// </summary>
+		/// <param name="center">
+		/// Reference to the point at which the circle is centered.
+		/// </param>
+		/// <param name="radius">
+		/// Radius of the circle.
+		/// </param>
+		/// <param name="vertexCount">
+		/// Count of vertices to return.
+		/// </param>
+		/// <param name="thetaOffset">
+		/// The optional rotation of the shape, in radians.
+		/// </param>
+		/// <returns>
+		/// Reference to a list of evenly-spaced vertices around the edge of the
+		/// indicated circle, if valid. Otherwise, an empty list.
+		/// </returns>
+		public static List<FPoint> GetVertices(FPoint center, float radius,
+			int vertexCount, float thetaOffset = 0f)
+		{
+			float angle = thetaOffset;
+			int index = 0;
+			List<FPoint> result = new List<FPoint>();
+			float space = 0f;
+
+			if(center != null && radius > 0f && vertexCount > 0)
+			{
+				angle = thetaOffset;
+				space = TwoPi / (float)vertexCount;
+				for(index = 0; index < vertexCount; index++)
+				{
+					result.Add(Trig.GetDestPoint(center, angle, radius));
+					angle += space;
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
 
 	}
 	//*-------------------------------------------------------------------------*
