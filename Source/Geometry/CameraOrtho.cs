@@ -485,7 +485,7 @@ namespace Geometry
 		/// the caller's display.
 		/// </summary>
 		/// <param name="subject">
-		/// Reference to the line to be projected to 2D.
+		/// Reference to the line, in World coordinates, to be projected to 2D.
 		/// </param>
 		/// <param name="trace">
 		/// Value indicating whether trace output should be rendered for this
@@ -502,7 +502,7 @@ namespace Geometry
 		/// the caller's display.
 		/// </summary>
 		/// <param name="subject">
-		/// Reference to the line to be projected to 2D.
+		/// Reference to the line, in World coordinates, to be projected to 2D.
 		/// </param>
 		/// <returns>
 		/// Reference to a two dimensional line compatible with display on the
@@ -539,7 +539,7 @@ namespace Geometry
 		/// the caller's display.
 		/// </summary>
 		/// <param name="subject">
-		/// Reference to the point to be projected to 2D.
+		/// Reference to the point, in World coordinates, to be projected to 2D.
 		/// </param>
 		/// <param name="trace">
 		/// Value indicating whether trace output should be rendered for this
@@ -561,7 +561,7 @@ namespace Geometry
 		/// the caller's display.
 		/// </summary>
 		/// <param name="subject">
-		/// Reference to the point to be projected to 2D.
+		/// Reference to the point, in World coordinates, to be projected to 2D.
 		/// </param>
 		/// <returns>
 		/// Reference to a two dimensional point compatible with display on the
