@@ -1,13 +1,15 @@
 # Geometry Library
 
-**NEW! Simple 3D projection of lines and points!** Create a Camera3D or
-CameraOrtho, set its Position and LookAt properties, then feed it points
-and lines from world space all day long.
-
 An easy-to-implement function library providing numeric operations to
 handle solutions to typical problems encountered in the field of
 geometry, including Bezier Curves, Linear Interpolation (Lerp), and
 Trigonometry.
+
+<p>&nbsp;</p>
+
+**NEW! Simple 3D projection of lines and points!** Create a Camera3D or
+CameraOrtho, set its Position and LookAt properties, then feed it points
+and lines from world space all day long.
 
 <p>&nbsp;</p>
 
@@ -142,18 +144,18 @@ reaching answers in different categories.
     quick and efficient calculations even for complex curves.
 
 -   **Camera3D**. A tiny, tiny, tiny 3D camera, performing all of its
-    operations in raw trigonometric functions, making it capable of 100x
-    CPU performance over current 3D systems. This renderer differs from
-    the status quo in two major areas: 1) All vertices are assumed to be
-    pre-positioned in their world locations and states, and 2) The
-    camera is moved to its stated location to view the world as it is,
-    as opposed to moving the entire world in front of a stationary
-    camera, as is generally accepted practice. Together, this set of
-    changes in philosophy reduce what would otherwise be a giant 3D
-    library to just a handful of lines of code, as you can see inside.
-    The catch on using it? Only individual 3D points and lines are
-    rendered so far. You are invited to get involved if you would like
-    to see this performance potential explode into the mainstream.
+    operations in raw trigonometric functions, making it capable of more
+    than 25x CPU performance over current 3D systems. This renderer
+    differs from the status quo in two major areas: 1) All vertices are
+    assumed to be pre-positioned in their world locations and states,
+    and 2) The camera is moved to its stated location to view the world
+    as it is, as opposed to moving the entire world in front of a
+    stationary camera, as is generally accepted practice. Together, this
+    set of changes in philosophy reduce what would otherwise be a giant
+    3D library to just a handful of lines of code, as you can see
+    inside. The catch on using it? Only individual 3D points and lines
+    are rendered so far. You are invited to get involved if you would
+    like to see this performance potential explode into the mainstream.
 
 -   **CameraOrtho**. An orthographic sibling to the tiny 3D camera, and
     nearly identical in operation, except for the projection stage. The
