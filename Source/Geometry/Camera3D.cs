@@ -49,6 +49,8 @@ namespace Geometry
 		private float mDisplayHeightHalf = 0f;
 		private float mDisplayWidthHalf = 0f;
 		private float mFieldOfViewY = 0f;
+		private double mNormalizedScaleX = 1.0d;
+		private double mNormalizedScaleY = 1.0d;
 		private float mViewfinderDistanceX = 0f;
 		private float mViewfinderDistanceY = 0f;
 		private float mViewfinderDown = 0f;
@@ -208,6 +210,8 @@ namespace Geometry
 			mViewfinderYHalf = Trig.DegToRad(mFieldOfViewY / 2f);
 			mViewfinderDistanceX = Trig.GetLineAdjFromAngOpp(mViewfinderXHalf, 0.5f);
 			mViewfinderDistanceY = Trig.GetLineAdjFromAngOpp(mViewfinderYHalf, 0.5f);
+			mNormalizedScaleX = 1.0d / Math.Tan((double)mViewfinderXHalf);
+			mNormalizedScaleY = 1.0d / Math.Tan((double)mViewfinderYHalf);
 			mDisplayWidthHalf = (float)mDisplayWidth / 2f;
 			mDisplayHeightHalf = (float)mDisplayHeight / 2f;
 		}
@@ -592,8 +596,8 @@ namespace Geometry
 			double normX = 0d;
 			double normY = 0d;
 			FPoint result = new FPoint();
-			double scaleX = 0d;
-			double scaleY = 0d;
+			//double scaleX = 0d;
+			//double scaleY = 0d;
 			FVector3 toSubject = null;
 
 			if(subject != null)
@@ -606,14 +610,14 @@ namespace Geometry
 				camY = FVector3.DotProduct(toSubject, mCamUp);
 				camZ = FVector3.DotProduct(toSubject, mCamForward);
 
-				scaleX = 1.0d / Math.Tan((double)mViewfinderXHalf);
-				scaleY = 1.0d / Math.Tan((double)mViewfinderYHalf);
+				//scaleX = 1.0d / Math.Tan((double)mViewfinderXHalf);
+				//scaleY = 1.0d / Math.Tan((double)mViewfinderYHalf);
 
 				//	Normalized projection.
 				if(camZ != 0d)
 				{
-					normX = (camX / camZ) * scaleX;
-					normY = (camY / camZ) * scaleY;
+					normX = (camX / camZ) * mNormalizedScaleX;
+					normY = (camY / camZ) * mNormalizedScaleY;
 				}
 
 				//	Convert to screen space.
