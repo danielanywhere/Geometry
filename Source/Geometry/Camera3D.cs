@@ -18,10 +18,6 @@
 #define NoShowTrace
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http.Headers;
-using System.Text;
 
 using static Geometry.GeometryUtil;
 
