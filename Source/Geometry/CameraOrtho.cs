@@ -41,16 +41,7 @@ namespace Geometry
 		private FVector3 mCamRight = null;
 		private float mDisplayHeightHalf = 0f;
 		private float mDisplayWidthHalf = 0f;
-		//private float mFieldOfViewY = 0f;
 		private float mTargetObjectHeight = 1f;
-		//private float mViewfinderDistanceX = 0f;
-		//private float mViewfinderDistanceY = 0f;
-		//private float mViewfinderDown = 0f;
-		//private float mViewfinderLeft = 0f;
-		//private float mViewfinderRight = 0f;
-		//private float mViewfinderUp = 0f;
-		//private float mViewfinderXHalf = 0f;
-		//private float mViewfinderYHalf = 0f;
 		private FVector3 mWorldUp = null;
 
 		//*************************************************************************
@@ -197,11 +188,6 @@ namespace Geometry
 			{
 				mAspectRatio = 0f;
 			}
-			//mFieldOfViewY = mFieldOfView * mAspectRatio;
-			//mViewfinderXHalf = Trig.DegToRad(mFieldOfView / 2f);
-			//mViewfinderYHalf = Trig.DegToRad(mFieldOfViewY / 2f);
-			//mViewfinderDistanceX = Trig.GetLineAdjFromAngOpp(mViewfinderXHalf, 0.5f);
-			//mViewfinderDistanceY = Trig.GetLineAdjFromAngOpp(mViewfinderYHalf, 0.5f);
 			mDisplayWidthHalf = (float)mDisplayWidth / 2f;
 			mDisplayHeightHalf = (float)mDisplayHeight / 2f;
 			mTargetObjectHeight = mTargetObjectWidth * mAspectRatio;
@@ -218,40 +204,34 @@ namespace Geometry
 		{
 			FVector3 camUpPreset = null;
 			float forwardLeak = 0f;
-			double horizontalDistance = 0d;
-			double verticalDistance = 0d;
 
 			mLookAtInternal = ConvertWorldToCamera(mLookAt);
 			mPositionInternal = ConvertWorldToCamera(mPosition);
 
 			switch(mRotationMode)
 			{
-				case ObjectRotationMode.LookAt:
-					mCamDistance = mLookAtInternal - mPositionInternal;
-					horizontalDistance = Math.Sqrt(
-						(double)mCamDistance.X * (double)mCamDistance.X +
-						(double)mCamDistance.Z * (double)mCamDistance.Z);
-					verticalDistance = Math.Sqrt(
-						(double)mCamDistance.Y * (double)mCamDistance.Y +
-						(double)mCamDistance.Z * (double)mCamDistance.Z);
-					mRotationInternal = new FVector3(
-						(float)Math.Atan2((double)mCamDistance.Y, horizontalDistance),
-						(float)Math.Atan2((double)mCamDistance.X, verticalDistance), 0f);
-					break;
 				case ObjectRotationMode.EulerRotation:
-				default:
 					mRotationInternal = new FVector3(
 						Trig.DegToRad(mRotation.X),
-						Trig.DegToRad(mRotation.Y),
+						Trig.DegToRad(mRotation.Y + 90f),
 						Trig.DegToRad(mRotation.Z));
-					//	TODO: Calculate the new LookAt from the rotation.
+					mLookAtInternal =
+						FVector3.GetDestPoint(mPositionInternal, mRotationInternal,
+							mCameraDistance);
+					mLookAt = ConvertCameraToWorld(mLookAtInternal);
+					break;
+				case ObjectRotationMode.LookAt:
+				default:
+					mCamDistance = mLookAtInternal - mPositionInternal;
+					//	Save the absolute distance from the camera to the subject.
+					mCameraDistance = FVector3.Length(mCamDistance);
+					mRotationInternal =
+						FVector3.GetEulerAngle(mPositionInternal, mLookAtInternal);
+					mRotation.X = Trig.RadToDeg(mRotationInternal.X);
+					mRotation.Y = Trig.RadToDeg(mRotationInternal.Y) - 90f;
+					mRotation.Z = Trig.RadToDeg(mRotationInternal.Z);
 					break;
 			}
-			////	Prepare the viewport edges for quick comparison.
-			//mViewfinderLeft = mRotationInternal.Y - mViewfinderXHalf;
-			//mViewfinderRight = mRotationInternal.Y + mViewfinderXHalf;
-			//mViewfinderUp = mRotationInternal.X + mViewfinderYHalf;
-			//mViewfinderDown = mRotationInternal.X - mViewfinderYHalf;
 
 			//	Create the perspective camera basis.
 			mCamForward = FVector3.Normalize(mCamDistance);
@@ -296,6 +276,32 @@ namespace Geometry
 		//*************************************************************************
 		//*	Public																																*
 		//*************************************************************************
+		/// <summary>
+		/// Private member for <see cref="CameraDistance">CameraDistance</see>.
+		/// </summary>
+		private float mCameraDistance = 0f;
+		/// <summary>
+		/// Get/Set the absolute distance from the camera to the subject.
+		/// </summary>
+		/// <remarks>
+		/// <para>
+		/// This value is ignored except when externally setting the Rotation
+		/// property while the RotationMode property is EulerRotation, and should
+		/// be set prior to adjusting Rotation.
+		/// </para>
+		/// <para>
+		/// The value can be prepared automatically for a scene by setting the
+		/// LookAt property first, which results in a practical value for this
+		/// property. Afterward, rotations and repositioning can take place in
+		/// any order and the LookAt property will be updated appropriately.
+		/// </para>
+		/// </remarks>
+		public float CameraDistance
+		{
+			get { return mCameraDistance; }
+			set { mCameraDistance = value; }
+		}
+		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//*	DisplayHeight																													*
@@ -338,27 +344,6 @@ namespace Geometry
 			}
 		}
 		//*-----------------------------------------------------------------------*
-
-		////*-----------------------------------------------------------------------*
-		////*	FieldOfView																														*
-		////*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Private member for <see cref="FieldOfView">FieldOfView</see>.
-		///// </summary>
-		//private float mFieldOfView = 60f;
-		///// <summary>
-		///// Get/Set the camera's field of view, in degrees.
-		///// </summary>
-		//public float FieldOfView
-		//{
-		//	get { return mFieldOfView; }
-		//	set
-		//	{
-		//		mFieldOfView = value;
-		//		UpdateDisplay();
-		//	}
-		//}
-		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//*	Handedness																														*
@@ -639,6 +624,15 @@ namespace Geometry
 		/// <summary>
 		/// Get/Set a reference to the 3D rotation of the camera.
 		/// </summary>
+		/// <remarks>
+		/// <para>
+		/// In this version, Pitch rotates upward and Yaw rotates left.
+		/// </para>
+		/// <para>
+		/// Natural camera-forward (eg Rotation 0,0,0) is rightward on
+		/// X-axis.
+		/// </para>
+		/// </remarks>
 		public FVector3 Rotation
 		{
 			get { return mRotation; }

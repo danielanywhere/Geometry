@@ -43,6 +43,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.2422.4040 | Upgrades: **Camera3D** and **CameraOrtho** cameras now support change in view using the **CameraDistance** and **Rotation** properties, instead of **LookAt**, however, **LookAt** can be used initially to accurately set **CameraDistance**; **FVector3.GetEulerAngle** function has been added; Error in **FVector3.GetDestPoint** has been repaired. |
 | 25.2414.4032 | Optimization: **Camera3D** ScaleX and ScaleY values are now only calculated when display information changes, reducing the total number of multiplications per vertex from 21 to 17 and the total number of divisions from 6 to 2. |
 | 25.2406.3841 | A vertical screen compression bug has been fixed in **Camera3D**; **Circle.GetVertices** method has been added. |
 | 25.2404.4129 | **CameraOrtho**, a tiny orthographic camera with the same direct world-to-screen projection capability as its sibling **Camera3D**, has been introduced in this version; **Camera3D.ProjectToScreen** now accepts coordinates in the caller's own world orientation, automatically translating them prior to rendering; Rotation axis order has been rearranged in **FMatrix3.Rotate(.., AxisType)** to reflect the correct outcomes for various up-axes; **FPoint3** can now be implicitly created from **FPoint** to support operations where a transition from 2D to 3D takes place; **Linear.Lerp** overloads have been added for **FPoint3** and **FVector3**. |

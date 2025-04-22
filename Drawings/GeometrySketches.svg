@@ -17,6 +17,12 @@
   <defs
      id="defs2">
     <rect
+       x="-12.828937"
+       y="6.1471991"
+       width="48.709871"
+       height="20.579753"
+       id="rect914" />
+    <rect
        x="47.841245"
        y="182.5053"
        width="71.628233"
@@ -52,6 +58,30 @@
        width="181.20874"
        height="6.4144689"
        id="rect963" />
+    <rect
+       x="-12.828937"
+       y="6.1471991"
+       width="48.709871"
+       height="20.579753"
+       id="rect920" />
+    <rect
+       x="-12.828937"
+       y="6.1471991"
+       width="48.709871"
+       height="20.579753"
+       id="rect930" />
+    <rect
+       x="-12.828937"
+       y="6.1471991"
+       width="48.709871"
+       height="20.579753"
+       id="rect934" />
+    <rect
+       x="-12.828937"
+       y="6.1471991"
+       width="48.709871"
+       height="20.579753"
+       id="rect938" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -60,11 +90,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="398.16888"
-     inkscape:cy="262.85835"
+     inkscape:zoom="0.70000001"
+     inkscape:cx="525.15719"
+     inkscape:cy="186.47638"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      units="px"
      inkscape:window-width="1920"
@@ -72,7 +102,8 @@
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
-     inkscape:document-rotation="0" />
+     inkscape:document-rotation="0"
+     inkscape:snap-global="false" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -81,7 +112,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -89,7 +120,8 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-17.6)">
+     transform="translate(0,-17.6)"
+     style="display:none">
     <rect
        x="0.2645835"
        y="17.864584"
@@ -245,7 +277,7 @@
     <text
        xml:space="preserve"
        id="text925"
-       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect927);fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect927);fill:#000000;fill-opacity:1;stroke:none;"
        transform="translate(-14.566189,13.898015)"><tspan
          x="101.28106"
          y="66.513083"><tspan
@@ -276,7 +308,7 @@
     <text
        xml:space="preserve"
        id="text937"
-       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect939);fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect939);fill:#000000;fill-opacity:1;stroke:none;"
        transform="translate(149.27003,49.712132)"><tspan
          x="96.760409"
          y="66.513083"><tspan
@@ -284,7 +316,7 @@
     <text
        xml:space="preserve"
        id="text941"
-       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect943);fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect943);fill:#000000;fill-opacity:1;stroke:none;"
        x="-25.592672"
        y="0"
        transform="translate(-41.961316,21.916101)"><tspan
@@ -294,7 +326,7 @@
     <text
        xml:space="preserve"
        id="text949"
-       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect951);fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect951);fill:#000000;fill-opacity:1;stroke:none;"
        x="-25.592672"
        y="0"
        transform="translate(-41.961316,28.33057)"><tspan
@@ -304,7 +336,7 @@
     <text
        xml:space="preserve"
        id="text955"
-       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect957);fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect957);fill:#000000;fill-opacity:1;stroke:none;"
        x="-25.592672"
        y="0"
        transform="translate(-41.961316,33.94323)"><tspan
@@ -314,12 +346,120 @@
     <text
        xml:space="preserve"
        id="text961"
-       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect963);fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect963);fill:#000000;fill-opacity:1;stroke:none;"
        x="-25.592672"
        y="0"
        transform="translate(-41.961316,39.288621)"><tspan
          x="47.841797"
          y="186.25136"><tspan
            style="font-size:4.23333px;text-align:start;text-anchor:start">Fasten point to Viewfinder Opposite.</tspan></tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="TargetFromRotation">
+    <ellipse
+       style="fill:none;fill-opacity:0.790441;fill-rule:evenodd;stroke:#d7d7d7;stroke-width:0.529167;stroke-linecap:round;stroke-opacity:1"
+       id="path924"
+       cx="64.892105"
+       cy="64.685257"
+       rx="5.1499252"
+       ry="11.764509"
+       transform="rotate(-50.204612)" />
+    <path
+       d="M -2.6458332,-3.1684271e-6 C -2.6458332,-1.4613032 -1.5205532,-2.6458332 -0.13229319,-2.6458332 c 1.38826999,0 2.51354999,1.18453 2.51354999,2.6458300315729 C 2.3812568,1.4612868 1.2559768,2.6458268 -0.13229319,2.6458268 c -1.38826001,0 -2.51354001,-1.18454 -2.51354001,-2.6458299684271 z"
+       stroke="#c00000"
+       stroke-width="0.529167"
+       stroke-miterlimit="8"
+       fill="#c00000"
+       fill-rule="evenodd"
+       id="path832-5"
+       sodipodi:nodetypes="sssss"
+       style="display:inline" />
+    <path
+       style="fill:#000000;fill-opacity:0.8;fill-rule:evenodd;stroke:#74b0e8;stroke-width:0.529167;stroke-linecap:round"
+       d="M 2.9104168,1.6490618e-7 H 98.058366"
+       id="path910" />
+    <text
+       xml:space="preserve"
+       id="text912"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect914);fill:#000000;fill-opacity:1;stroke:none"
+       transform="translate(-11.358955,-0.80180858)"><tspan
+         x="-7.2838399"
+         y="11.140491"><tspan
+           style="shape-inside:url(#rect914)">Origin (0,0,0)</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       id="text918"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect920);fill:#000000;fill-opacity:1;stroke:none"
+       transform="translate(38.479141,-5.2430288)"><tspan
+         x="1.7919127"
+         y="11.140491"><tspan
+           style="shape-inside:url(#rect920)">Length</tspan></tspan></text>
+    <path
+       d="M 98.058366,1.6490618e-7 C 98.058366,-0.58452054 98.532167,-1.058333 99.116698,-1.058333 c 0.584533,0 1.058332,0.47381246 1.058332,1.05833316490618 C 100.17503,0.58451676 99.701231,1.0583333 99.116698,1.0583333 c -0.584531,0 -1.058332,-0.47381654 -1.058332,-1.05833313509382 z"
+       stroke="#c00000"
+       stroke-width="0.529167"
+       stroke-miterlimit="8"
+       fill="#c00000"
+       fill-rule="evenodd"
+       id="path922"
+       sodipodi:nodetypes="sssss"
+       style="display:inline" />
+    <path
+       d="m 142.74879,69.222804 c 0,-1.4613 1.12528,-2.64583 2.51354,-2.64583 1.38827,0 2.51355,1.18453 2.51355,2.64583 0,1.46129 -1.12528,2.64583 -2.51355,2.64583 -1.38826,0 -2.51354,-1.18454 -2.51354,-2.64583 z"
+       stroke="#c00000"
+       stroke-width="0.529167"
+       stroke-miterlimit="8"
+       fill="#c00000"
+       fill-rule="evenodd"
+       id="path926"
+       sodipodi:nodetypes="sssss"
+       style="display:inline" />
+    <text
+       xml:space="preserve"
+       id="text928"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect930);fill:#000000;fill-opacity:1;stroke:none"
+       transform="translate(134.03567,68.420999)"><tspan
+         x="0.53789894"
+         y="11.140491"><tspan
+           style="shape-inside:url(#rect930)">Position </tspan></tspan><tspan
+         x="-3.243435"
+         y="18.196041"><tspan
+           style="shape-inside:url(#rect930)">(10,10,10)</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       id="text932"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect934);fill:#000000;fill-opacity:1;stroke:none"
+       transform="translate(-13.638416,-19.408314)"><tspan
+         x="-7.7289459"
+         y="11.140491"><tspan
+           style="shape-inside:url(#rect934)">Step 1 Rotate</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       id="text936"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect938);fill:#000000;fill-opacity:1;stroke:none"
+       transform="translate(149.93053,3.8441347)"><tspan
+         x="-11.303574"
+         y="11.140491"><tspan
+           style="shape-inside:url(#rect938)">Step 2 Translate</tspan></tspan></text>
+    <path
+       style="fill:none;fill-opacity:0.790441;fill-rule:evenodd;stroke:#d7d7d7;stroke-width:0.52916673;stroke-linecap:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:2.11666692,4.23333384;stroke-dashoffset:0"
+       d="M 2.031622,1.8898809 142.73326,67.846725"
+       id="path940" />
+    <path
+       style="fill:none;fill-opacity:0.790441;fill-rule:evenodd;stroke:#d7d7d7;stroke-width:0.52916698;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 101.81734,1.8898809 242.51897,67.846725"
+       id="path942" />
+    <path
+       d="m 243.20123,68.602678 c 0,-0.584521 0.4738,-1.058333 1.05833,-1.058333 0.58453,0 1.05833,0.473812 1.05833,1.058333 0,0.584516 -0.4738,1.058333 -1.05833,1.058333 -0.58453,0 -1.05833,-0.473817 -1.05833,-1.058333 z"
+       stroke="#c00000"
+       stroke-width="0.529167"
+       stroke-miterlimit="8"
+       fill="#c00000"
+       fill-rule="evenodd"
+       id="path944"
+       sodipodi:nodetypes="sssss"
+       style="display:inline" />
   </g>
 </svg>

@@ -437,6 +437,40 @@ namespace GeometryExample
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* Test3DRotationMode																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test and compare results of setting the camera by LookAt and
+		/// Euler rotation modes.
+		/// </summary>
+		private static void Test3DRotationMode()
+		{
+			Camera3D camera = new Camera3D();
+			FVector3 storedRotation = null;
+
+			Console.WriteLine("** Testing 3D Rotation Mode **");
+			Console.WriteLine(" Mode: Look-at.");
+			Console.WriteLine(" Position: 0, 0, 0");
+			Console.WriteLine(" Look at: 10, 10, 10");
+			camera.RotationMode = ObjectRotationMode.LookAt;
+			camera.Position = new FPoint3(0f, 0f, 0f);
+			camera.LookAt = new FPoint3(10f, 10f, 10f);
+			storedRotation = camera.Rotation;
+			Console.WriteLine($"  Camera distance: {camera.CameraDistance}");
+			Console.WriteLine($"  Rotation: {camera.Rotation}");
+
+			Console.WriteLine(" Changing mode to EulerRotation.");
+			camera.RotationMode = ObjectRotationMode.EulerRotation;
+			Console.WriteLine(" Resetting rotation.");
+			camera.Rotation = new FVector3(0f, 0f, 0f);
+			Console.WriteLine($"  Look at: {camera.LookAt}");
+			Console.WriteLine($"  Set rotation: {storedRotation}");
+			camera.Rotation = storedRotation;
+			Console.WriteLine($"  Look at: {camera.LookAt}");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* TestEllipseCoordinateByAngle																					*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -1045,6 +1079,9 @@ namespace GeometryExample
 			List<FPoint> points = null;
 			float time = 0f;
 			int index = 0;
+
+			//	Test Camera3D rotation mode.
+			Test3DRotationMode();
 
 			//	Test FMatrix3 operations.
 			TestMatrix3();

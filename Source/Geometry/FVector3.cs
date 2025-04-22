@@ -95,183 +95,6 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	- operator overload																										*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return the result of one vector subtracted from another.
-		/// </summary>
-		/// <param name="minuend">
-		/// The part to be subtracted from.
-		/// </param>
-		/// <param name="subtrahend">
-		/// The amount to subtract.
-		/// </param>
-		/// <returns>
-		/// Reference to the vector subtraction result.
-		/// </returns>
-		public static FVector3 operator -(FVector3 minuend, FVector3 subtrahend)
-		{
-			FVector3 result = new FVector3();
-
-			if(minuend != null && subtrahend != null)
-			{
-				Assign(result,
-					minuend.mValues[vX] - subtrahend.mValues[vX],
-					minuend.mValues[vY] - subtrahend.mValues[vY],
-					minuend.mValues[vZ] - subtrahend.mValues[vZ]);
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	* operator overload																										*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return the result of a vector multiplied by a scalar value.
-		/// </summary>
-		/// <param name="multiplicand">
-		/// Reference to the multiplicand.
-		/// </param>
-		/// <param name="multiplier">
-		/// Reference to the multiplier.
-		/// </param>
-		/// <returns>
-		/// Reference to a new vector representing the result of the
-		/// multiplication.
-		/// </returns>
-		public static FVector3 operator *(FVector3 multiplicand, float multiplier)
-		{
-			FVector3 result = new FVector3();
-
-			if(multiplicand != null)
-			{
-				Assign(result,
-					multiplicand.mValues[vX] * multiplier,
-					multiplicand.mValues[vY] * multiplier,
-					multiplicand.mValues[vZ] * multiplier);
-			}
-			return result;
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
-		/// <summary>
-		/// Return the result of two vectors multiplied by one another.
-		/// </summary>
-		/// <param name="multiplicand">
-		/// Reference to the multiplicand.
-		/// </param>
-		/// <param name="multiplier">
-		/// Reference to the multiplier.
-		/// </param>
-		/// <returns>
-		/// Reference to a new vector representing the result of the
-		/// multiplication.
-		/// </returns>
-		public static FVector3 operator *(FVector3 multiplicand,
-			FVector3 multiplier)
-		{
-			FVector3 result = new FVector3();
-
-			if(multiplicand != null && multiplier != null)
-			{
-				Assign(result,
-					multiplicand.mValues[vX] * multiplier.mValues[vX],
-					multiplicand.mValues[vY] * multiplier.mValues[vY],
-					multiplicand.mValues[vZ] * multiplier.mValues[vZ]);
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	/ operator overload																										*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return the result of one vector divided by the other.
-		/// </summary>
-		/// <param name="divisor">
-		/// A reference to the divisor.
-		/// </param>
-		/// <param name="dividend">
-		/// A reference to the dividend.
-		/// </param>
-		/// <returns>
-		/// Reference to the vector division result.
-		/// </returns>
-		public static FVector3 operator /(FVector3 divisor, FVector3 dividend)
-		{
-			FVector3 result = new FVector3();
-
-			if(divisor != null && dividend != null)
-			{
-				Assign(result,
-					(dividend.mValues[vX] != 0f ?
-						divisor.mValues[vX] / dividend.mValues[vX] : 0f),
-					(dividend.mValues[vY] != 0f ?
-						divisor.mValues[vY] / dividend.mValues[vY] : 0f),
-					(dividend.mValues[vZ] != 0f ?
-						divisor.mValues[vZ] / dividend.mValues[vZ] : 0f));
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	+ operator overload																										*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return the result of a vector added by scalar value.
-		/// </summary>
-		/// <param name="addend1">
-		/// Reference to the vector whose values will be added.
-		/// </param>
-		/// <param name="addend2">
-		/// The scalar value to add.
-		/// </param>
-		/// <returns>
-		/// Reference to a new vector representing the result of the addition.
-		/// </returns>
-		public static FVector3 operator +(FVector3 addend1, float addend2)
-		{
-			FVector3 result = new FVector3();
-
-			if(addend1 != null)
-			{
-				result.mValues[vX] = addend1.mValues[vX] + addend2;
-				result.mValues[vY] = addend1.mValues[vY] + addend2;
-				result.mValues[vZ] = addend1.mValues[vZ] + addend2;
-			}
-			return result;
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
-		/// <summary>
-		/// Return the result of the addition of two vectors.
-		/// </summary>
-		/// <param name="addend1">
-		/// Reference to the first addend.
-		/// </param>
-		/// <param name="addend2">
-		/// Reference to the second addend.
-		/// </param>
-		/// <returns>
-		/// Reference to the vector addition result.
-		/// </returns>
-		public static FVector3 operator +(FVector3 addend1, FVector3 addend2)
-		{
-			FVector3 result = new FVector3();
-
-			if(addend1 != null && addend2 != null)
-			{
-				Assign(result,
-					addend1.mValues[vX] + addend2.mValues[vX],
-					addend1.mValues[vY] + addend2.mValues[vY],
-					addend1.mValues[vZ] + addend2.mValues[vZ]);
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
 		//*	_Implicit FPoint = FVector3																						*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -389,6 +212,233 @@ namespace Geometry
 				{
 					result.Values[index] = value.mValues[index];
 				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	_Operator -																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the result of one vector subtracted from another.
+		/// </summary>
+		/// <param name="minuend">
+		/// The part to be subtracted from.
+		/// </param>
+		/// <param name="subtrahend">
+		/// The amount to subtract.
+		/// </param>
+		/// <returns>
+		/// Reference to the vector subtraction result.
+		/// </returns>
+		public static FVector3 operator -(FVector3 minuend, FVector3 subtrahend)
+		{
+			FVector3 result = new FVector3();
+
+			if(minuend != null && subtrahend != null)
+			{
+				Assign(result,
+					minuend.mValues[vX] - subtrahend.mValues[vX],
+					minuend.mValues[vY] - subtrahend.mValues[vY],
+					minuend.mValues[vZ] - subtrahend.mValues[vZ]);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	_Operator *																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the result of a vector multiplied by a scalar.
+		/// </summary>
+		/// <param name="multiplicand">
+		/// The scalar value to multiply.
+		/// </param>
+		/// <param name="multiplier">
+		/// The vector to multiply.
+		/// </param>
+		/// <returns>
+		/// Result of the multiplication.
+		/// </returns>
+		public static FVector3 operator *(float multiplicand, FVector3 multiplier)
+		{
+			FVector3 result = new FVector3();
+
+			if(multiplier != null && multiplicand != 0f)
+			{
+				result.mValues[vX] = multiplicand * multiplier.mValues[vX];
+				result.mValues[vY] = multiplicand * multiplier.mValues[vY];
+				result.mValues[vZ] = multiplicand * multiplier.mValues[vZ];
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the result of a vector multiplied by a scalar value.
+		/// </summary>
+		/// <param name="multiplicand">
+		/// Reference to the multiplicand.
+		/// </param>
+		/// <param name="multiplier">
+		/// Reference to the multiplier.
+		/// </param>
+		/// <returns>
+		/// Reference to a new vector representing the result of the
+		/// multiplication.
+		/// </returns>
+		public static FVector3 operator *(FVector3 multiplicand, float multiplier)
+		{
+			FVector3 result = new FVector3();
+
+			if(multiplicand != null)
+			{
+				Assign(result,
+					multiplicand.mValues[vX] * multiplier,
+					multiplicand.mValues[vY] * multiplier,
+					multiplicand.mValues[vZ] * multiplier);
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the result of two vectors multiplied by one another.
+		/// </summary>
+		/// <param name="multiplicand">
+		/// Reference to the multiplicand.
+		/// </param>
+		/// <param name="multiplier">
+		/// Reference to the multiplier.
+		/// </param>
+		/// <returns>
+		/// Reference to a new vector representing the result of the
+		/// multiplication.
+		/// </returns>
+		public static FVector3 operator *(FVector3 multiplicand,
+			FVector3 multiplier)
+		{
+			FVector3 result = new FVector3();
+
+			if(multiplicand != null && multiplier != null)
+			{
+				Assign(result,
+					multiplicand.mValues[vX] * multiplier.mValues[vX],
+					multiplicand.mValues[vY] * multiplier.mValues[vY],
+					multiplicand.mValues[vZ] * multiplier.mValues[vZ]);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	_Operator /																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the result of one vector divided by the other.
+		/// </summary>
+		/// <param name="divisor">
+		/// A reference to the divisor.
+		/// </param>
+		/// <param name="dividend">
+		/// A reference to the dividend.
+		/// </param>
+		/// <returns>
+		/// Reference to the vector division result.
+		/// </returns>
+		public static FVector3 operator /(FVector3 divisor, FVector3 dividend)
+		{
+			FVector3 result = new FVector3();
+
+			if(divisor != null && dividend != null)
+			{
+				Assign(result,
+					(dividend.mValues[vX] != 0f ?
+						divisor.mValues[vX] / dividend.mValues[vX] : 0f),
+					(dividend.mValues[vY] != 0f ?
+						divisor.mValues[vY] / dividend.mValues[vY] : 0f),
+					(dividend.mValues[vZ] != 0f ?
+						divisor.mValues[vZ] / dividend.mValues[vZ] : 0f));
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	_Operator +																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the result of a vector added by scalar value.
+		/// </summary>
+		/// <param name="addend1">
+		/// The scalar value to add.
+		/// </param>
+		/// <param name="addend2">
+		/// Reference to the vector whose values will be added.
+		/// </param>
+		/// <returns>
+		/// Reference to a new vector representing the result of the addition.
+		/// </returns>
+		public static FVector3 operator +(float addend1, FVector3 addend2)
+		{
+			FVector3 result = new FVector3();
+
+			if(addend2 != null)
+			{
+				result.mValues[vX] = addend2.mValues[vX] + addend1;
+				result.mValues[vY] = addend2.mValues[vY] + addend1;
+				result.mValues[vZ] = addend2.mValues[vZ] + addend1;
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the result of a vector added by scalar value.
+		/// </summary>
+		/// <param name="addend1">
+		/// Reference to the vector whose values will be added.
+		/// </param>
+		/// <param name="addend2">
+		/// The scalar value to add.
+		/// </param>
+		/// <returns>
+		/// Reference to a new vector representing the result of the addition.
+		/// </returns>
+		public static FVector3 operator +(FVector3 addend1, float addend2)
+		{
+			FVector3 result = new FVector3();
+
+			if(addend1 != null)
+			{
+				result.mValues[vX] = addend1.mValues[vX] + addend2;
+				result.mValues[vY] = addend1.mValues[vY] + addend2;
+				result.mValues[vZ] = addend1.mValues[vZ] + addend2;
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the result of the addition of two vectors.
+		/// </summary>
+		/// <param name="addend1">
+		/// Reference to the first addend.
+		/// </param>
+		/// <param name="addend2">
+		/// Reference to the second addend.
+		/// </param>
+		/// <returns>
+		/// Reference to the vector addition result.
+		/// </returns>
+		public static FVector3 operator +(FVector3 addend1, FVector3 addend2)
+		{
+			FVector3 result = new FVector3();
+
+			if(addend1 != null && addend2 != null)
+			{
+				Assign(result,
+					addend1.mValues[vX] + addend2.mValues[vX],
+					addend1.mValues[vY] + addend2.mValues[vY],
+					addend1.mValues[vZ] + addend2.mValues[vZ]);
 			}
 			return result;
 		}
@@ -655,8 +705,8 @@ namespace Geometry
 		/// Coordinates of the starting point.
 		/// </param>
 		/// <param name="theta">
-		/// Angles to apply, in radians. Notice that the Y rotation is ignored.
-		/// X-axis is azimuth and Z-axis is zenith.
+		/// Angles to apply, in radians. Notice that in this version, the Z
+		/// rotation (roll) is ignored. X = pitch and Y = yaw.
 		/// </param>
 		/// <param name="length">
 		/// Length of the line.
@@ -667,23 +717,63 @@ namespace Geometry
 		public static FVector3 GetDestPoint(FVector3 point, FVector3 theta,
 			float length)
 		{
+			double cosPhi = 0d;
+			FVector3 direction = null;
+			double phiPitch = 0d;
 			FVector3 result = new FVector3();
+			double thetaYaw = 0d;
 
 			if(point != null && theta != null && length != 0.0)
 			{
-				result.mValues[vX] =
-					point.mValues[vX] +
-					(float)((double)length *
-						Math.Sin((double)theta.mValues[vZ]) *
-						Math.Cos((double)theta.mValues[vX]));
-				result.mValues[vY] =
-					point.mValues[vY] +
-					(float)((double)length *
-						Math.Sin((double)theta.mValues[vZ]) *
-						Math.Sin((double)theta.mValues[vX]));
-				result.mValues[vZ] =
-					point.mValues[vZ] +
-					(float)((double)length * Math.Cos((double)theta.mValues[vZ]));
+				phiPitch = (double)theta.X;
+				thetaYaw = (double)theta.Y;
+				cosPhi = Math.Cos(phiPitch);
+				direction = new FVector3(
+					(float)(cosPhi * Math.Cos(thetaYaw)),
+					(float)Math.Sin(phiPitch),
+					(float)(cosPhi * Math.Sin(thetaYaw)));
+				result = point + (length * direction);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetEulerAngle																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the 3D Euler angle of the line between point 
+		/// </summary>
+		/// <param name="vectorA">
+		/// Reference to the first vector on the line, or starting point.
+		/// </param>
+		/// <param name="vectorB">
+		/// Reference to the second vector on the line, or ending point.
+		/// </param>
+		/// <returns>
+		/// The pitch (X) and yaw (Y) of the angle between the two specified
+		/// vectors, where vectorA is considered to be the base and vectorB
+		/// is considered to be the target. Roll (Z) is ignored in this version
+		/// because there isn't enough context to create it.
+		/// </returns>
+		public static FVector3 GetEulerAngle(FVector3 vectorA, FVector3 vectorB)
+		{
+			double deltaX = 0d;
+			double deltaY = 0d;
+			double deltaZ = 0d;
+			double pitch = 0d;
+			FVector3 result = null;
+			double yaw = 0d;
+
+			if(vectorA != null && vectorB != null)
+			{
+				deltaX = (double)vectorB.X - (double)vectorA.X;
+				deltaY = (double)vectorB.Y - (double)vectorA.Y;
+				deltaZ = (double)vectorB.Z - (double)vectorA.Z;
+				pitch = Math.Atan2(deltaY,
+					Math.Sqrt(deltaX * deltaX + deltaZ * deltaZ));
+				yaw = Math.Atan2(deltaY, deltaX);
+				result = new FVector3((float)pitch, (float)yaw, 0f);
 			}
 			return result;
 		}
@@ -1278,17 +1368,53 @@ namespace Geometry
 			if(vector != null)
 			{
 				result = new FVector3(vector);
-				if(thetaZ != 0.0)
+				if(thetaX != 0.0f)
 				{
-					result = FMatrix3.RotateZ(result, thetaZ);
+					result = FMatrix3.RotateX(result, thetaX);
 				}
-				if(thetaY != 0.0)
+				if(thetaY != 0.0f)
 				{
 					result = FMatrix3.RotateY(result, thetaY);
 				}
-				if(thetaX != 0.0)
+				if(thetaZ != 0.0f)
 				{
-					result = FMatrix3.RotateX(result, thetaX);
+					result = FMatrix3.RotateZ(result, thetaZ);
+				}
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return a vector representing the source value rotated around the
+		/// origin.
+		/// </summary>
+		/// <param name="vector">
+		/// Value to rotate.
+		/// </param>
+		/// <param name="theta">
+		/// Reference to the X, Y, and Z rotation values to apply.
+		/// </param>
+		/// <returns>
+		/// Result of rotation of the vector around the universal center (0, 0).
+		/// </returns>
+		public static FVector3 Rotate(FVector3 vector, FVector3 theta)
+		{
+			FVector3 result = null;
+
+			if(vector != null && theta != null)
+			{
+				result = new FVector3(vector);
+				if(theta.X != 0.0f)
+				{
+					result = FMatrix3.RotateX(result, theta.X);
+				}
+				if(theta.Y != 0.0f)
+				{
+					result = FMatrix3.RotateY(result, theta.Y);
+				}
+				if(theta.Z != 0.0f)
+				{
+					result = FMatrix3.RotateZ(result, theta.Z);
 				}
 			}
 			return result;
