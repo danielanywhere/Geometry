@@ -629,8 +629,8 @@ namespace Geometry
 		/// In this version, Pitch rotates upward and Yaw rotates left.
 		/// </para>
 		/// <para>
-		/// Natural camera-forward (eg Rotation 0,0,0) is rightward on
-		/// X-axis.
+		/// Natural camera-forward (eg Rotation 0,0,0) is forward on
+		/// Z-axis.
 		/// </para>
 		/// </remarks>
 		public FVector3 Rotation
