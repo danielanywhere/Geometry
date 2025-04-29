@@ -24,6 +24,9 @@ using Newtonsoft.Json;
 
 using static Geometry.GeometryUtil;
 
+
+//	TODO: Add Suspended property to allow multiple changes to take place on single event.
+
 namespace Geometry
 {
 	//*-------------------------------------------------------------------------*
@@ -39,7 +42,7 @@ namespace Geometry
 	/// continue to carry exactly the same information as the root instance until
 	/// they are changed.
 	/// </remarks>
-	public class FPoint3
+	public class FPoint3 : FVector3
 	{
 		//*************************************************************************
 		//*	Private																																*
@@ -47,21 +50,6 @@ namespace Geometry
 		//*************************************************************************
 		//*	Protected																															*
 		//*************************************************************************
-		//*-----------------------------------------------------------------------*
-		//*	OnCoordinateChanged																										*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Raise the CoordinateChanged event whenever coordinates have changed.
-		/// </summary>
-		/// <param name="e">
-		/// Float point event arguments.
-		/// </param>
-		protected virtual void OnCoordinateChanged(FloatPoint3EventArgs e)
-		{
-			CoordinateChanged?.Invoke(this, e);
-		}
-		//*-----------------------------------------------------------------------*
-
 		//*************************************************************************
 		//*	Public																																*
 		//*************************************************************************
@@ -98,9 +86,25 @@ namespace Geometry
 		/// Create a new Instance of the FPoint Item.
 		/// </summary>
 		/// <param name="source">
-		/// Reference to an instance of a FPoint to use for reference values.
+		/// Reference to an instance of an FPoint3 to use for reference values.
 		/// </param>
 		public FPoint3(FPoint3 source)
+		{
+			if(source != null)
+			{
+				mX = source.X;
+				mY = source.Y;
+				mZ = source.Z;
+			}
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Create a new Instance of the FPoint Item.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to an instance of an FVector3 to use for reference values.
+		/// </param>
+		public FPoint3(FVector3 source)
 		{
 			if(source != null)
 			{
@@ -145,7 +149,42 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//* _Operator scalar * FPoint3																						*
+		//* _Operator -																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the result of one point subtracted from another.
+		/// </summary>
+		/// <param name="pointA">
+		/// Reference to the minuend point.
+		/// </param>
+		/// <param name="pointB">
+		/// Reference to the subtrahend point.
+		/// </param>
+		/// <returns>
+		/// Result of the subtraction.
+		/// </returns>
+		public static FPoint3 operator -(FPoint3 pointA, FPoint3 pointB)
+		{
+			FPoint3 result = new FPoint3();
+
+			if(pointA != null)
+			{
+				result.mX = pointA.mX;
+				result.mY = pointA.mY;
+				result.mZ = pointA.mZ;
+			}
+			if(pointB != null)
+			{
+				result.mX -= pointB.mX;
+				result.mY -= pointB.mY;
+				result.mZ -= pointB.mZ;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* _Operator *																														*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return the result of a point multiplied by a scalar.
@@ -199,7 +238,40 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//* _Operator FPoint3 + FPoint3																						*
+		//*	_Operator /																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the result of one point divided by the other.
+		/// </summary>
+		/// <param name="divisor">
+		/// A reference to the divisor.
+		/// </param>
+		/// <param name="dividend">
+		/// A reference to the dividend.
+		/// </param>
+		/// <returns>
+		/// Reference to the point division result.
+		/// </returns>
+		public static FPoint3 operator /(FPoint3 divisor, FPoint3 dividend)
+		{
+			FPoint3 result = new FPoint3();
+
+			if(divisor != null && dividend != null)
+			{
+				Assign(result,
+					(dividend.mX != 0f ?
+						divisor.mX / dividend.mX : 0f),
+					(dividend.mY != 0f ?
+						divisor.mY / dividend.mY : 0f),
+					(dividend.mZ != 0f ?
+						divisor.mZ / dividend.mZ : 0f));
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* _Operator +																														*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return the result of the values of two points added together.
@@ -234,42 +306,7 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//* _Operator FPoint3 - FPoint3																						*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return the result of one point subtracted from another.
-		/// </summary>
-		/// <param name="pointA">
-		/// Reference to the minuend point.
-		/// </param>
-		/// <param name="pointB">
-		/// Reference to the subtrahend point.
-		/// </param>
-		/// <returns>
-		/// Result of the subtraction.
-		/// </returns>
-		public static FPoint3 operator -(FPoint3 pointA, FPoint3 pointB)
-		{
-			FPoint3 result = new FPoint3();
-
-			if(pointA != null)
-			{
-				result.mX = pointA.mX;
-				result.mY = pointA.mY;
-				result.mZ = pointA.mZ;
-			}
-			if(pointB != null)
-			{
-				result.mX -= pointB.mX;
-				result.mY -= pointB.mY;
-				result.mZ -= pointB.mZ;
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	_Operator FPoint3 != FPoint3																					*
+		//*	_Operator !=																													*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return a value indicating whether values of two points are not equal.
@@ -337,23 +374,23 @@ namespace Geometry
 		}
 		//*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//* Clear																																	*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Clear the values on the specified point.
-		/// </summary>
-		/// <param name="point">
-		/// Reference to the point to clear.
-		/// </param>
-		public static void Clear(FPoint3 point)
-		{
-			if(point != null && !point.mReadOnly)
-			{
-				point.mX = point.mY = point.mZ = 0f;
-			}
-		}
-		//*-----------------------------------------------------------------------*
+		////*-----------------------------------------------------------------------*
+		////* Clear																																	*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Clear the values on the specified point.
+		///// </summary>
+		///// <param name="point">
+		///// Reference to the point to clear.
+		///// </param>
+		//public static void Clear(FPoint3 point)
+		//{
+		//	if(point != null && !point.mReadOnly)
+		//	{
+		//		point.mX = point.mY = point.mZ = 0f;
+		//	}
+		//}
+		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//*	Clone																																	*
@@ -361,7 +398,7 @@ namespace Geometry
 		/// <summary>
 		/// Return a memberwise clone of the provided point.
 		/// </summary>
-		/// <param name="source">
+		/// <param name="point">
 		/// Reference to the source point to be cloned.
 		/// </param>
 		/// <returns>
@@ -369,16 +406,41 @@ namespace Geometry
 		/// are the same as those in the source, if a legitimate source was
 		/// provided. Otherwise, an empty FPoint.
 		/// </returns>
-		public static FPoint3 Clone(FPoint3 source)
+		public static FPoint3 Clone(FPoint3 point)
 		{
 			FPoint3 result = new FPoint3();
 
-			if(source != null)
+			if(point != null)
 			{
-				result.mReadOnly = source.mReadOnly;
-				result.mX = source.mX;
-				result.mY = source.mY;
-				result.mZ = source.mZ;
+				result.mReadOnly = point.mReadOnly;
+				result.mX = point.mX;
+				result.mY = point.mY;
+				result.mZ = point.mZ;
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return a memberwise clone of the provided point.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the source vector to be cloned.
+		/// </param>
+		/// <returns>
+		/// Reference to a new FPoint instance where the primitive member values
+		/// are the same as those in the source, if a legitimate source was
+		/// provided. Otherwise, an empty FPoint.
+		/// </returns>
+		public static new FPoint3 Clone(FVector3 vector)
+		{
+			FPoint3 result = new FPoint3();
+
+			if(vector != null)
+			{
+				result.mReadOnly = vector.ReadOnly;
+				result.mX = vector.X;
+				result.mY = vector.Y;
+				result.mZ = vector.Z;
 			}
 			return result;
 		}
@@ -403,14 +465,14 @@ namespace Geometry
 		}
 		//*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//*	CoordinateChanged																											*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Fired when a coordinate has changed.
-		/// </summary>
-		public event FloatPoint3EventHandler CoordinateChanged;
-		//*-----------------------------------------------------------------------*
+		////*-----------------------------------------------------------------------*
+		////*	CoordinateChanged																											*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Fired when a coordinate has changed.
+		///// </summary>
+		//public event FloatPointEventHandler CoordinateChanged;
+		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//* Delta																																	*
@@ -441,34 +503,34 @@ namespace Geometry
 		}
 		//*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//* Dot																																		*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return the dot product of two points.
-		/// </summary>
-		/// <param name="value1">
-		/// Reference to the first point to compare.
-		/// </param>
-		/// <param name="value2">
-		/// Reference to the second point to compare.
-		/// </param>
-		/// <returns>
-		/// The dot product of the two input points.
-		/// </returns>
-		public static float Dot(FPoint3 value1, FPoint3 value2)
-		{
-			float result = 0f;
+		////*-----------------------------------------------------------------------*
+		////* Dot																																		*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Return the dot product of two points.
+		///// </summary>
+		///// <param name="value1">
+		///// Reference to the first point to compare.
+		///// </param>
+		///// <param name="value2">
+		///// Reference to the second point to compare.
+		///// </param>
+		///// <returns>
+		///// The dot product of the two input points.
+		///// </returns>
+		//public static float Dot(FPoint3 value1, FPoint3 value2)
+		//{
+		//	float result = 0f;
 
-			if(value1 != null && value2 != null)
-			{
-				result = (value1.X * value2.X) +
-					(value1.Y * value2.Y) +
-					(value1.Z * value2.Z);
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
+		//	if(value1 != null && value2 != null)
+		//	{
+		//		result = (value1.X * value2.X) +
+		//			(value1.Y * value2.Y) +
+		//			(value1.Z * value2.Z);
+		//	}
+		//	return result;
+		//}
+		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//*	Equals																																*
@@ -548,90 +610,90 @@ namespace Geometry
 		}
 		//*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//* IsDifferent																														*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return a value indicating whether two points are different.
-		/// </summary>
-		/// <param name="pointA">
-		/// Reference to the first point to compare.
-		/// </param>
-		/// <param name="pointB">
-		/// Reference to the second point to compare.
-		/// </param>
-		/// <returns>
-		/// True if the two points are different. Otherwise, false.
-		/// </returns>
-		public static bool IsDifferent(FPoint3 pointA, FPoint3 pointB)
-		{
-			bool result = false;
+		////*-----------------------------------------------------------------------*
+		////* IsDifferent																														*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Return a value indicating whether two points are different.
+		///// </summary>
+		///// <param name="pointA">
+		///// Reference to the first point to compare.
+		///// </param>
+		///// <param name="pointB">
+		///// Reference to the second point to compare.
+		///// </param>
+		///// <returns>
+		///// True if the two points are different. Otherwise, false.
+		///// </returns>
+		//public static bool IsDifferent(FPoint3 pointA, FPoint3 pointB)
+		//{
+		//	bool result = false;
 
-			if(pointA != null && pointB != null)
-			{
-				result = pointA.mX != pointB.mX ||
-					pointA.mY != pointB.mY ||
-					pointA.mZ != pointB.mZ;
-			}
-			else if(pointA != null || pointB != null)
-			{
-				result = true;
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
+		//	if(pointA != null && pointB != null)
+		//	{
+		//		result = pointA.mX != pointB.mX ||
+		//			pointA.mY != pointB.mY ||
+		//			pointA.mZ != pointB.mZ;
+		//	}
+		//	else if(pointA != null || pointB != null)
+		//	{
+		//		result = true;
+		//	}
+		//	return result;
+		//}
+		////*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//* IsEmpty																																*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return a value indicating whether the specified point is empty.
-		/// </summary>
-		/// <param name="point">
-		/// Reference to the object to inspect.
-		/// </param>
-		/// <returns>
-		/// True if the specified point is empty. Otherwise, false.
-		/// </returns>
-		public static bool IsEmpty(FPoint3 point)
-		{
-			bool result = true;
+		////*-----------------------------------------------------------------------*
+		////* IsEmpty																																*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Return a value indicating whether the specified point is empty.
+		///// </summary>
+		///// <param name="point">
+		///// Reference to the object to inspect.
+		///// </param>
+		///// <returns>
+		///// True if the specified point is empty. Otherwise, false.
+		///// </returns>
+		//public static bool IsEmpty(FPoint3 point)
+		//{
+		//	bool result = true;
 
-			if(point != null)
-			{
-				result = (point.mX == 0f && point.mY == 0f && point.mZ == 0f);
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
+		//	if(point != null)
+		//	{
+		//		result = (point.mX == 0f && point.mY == 0f && point.mZ == 0f);
+		//	}
+		//	return result;
+		//}
+		////*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//* Magnitude																															*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return the absolute magnitude of the provided point.
-		/// </summary>
-		/// <param name="point">
-		/// Reference to the point for which the magnitude will be found.
-		/// </param>
-		/// <returns>
-		/// The absolute magnitude of the caller's point.
-		/// </returns>
-		public static float Magnitude(FPoint3 point)
-		{
-			float result = 0f;
+		////*-----------------------------------------------------------------------*
+		////* Magnitude																															*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Return the absolute magnitude of the provided point.
+		///// </summary>
+		///// <param name="point">
+		///// Reference to the point for which the magnitude will be found.
+		///// </param>
+		///// <returns>
+		///// The absolute magnitude of the caller's point.
+		///// </returns>
+		//public static float Magnitude(FPoint3 point)
+		//{
+		//	float result = 0f;
 
-			if(point != null)
-			{
-				result = (float)Math.Sqrt(
-					(double)(
-					point.mX * point.mX +
-					point.mY * point.mY +
-					point.mZ * point.mZ));
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
+		//	if(point != null)
+		//	{
+		//		result = (float)Math.Sqrt(
+		//			(double)(
+		//			point.mX * point.mX +
+		//			point.mY * point.mY +
+		//			point.mZ * point.mZ));
+		//	}
+		//	return result;
+		//}
+		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//*	MiddlePoint																														*
@@ -687,8 +749,12 @@ namespace Geometry
 		/// </returns>
 		public static FPoint3 Offset(FPoint3 point, float dx, float dy, float dz)
 		{
-			FPoint3 result =
-				new FPoint3(point.mX + dx, point.mY + dy, point.mZ + dz);
+			FPoint3 result = null;
+
+			if(point != null)
+			{
+				result = new FPoint3(point.mX + dx, point.mY + dy, point.mZ + dz);
+			}
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
@@ -710,7 +776,7 @@ namespace Geometry
 		/// Newly created FPoint value representing the caller's input, if
 		/// that input was legal or allowNull was false. Otherwise, a null value.
 		/// </returns>
-		public static FPoint3 Parse(string coordinate, bool allowNull = false)
+		public static new FPoint3 Parse(string coordinate, bool allowNull = false)
 		{
 			bool bX = false;
 			bool bY = false;
@@ -796,20 +862,20 @@ namespace Geometry
 		}
 		//*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//*	ReadOnly																															*
-		//*-----------------------------------------------------------------------*
-		private bool mReadOnly = false;
-		/// <summary>
-		/// Get/Set a value indicating whether this item is read-only.
-		/// </summary>
-		[JsonIgnore]
-		public bool ReadOnly
-		{
-			get { return mReadOnly; }
-			set { mReadOnly = value; }
-		}
-		//*-----------------------------------------------------------------------*
+		////*-----------------------------------------------------------------------*
+		////*	ReadOnly																															*
+		////*-----------------------------------------------------------------------*
+		//private bool mReadOnly = false;
+		///// <summary>
+		///// Get/Set a value indicating whether this item is read-only.
+		///// </summary>
+		//[JsonIgnore]
+		//public bool ReadOnly
+		//{
+		//	get { return mReadOnly; }
+		//	set { mReadOnly = value; }
+		//}
+		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//* Rotate																																*
@@ -869,13 +935,13 @@ namespace Geometry
 					{ 0f, 0f, 1f }
 				},
 			};
-			FVector3 point = new FVector3(x, y, z);
+			FVector3 point = new FPoint3(x, y, z);
 
 			point = FMatrix3.Multiply(mxZ, point);
 			point = FMatrix3.Multiply(mxY, point);
 			point = FMatrix3.Multiply(mxX, point);
 
-			return point;
+			return new FPoint3(point);
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -936,7 +1002,7 @@ namespace Geometry
 				localPoint = FMatrix3.Multiply(mxY, localPoint);
 				localPoint = FMatrix3.Multiply(mxX, localPoint);
 			}
-			return localPoint;
+			return new FPoint3(localPoint);
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -969,198 +1035,186 @@ namespace Geometry
 		}
 		//*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//*	ToString																															*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return the string representation of this item.
-		/// </summary>
-		/// <returns>
-		/// String representation of the values of this point.
-		/// </returns>
-		public override string ToString()
-		{
-			StringBuilder result = new StringBuilder();
+		////*-----------------------------------------------------------------------*
+		////*	ToString																															*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Return the string representation of this item.
+		///// </summary>
+		///// <returns>
+		///// String representation of the values of this point.
+		///// </returns>
+		//public override string ToString()
+		//{
+		//	StringBuilder result = new StringBuilder();
 
-			result.Append($"{mX:0.000}");
-			result.Append(',');
-			result.Append($"{mY:0.000}");
-			result.Append(',');
-			result.Append($"{mZ:0.000}");
-			return result.ToString();
-		}
-		//*-----------------------------------------------------------------------*
+		//	result.Append($"{mX:0.000}");
+		//	result.Append(',');
+		//	result.Append($"{mY:0.000}");
+		//	result.Append(',');
+		//	result.Append($"{mZ:0.000}");
+		//	return result.ToString();
+		//}
+		////*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//* Translate																															*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Translate the values of the caller's point by the provided offset.
-		/// </summary>
-		/// <param name="point">
-		/// Reference to the point to be translated.
-		/// </param>
-		/// <param name="offset">
-		/// Reference to the offset to apply to the point.
-		/// </param>
-		public static void Translate(FPoint3 point, FPoint3 offset)
-		{
-			if(point != null && offset != null)
-			{
-				point.mX += offset.mX;
-				point.mY += offset.mY;
-				point.mZ += offset.mZ;
-			}
-		}
-		//*-----------------------------------------------------------------------*
+		////*-----------------------------------------------------------------------*
+		////* Translate																															*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Translate the values of the caller's point by the provided offset.
+		///// </summary>
+		///// <param name="point">
+		///// Reference to the point to be translated.
+		///// </param>
+		///// <param name="offset">
+		///// Reference to the offset to apply to the point.
+		///// </param>
+		//public static void Translate(FPoint3 point, FPoint3 offset)
+		//{
+		//	if(point != null && offset != null)
+		//	{
+		//		point.mX += offset.mX;
+		//		point.mY += offset.mY;
+		//		point.mZ += offset.mZ;
+		//	}
+		//}
+		////*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//*	TransferValues																												*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Transfer the member values of one instance to another.
-		/// </summary>
-		/// <param name="source">
-		/// Reference to the source point whose values will be assigned.
-		/// </param>
-		/// <param name="target">
-		/// Reference to the target point that will receive the values.
-		/// </param>
-		public static void TransferValues(FPoint3 source, FPoint3 target)
-		{
-			if(source != null && target != null && !target.mReadOnly)
-			{
-				//	It would be possible to allow a null target, but that strategy
-				//	would have to assigned an 'out' value to the parameter, or to
-				//	return the newly created value.
-				target.mX = source.mX;
-				target.mY = source.mY;
-				target.mZ = source.mZ;
-			}
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
-		/// <summary>
-		/// Transfer member values to the specified target.
-		/// </summary>
-		/// <param name="target">
-		/// Reference to the item to be set.
-		/// </param>
-		/// <param name="x">
-		/// X coordinate to assign.
-		/// </param>
-		/// <param name="y">
-		/// Y coordinate to assign.
-		/// </param>
-		/// <param name="z">
-		/// Z coordinate to assign.
-		/// </param>
-		public static void TransferValues(FPoint3 target,
-			float x, float y, float z)
-		{
-			if(target != null && !target.mReadOnly)
-			{
-				target.mX = x;
-				target.mY = y;
-				target.mZ = z;
-			}
-		}
-		//*-----------------------------------------------------------------------*
+		////*-----------------------------------------------------------------------*
+		////*	TransferValues																												*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Transfer the member values of one instance to another.
+		///// </summary>
+		///// <param name="source">
+		///// Reference to the source point whose values will be assigned.
+		///// </param>
+		///// <param name="target">
+		///// Reference to the target point that will receive the values.
+		///// </param>
+		//public static void TransferValues(FPoint3 source, FPoint3 target)
+		//{
+		//	if(source != null && target != null && !target.mReadOnly)
+		//	{
+		//		//	It would be possible to allow a null target, but that strategy
+		//		//	would have to assigned an 'out' value to the parameter, or to
+		//		//	return the newly created value.
+		//		target.mX = source.mX;
+		//		target.mY = source.mY;
+		//		target.mZ = source.mZ;
+		//	}
+		//}
+		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		///// <summary>
+		///// Transfer member values to the specified target.
+		///// </summary>
+		///// <param name="target">
+		///// Reference to the item to be set.
+		///// </param>
+		///// <param name="x">
+		///// X coordinate to assign.
+		///// </param>
+		///// <param name="y">
+		///// Y coordinate to assign.
+		///// </param>
+		///// <param name="z">
+		///// Z coordinate to assign.
+		///// </param>
+		//public static void TransferValues(FPoint3 target,
+		//	float x, float y, float z)
+		//{
+		//	if(target != null && !target.mReadOnly)
+		//	{
+		//		target.mX = x;
+		//		target.mY = y;
+		//		target.mZ = z;
+		//	}
+		//}
+		////*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//*	X																																			*
-		//*-----------------------------------------------------------------------*
-		private float mX = 0f;
-		/// <summary>
-		/// Get/Set the x coordinate.
-		/// </summary>
-		[JsonProperty(Order = 0)]
-		public float X
-		{
-			get { return mX; }
-			set
-			{
-				float original = mX;
+		////*-----------------------------------------------------------------------*
+		////*	X																																			*
+		////*-----------------------------------------------------------------------*
+		//private float mX = 0f;
+		///// <summary>
+		///// Get/Set the x coordinate.
+		///// </summary>
+		//[JsonProperty(Order = 0)]
+		//public float X
+		//{
+		//	get { return mX; }
+		//	set
+		//	{
+		//		float original = mX;
 
-				if(!mReadOnly)
-				{
-					mX = value;
-					if(original != value)
-					{
-						OnCoordinateChanged(
-							new FloatPoint3EventArgs()
-							{
-								OriginalValue = new FPoint3(original, mY, mZ),
-								NewValue = new FPoint3(value, mY, mZ)
-							});
-					}
-				}
-			}
-		}
-		//*-----------------------------------------------------------------------*
+		//		if(!mReadOnly)
+		//		{
+		//			mX = value;
+		//			if(original != value)
+		//			{
+		//				OnCoordinateChanged(
+		//					new FloatPointEventArgs("X", value, original));
+		//			}
+		//		}
+		//	}
+		//}
+		////*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//*	Y																																			*
-		//*-----------------------------------------------------------------------*
-		private float mY = 0f;
-		/// <summary>
-		/// Get/Set the y coordinate.
-		/// </summary>
-		[JsonProperty(Order = 1)]
-		public float Y
-		{
-			get { return mY; }
-			set
-			{
-				float original = mY;
+		////*-----------------------------------------------------------------------*
+		////*	Y																																			*
+		////*-----------------------------------------------------------------------*
+		//private float mY = 0f;
+		///// <summary>
+		///// Get/Set the y coordinate.
+		///// </summary>
+		//[JsonProperty(Order = 1)]
+		//public float Y
+		//{
+		//	get { return mY; }
+		//	set
+		//	{
+		//		float original = mY;
 
-				if(!mReadOnly)
-				{
-					mY = value;
-					if(original != value)
-					{
-						OnCoordinateChanged(
-							new FloatPoint3EventArgs()
-							{
-								OriginalValue = new FPoint3(mX, original, mZ),
-								NewValue = new FPoint3(mX, value, mZ)
-							});
-					}
-				}
-			}
-		}
-		//*-----------------------------------------------------------------------*
+		//		if(!mReadOnly)
+		//		{
+		//			mY = value;
+		//			if(original != value)
+		//			{
+		//				OnCoordinateChanged(
+		//					new FloatPointEventArgs("Y", value, original));
+		//			}
+		//		}
+		//	}
+		//}
+		////*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//*	Z																																			*
-		//*-----------------------------------------------------------------------*
-		private float mZ = 0f;
-		/// <summary>
-		/// Get/Set the y coordinate.
-		/// </summary>
-		[JsonProperty(Order = 1)]
-		public float Z
-		{
-			get { return mZ; }
-			set
-			{
-				float original = mZ;
+		////*-----------------------------------------------------------------------*
+		////*	Z																																			*
+		////*-----------------------------------------------------------------------*
+		//private float mZ = 0f;
+		///// <summary>
+		///// Get/Set the y coordinate.
+		///// </summary>
+		//[JsonProperty(Order = 1)]
+		//public float Z
+		//{
+		//	get { return mZ; }
+		//	set
+		//	{
+		//		float original = mZ;
 
-				if(!mReadOnly)
-				{
-					mZ = value;
-					if(original != value)
-					{
-						OnCoordinateChanged(
-							new FloatPoint3EventArgs()
-							{
-								OriginalValue = new FPoint3(mX, mY, original),
-								NewValue = new FPoint3(mX, mY, value)
-							});
-					}
-				}
-			}
-		}
-		//*-----------------------------------------------------------------------*
+		//		if(!mReadOnly)
+		//		{
+		//			mZ = value;
+		//			if(original != value)
+		//			{
+		//				OnCoordinateChanged(
+		//					new FloatPointEventArgs("Z", value, original));
+		//			}
+		//		}
+		//	}
+		//}
+		////*-----------------------------------------------------------------------*
 
 
 	}

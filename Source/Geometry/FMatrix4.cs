@@ -749,18 +749,26 @@ namespace Geometry
 		public static FVector4 Multiply(FMatrix4 matrix, FVector4 vector)
 		{
 			int col = 0;
+			float[] inputValues = null;
+			float[] outputValues = null;
 			int row = 0;
 			FVector4 result = new FVector4();
 			float value = 0;   //	Output value.
 
-			for(row = 0; row < 4; row++)
+			if(matrix != null && vector != null)
 			{
-				value = 0;
-				for(col = 0; col < 4; col++)
+				inputValues = FVector4.GetArray(vector);
+				outputValues = new float[4];
+				for(row = 0; row < 4; row++)
 				{
-					value += vector.Values[col] * matrix.Values[row, col];
+					value = 0;
+					for(col = 0; col < 4; col++)
+					{
+						value += inputValues[col] * matrix.Values[row, col];
+					}
+					outputValues[row] = value;
 				}
-				result.Values[row] = value;
+				FVector4.SetArray(result, outputValues);
 			}
 			return result;
 		}
@@ -822,9 +830,9 @@ namespace Geometry
 
 			if(point != null && scale != null)
 			{
-				matrix.Values[0, 0] = scale.Values[0];
-				matrix.Values[1, 1] = scale.Values[1];
-				matrix.Values[2, 2] = scale.Values[2];
+				matrix.Values[0, 0] = scale.X;
+				matrix.Values[1, 1] = scale.Y;
+				matrix.Values[2, 2] = scale.Z;
 				result = Multiply(matrix, point);
 			}
 			return result;
@@ -947,9 +955,9 @@ namespace Geometry
 
 			if(point != null)
 			{
-				matrix.Values[0, 3] = translation.Values[0];
-				matrix.Values[1, 3] = translation.Values[1];
-				matrix.Values[2, 3] = translation.Values[2];
+				matrix.Values[0, 3] = translation.X;
+				matrix.Values[1, 3] = translation.Y;
+				matrix.Values[2, 3] = translation.Z;
 				result = Multiply(matrix, point);
 			}
 			return result;

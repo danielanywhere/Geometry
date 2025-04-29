@@ -62,18 +62,18 @@ namespace Geometry
 		/// and / or the value of the Y or Z axes have been flipped, as necessary,
 		/// if a valid vector has been supplied. Otherwise, null.
 		/// </returns>
-		protected virtual FVector3 ConvertCameraToWorld(FVector3 vector)
+		protected virtual FPoint3 ConvertCameraToWorld(FVector3 vector)
 		{
-			FVector3 result = null;
+			FPoint3 result = null;
 
 			if(vector != null)
 			{
-				result = new FVector3();
+				result = new FPoint3();
 				if(mUpAxis == AxisType.Y &&
 					mHandedness == HandType.Left)
 				{
 					//	The world orientation matches the camera.
-					result = FVector3.Clone(vector);
+					result = FPoint3.Clone(vector);
 				}
 				else if(mUpAxis == AxisType.Z)
 				{
@@ -236,7 +236,7 @@ namespace Geometry
 			//	Create the perspective camera basis.
 			mCamForward = FVector3.Normalize(mCamDistance);
 			mWorldUp = new FVector3(0f, 1f, 0f);
-			if(Math.Abs(FVector3.DotProduct(mCamForward, mWorldUp)) > 0.99999f)
+			if(Math.Abs(FVector3.Dot(mCamForward, mWorldUp)) > 0.99999f)
 			{
 				//	If near-vertical forward occurs, switch perspective.
 				mWorldUp = new FVector3(0f, 0f, 1f);
@@ -259,7 +259,7 @@ namespace Geometry
 			}
 			else
 			{
-				forwardLeak = FVector3.DotProduct(camUpPreset, mCamForward);
+				forwardLeak = FVector3.Dot(camUpPreset, mCamForward);
 				mCamUp = FVector3.Normalize(camUpPreset - (mCamForward * forwardLeak));
 			}
 #if ShowTrace
@@ -405,7 +405,7 @@ namespace Geometry
 		/// <summary>
 		/// Private member for <see cref="LookAt">LookAt</see>.
 		/// </summary>
-		private FPoint3 mLookAtInternal = new FPoint3();
+		private FVector3 mLookAtInternal = new FVector3();
 		/// <summary>
 		/// Get/Set a reference to the location upon which the camera is focused,
 		/// in world coordinates.
@@ -420,7 +420,14 @@ namespace Geometry
 			get { return mLookAt; }
 			set
 			{
-				mLookAt = value;
+				if(value != null)
+				{
+					mLookAt = value;
+				}
+				else
+				{
+					mLookAt = new FPoint3();
+				}
 				UpdatePositions();
 			}
 		}
@@ -436,7 +443,7 @@ namespace Geometry
 		/// <summary>
 		/// Private member for <see cref="Position">Position</see>.
 		/// </summary>
-		private FPoint3 mPositionInternal = new FPoint3();
+		private FVector3 mPositionInternal = new FVector3();
 		/// <summary>
 		/// Get/Set a reference to the position of the camera, in world
 		/// coordinates.
@@ -451,7 +458,14 @@ namespace Geometry
 			get { return mPosition; }
 			set
 			{
-				mPosition = value;
+				if(value != null)
+				{
+					mPosition = value;
+				}
+				else
+				{
+					mPosition = new FPoint3();
+				}
 				UpdatePositions();
 			}
 		}
@@ -570,8 +584,8 @@ namespace Geometry
 				toSubject =
 					ConvertWorldToCamera(subject) - (FVector3)mPositionInternal;
 
-				camX = FVector3.DotProduct(toSubject, mCamRight);
-				camY = FVector3.DotProduct(toSubject, mCamUp);
+				camX = FVector3.Dot(toSubject, mCamRight);
+				camY = FVector3.Dot(toSubject, mCamUp);
 				//camZ = FVector3.DotProduct(toSubject, mCamForward);
 
 				//scaleX = 1.0d / Math.Tan((double)mViewfinderXHalf);
@@ -636,7 +650,17 @@ namespace Geometry
 		public FVector3 Rotation
 		{
 			get { return mRotation; }
-			set { mRotation = value; }
+			set
+			{
+				if(value != null)
+				{
+					mRotation = value;
+				}
+				else
+				{
+					mRotation = new FVector3();
+				}
+			}
 		}
 		//*-----------------------------------------------------------------------*
 

@@ -24,8 +24,8 @@ namespace Geometry
 	//*	FloatPointEventArgs																											*
 	//*-------------------------------------------------------------------------*
 	/// <summary>
-	/// Event arguments for events where a floating point location is the main
-	/// focus.
+	/// Event arguments for events where a floating point coordinate values are
+	/// the main focus.
 	/// </summary>
 	public class FloatPointEventArgs : EventArgs
 	{
@@ -51,22 +51,25 @@ namespace Geometry
 		/// <summary>
 		/// Create a new instance of the FloatPointEventArgs Item.
 		/// </summary>
+		/// <param name="axisName">
+		/// Name of the axis for which the event will be fired.
+		/// </param>
 		/// <param name="newValue">
 		/// Current location.
 		/// </param>
 		/// <param name="originalValue">
 		/// Optional original value.
 		/// </param>
-		public FloatPointEventArgs(FPoint newValue, FPoint originalValue = null)
+		public FloatPointEventArgs(string axisName, float newValue,
+			float originalValue = 0f)
 		{
-			if(newValue != null)
+			AxisValueTrackerItem value = new AxisValueTrackerItem()
 			{
-				mNewValue = newValue;
-			}
-			if(originalValue != null)
-			{
-				mOriginalValue = originalValue;
-			}
+				AxisName = (axisName?.Length > 0 ? axisName : ""),
+				NewValue = newValue,
+				OriginalValue = originalValue
+			};
+			mValues.Add(value);
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -79,46 +82,291 @@ namespace Geometry
 		/// Current Y coordinate value.
 		/// </param>
 		/// <param name="originalX">
-		/// Optional original X.
+		/// Original X.
 		/// </param>
 		/// <param name="originalY">
-		/// Optional original Y.
+		/// Original Y.
 		/// </param>
 		public FloatPointEventArgs(float newX, float newY,
-			float originalX = 0f, float originalY = 0f)
+			float originalX, float originalY)
 		{
-			mNewValue.X = newX;
-			mNewValue.Y = newY;
-			mOriginalValue.X = originalX;
-			mOriginalValue.Y = originalY;
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "X",
+				NewValue = newX,
+				OriginalValue = originalX
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "Y",
+				NewValue = newY,
+				OriginalValue = originalY
+			});
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Create a new instance of the FloatPointEventArgs Item.
+		/// </summary>
+		/// <param name="newX">
+		/// Current X coordinate value.
+		/// </param>
+		/// <param name="newY">
+		/// Current Y coordinate value.
+		/// </param>
+		/// <param name="newZ">
+		/// Current Z coordinate value.
+		/// </param>
+		/// <param name="originalX">
+		/// Original X.
+		/// </param>
+		/// <param name="originalY">
+		/// Original Y.
+		/// </param>
+		/// <param name="originalZ">
+		/// Original Z.
+		/// </param>
+		public FloatPointEventArgs(float newX, float newY, float newZ,
+			float originalX, float originalY, float originalZ)
+		{
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "X",
+				NewValue = newX,
+				OriginalValue = originalX
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "Y",
+				NewValue = newY,
+				OriginalValue = originalY
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "Z",
+				NewValue = newZ,
+				OriginalValue = originalZ
+			});
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Create a new instance of the FloatPointEventArgs Item.
+		/// </summary>
+		/// <param name="newX">
+		/// Current X coordinate value.
+		/// </param>
+		/// <param name="newY">
+		/// Current Y coordinate value.
+		/// </param>
+		/// <param name="newZ">
+		/// Current Z coordinate value.
+		/// </param>
+		/// <param name="newW">
+		/// Current W coordinate value.
+		/// </param>
+		/// <param name="originalX">
+		/// Original X.
+		/// </param>
+		/// <param name="originalY">
+		/// Original Y.
+		/// </param>
+		/// <param name="originalZ">
+		/// Original Z.
+		/// </param>
+		/// <param name="originalW">
+		/// Original W.
+		/// </param>
+		public FloatPointEventArgs(float newX, float newY, float newZ, float newW,
+			float originalX, float originalY, float originalZ, float originalW)
+		{
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "X",
+				NewValue = newX,
+				OriginalValue = originalX
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "Y",
+				NewValue = newY,
+				OriginalValue = originalY
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "Z",
+				NewValue = newZ,
+				OriginalValue = originalZ
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "W",
+				NewValue = newW,
+				OriginalValue = originalW
+			});
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Create a new instance of the FloatPointEventArgs Item.
+		/// </summary>
+		/// <param name="newValue">
+		/// The new value to record.
+		/// </param>
+		/// <param name="originalValue">
+		/// The original value to record.
+		/// </param>
+		public FloatPointEventArgs(FVector2 newValue, FVector2 originalValue)
+		{
+			float nX = 0f;
+			float nY = 0f;
+			float oX = 0f;
+			float oY = 0f;
+
+			if(newValue != null)
+			{
+				nX = newValue.X;
+				nY = newValue.Y;
+			}
+			if(originalValue != null)
+			{
+				oX = originalValue.X;
+				oY = originalValue.Y;
+			}
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "X",
+				NewValue = nX,
+				OriginalValue = oX
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "Y",
+				NewValue = nY,
+				OriginalValue = oY
+			});
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Create a new instance of the FloatPointEventArgs Item.
+		/// </summary>
+		/// <param name="newValue">
+		/// The new value to record.
+		/// </param>
+		/// <param name="originalValue">
+		/// The original value to record.
+		/// </param>
+		public FloatPointEventArgs(FVector3 newValue, FVector3 originalValue)
+		{
+			float nX = 0f;
+			float nY = 0f;
+			float nZ = 0f;
+			float oX = 0f;
+			float oY = 0f;
+			float oZ = 0f;
+
+			if(newValue != null)
+			{
+				nX = newValue.X;
+				nY = newValue.Y;
+				nZ = newValue.Z;
+			}
+			if(originalValue != null)
+			{
+				oX = originalValue.X;
+				oY = originalValue.Y;
+				oZ = originalValue.Z;
+			}
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "X",
+				NewValue = nX,
+				OriginalValue = oX
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "Y",
+				NewValue = nY,
+				OriginalValue = oY
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "Z",
+				NewValue = nZ,
+				OriginalValue = oZ
+			});
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Create a new instance of the FloatPointEventArgs Item.
+		/// </summary>
+		/// <param name="newValue">
+		/// The new value to record.
+		/// </param>
+		/// <param name="originalValue">
+		/// The original value to record.
+		/// </param>
+		public FloatPointEventArgs(FVector4 newValue, FVector4 originalValue)
+		{
+			float nW = 0f;
+			float nX = 0f;
+			float nY = 0f;
+			float nZ = 0f;
+			float oW = 0f;
+			float oX = 0f;
+			float oY = 0f;
+			float oZ = 0f;
+
+			if(newValue != null)
+			{
+				nX = newValue.X;
+				nY = newValue.Y;
+				nZ = newValue.Z;
+				nW = newValue.W;
+			}
+			if(originalValue != null)
+			{
+				oX = originalValue.X;
+				oY = originalValue.Y;
+				oZ = originalValue.Z;
+				oW = originalValue.W;
+			}
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "X",
+				NewValue = nX,
+				OriginalValue = oX
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "Y",
+				NewValue = nY,
+				OriginalValue = oY
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "Z",
+				NewValue = nZ,
+				OriginalValue = oZ
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "W",
+				NewValue = nW,
+				OriginalValue = oW
+			});
 		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	NewValue																															*
+		//*	Values																																*
 		//*-----------------------------------------------------------------------*
-		private FPoint mNewValue = new FPoint();
+		private AxisValueTrackerCollection mValues =
+			new AxisValueTrackerCollection();
 		/// <summary>
-		/// Get/Set the new value.
+		/// Get a reference to the collection of axis values being tracked in this
+		/// event.
 		/// </summary>
-		public FPoint NewValue
+		public AxisValueTrackerCollection Values
 		{
-			get { return mNewValue; }
-			set { mNewValue = value; }
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	OriginalValue																													*
-		//*-----------------------------------------------------------------------*
-		private FPoint mOriginalValue = new FPoint();
-		/// <summary>
-		/// Get/Set the original value before the event.
-		/// </summary>
-		public FPoint OriginalValue
-		{
-			get { return mOriginalValue; }
-			set { mOriginalValue = value; }
+			get { return mValues; }
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -130,7 +378,7 @@ namespace Geometry
 	//* FloatPointEventHandler																									*
 	//*-------------------------------------------------------------------------*
 	/// <summary>
-	/// Event handlers for events where a floating point 2-dimensional location
+	/// Event handlers for events where a floating point coordinate value
 	/// is the main focus.
 	/// </summary>
 	/// <param name="sender">

@@ -182,9 +182,9 @@ namespace Geometry
 
 			if(start != null && end != null)
 			{
-				result.Values[0] = Lerp(start.Values[0], end.Values[0], progress);
-				result.Values[1] = Lerp(start.Values[2], end.Values[2], progress);
-				result.Values[2] = Lerp(start.Values[3], end.Values[3], progress);
+				result.X = Lerp(start.X, end.X, progress);
+				result.Y = Lerp(start.Y, end.Y, progress);
+				result.Z = Lerp(start.Z, end.Z, progress);
 			}
 			return result;
 		}

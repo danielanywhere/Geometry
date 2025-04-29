@@ -18,8 +18,12 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Diagnostics;
+using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+
+using static Geometry.GeometryUtil;
 
 namespace Geometry
 {
@@ -34,22 +38,24 @@ namespace Geometry
 		//*************************************************************************
 		//*	Private																																*
 		//*************************************************************************
-		/// <summary>
-		/// The constant X index in a vector.
-		/// </summary>
-		private const int vX = 0;
-		/// <summary>
-		/// The constant Y index in a vector.
-		/// </summary>
-		private const int vY = 1;
-		/// <summary>
-		/// The constant Z index in a vector.
-		/// </summary>
-		private const int vZ = 2;
-
 		//*************************************************************************
 		//*	Protected																															*
 		//*************************************************************************
+		//*-----------------------------------------------------------------------*
+		//*	OnCoordinateChanged																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Raise the CoordinateChanged event whenever coordinates have changed.
+		/// </summary>
+		/// <param name="e">
+		/// Float point event arguments.
+		/// </param>
+		protected virtual void OnCoordinateChanged(FloatPointEventArgs e)
+		{
+			CoordinateChanged?.Invoke(this, e);
+		}
+		//*-----------------------------------------------------------------------*
+
 		//*************************************************************************
 		//*	Public																																*
 		//*************************************************************************
@@ -77,9 +83,9 @@ namespace Geometry
 		/// </param>
 		public FVector3(float x, float y, float z) : this()
 		{
-			mValues[vX] = x;
-			mValues[vY] = y;
-			mValues[vZ] = z;
+			mX = x;
+			mY = y;
+			mZ = z;
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -113,78 +119,72 @@ namespace Geometry
 
 			if(value != null)
 			{
-				if(value.mValues.Length > vX)
-				{
-					result.X = value.mValues[vX];
-				}
-				if(value.mValues.Length > vY)
-				{
-					result.Y = value.mValues[vY];
-				}
+				result.X = value.mX;
+				result.Y = value.mY;
 			}
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//*	_Implicit FPoint3 = FVector3																					*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Cast the FVector3 instance to an FPoint3.
-		/// </summary>
-		/// <param name="value">
-		/// Reference to the FVector3 value to be converted.
-		/// </param>
-		/// <returns>
-		/// Reference to a newly created FPoint3 whose values represent those
-		/// in the caller's FVector3 source.
-		/// </returns>
-		public static implicit operator FPoint3(FVector3 value)
-		{
-			FPoint3 result = new FPoint3();
+		////*-----------------------------------------------------------------------*
+		////*	_Implicit FPoint3 = FVector3																					*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Cast the FVector3 instance to an FPoint3.
+		///// </summary>
+		///// <param name="value">
+		///// Reference to the FVector3 value to be converted.
+		///// </param>
+		///// <returns>
+		///// Reference to a newly created FPoint3 whose values represent those
+		///// in the caller's FVector3 source.
+		///// </returns>
+		//public static implicit operator FPoint3(FVector3 value)
+		//{
+		//	FPoint3 result = new FPoint3();
 
-			if(value?.mValues.Length > 0)
-			{
-				result.X = value.mValues[vX];
-				if(value.mValues.Length > vY)
-				{
-					result.Y = value.mValues[vY];
-				}
-				if(value.mValues.Length > vZ)
-				{
-					result.Z = value.mValues[vZ];
-				}
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
+		//	if(value?.mValues.Length > 0)
+		//	{
+		//		result.X = value.mX;
+		//		if(value.mValues.Length > vY)
+		//		{
+		//			result.Y = value.mY;
+		//		}
+		//		if(value.mValues.Length > vZ)
+		//		{
+		//			result.Z = value.mZ;
+		//		}
+		//	}
+		//	return result;
+		//}
+		////*-----------------------------------------------------------------------*
 
-		//*-----------------------------------------------------------------------*
-		//*	_Implicit FVector3 = FPoint3																					*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Cast the FPoint3 instance to an FVector3.
-		/// </summary>
-		/// <param name="value">
-		/// Reference to the point to be converted.
-		/// </param>
-		/// <returns>
-		/// Reference to a newly created FVector3 representing the values in
-		/// the caller's point.
-		/// </returns>
-		public static implicit operator FVector3(FPoint3 value)
-		{
-			FVector3 result = new FVector3();
+		////*-----------------------------------------------------------------------*
+		////*	_Implicit FVector3 = FPoint3																					*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Cast the FPoint3 instance to an FVector3.
+		///// </summary>
+		///// <param name="value">
+		///// Reference to the point to be converted.
+		///// </param>
+		///// <returns>
+		///// Reference to a newly created FVector3 representing the values in
+		///// the caller's point.
+		///// </returns>
+		//public static implicit operator FVector3(FPoint3 value)
+		//{
+		//	FVector3 result = new FVector3();
 
-			if(value != null)
-			{
-				result.mValues[vX] = value.X;
-				result.mValues[vY] = value.Y;
-				result.mValues[vZ] = value.Z;
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
+		//	if(value != null)
+		//	{
+		//		result.mX = value.X;
+		//		result.mY = value.Y;
+		//		result.mZ = value.Z;
+		//	}
+		//	return result;
+		//}
+		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//*	_Implicit FVector2 = FVector3																					*
@@ -201,17 +201,12 @@ namespace Geometry
 		/// </returns>
 		public static implicit operator FVector2(FVector3 value)
 		{
-			int count = 0;
-			int index = 0;
 			FVector2 result = new FVector2();
 
-			if(value?.mValues.Length > 0)
+			if(value != null)
 			{
-				count = Math.Min(result.Values.Length, value.mValues.Length);
-				for(index = 0; index < count; index ++)
-				{
-					result.Values[index] = value.mValues[index];
-				}
+				result.X = value.mX;
+				result.Y = value.mY;
 			}
 			return result;
 		}
@@ -239,9 +234,9 @@ namespace Geometry
 			if(minuend != null && subtrahend != null)
 			{
 				Assign(result,
-					minuend.mValues[vX] - subtrahend.mValues[vX],
-					minuend.mValues[vY] - subtrahend.mValues[vY],
-					minuend.mValues[vZ] - subtrahend.mValues[vZ]);
+					minuend.mX - subtrahend.mX,
+					minuend.mY - subtrahend.mY,
+					minuend.mZ - subtrahend.mZ);
 			}
 			return result;
 		}
@@ -268,9 +263,9 @@ namespace Geometry
 
 			if(multiplier != null && multiplicand != 0f)
 			{
-				result.mValues[vX] = multiplicand * multiplier.mValues[vX];
-				result.mValues[vY] = multiplicand * multiplier.mValues[vY];
-				result.mValues[vZ] = multiplicand * multiplier.mValues[vZ];
+				result.mX = multiplicand * multiplier.mX;
+				result.mY = multiplicand * multiplier.mY;
+				result.mZ = multiplicand * multiplier.mZ;
 			}
 			return result;
 		}
@@ -295,9 +290,9 @@ namespace Geometry
 			if(multiplicand != null)
 			{
 				Assign(result,
-					multiplicand.mValues[vX] * multiplier,
-					multiplicand.mValues[vY] * multiplier,
-					multiplicand.mValues[vZ] * multiplier);
+					multiplicand.mX * multiplier,
+					multiplicand.mY * multiplier,
+					multiplicand.mZ * multiplier);
 			}
 			return result;
 		}
@@ -323,9 +318,9 @@ namespace Geometry
 			if(multiplicand != null && multiplier != null)
 			{
 				Assign(result,
-					multiplicand.mValues[vX] * multiplier.mValues[vX],
-					multiplicand.mValues[vY] * multiplier.mValues[vY],
-					multiplicand.mValues[vZ] * multiplier.mValues[vZ]);
+					multiplicand.mX * multiplier.mX,
+					multiplicand.mY * multiplier.mY,
+					multiplicand.mZ * multiplier.mZ);
 			}
 			return result;
 		}
@@ -353,12 +348,12 @@ namespace Geometry
 			if(divisor != null && dividend != null)
 			{
 				Assign(result,
-					(dividend.mValues[vX] != 0f ?
-						divisor.mValues[vX] / dividend.mValues[vX] : 0f),
-					(dividend.mValues[vY] != 0f ?
-						divisor.mValues[vY] / dividend.mValues[vY] : 0f),
-					(dividend.mValues[vZ] != 0f ?
-						divisor.mValues[vZ] / dividend.mValues[vZ] : 0f));
+					(dividend.mX != 0f ?
+						divisor.mX / dividend.mX : 0f),
+					(dividend.mY != 0f ?
+						divisor.mY / dividend.mY : 0f),
+					(dividend.mZ != 0f ?
+						divisor.mZ / dividend.mZ : 0f));
 			}
 			return result;
 		}
@@ -385,9 +380,9 @@ namespace Geometry
 
 			if(addend2 != null)
 			{
-				result.mValues[vX] = addend2.mValues[vX] + addend1;
-				result.mValues[vY] = addend2.mValues[vY] + addend1;
-				result.mValues[vZ] = addend2.mValues[vZ] + addend1;
+				result.mX = addend2.mX + addend1;
+				result.mY = addend2.mY + addend1;
+				result.mZ = addend2.mZ + addend1;
 			}
 			return result;
 		}
@@ -410,9 +405,9 @@ namespace Geometry
 
 			if(addend1 != null)
 			{
-				result.mValues[vX] = addend1.mValues[vX] + addend2;
-				result.mValues[vY] = addend1.mValues[vY] + addend2;
-				result.mValues[vZ] = addend1.mValues[vZ] + addend2;
+				result.mX = addend1.mX + addend2;
+				result.mY = addend1.mY + addend2;
+				result.mZ = addend1.mZ + addend2;
 			}
 			return result;
 		}
@@ -436,9 +431,78 @@ namespace Geometry
 			if(addend1 != null && addend2 != null)
 			{
 				Assign(result,
-					addend1.mValues[vX] + addend2.mValues[vX],
-					addend1.mValues[vY] + addend2.mValues[vY],
-					addend1.mValues[vZ] + addend2.mValues[vZ]);
+					addend1.mX + addend2.mX,
+					addend1.mY + addend2.mY,
+					addend1.mZ + addend2.mZ);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	_Operator !=																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether values of two vectors are not equal.
+		/// </summary>
+		/// <param name="vectorA">
+		/// Reference to the first vector to compare.
+		/// </param>
+		/// <param name="vectorB">
+		/// Reference to the second vector to compare.
+		/// </param>
+		/// <returns>
+		/// True if the two objects are substantially not equal in value.
+		/// Otherwise, false.
+		/// </returns>
+		[DebuggerStepThrough]
+		public static bool operator !=(FVector3 vectorA, FVector3 vectorB)
+		{
+			bool result = true;
+
+			if((object)vectorA != null && (object)vectorB != null)
+			{
+				result = !(vectorA == vectorB);
+			}
+			else if((object)vectorA == null && (object)vectorB == null)
+			{
+				result = false;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	_Operator ==																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether values of two vectors are equal.
+		/// </summary>
+		/// <param name="vectorA">
+		/// Reference to the first vector to compare.
+		/// </param>
+		/// <param name="vectorB">
+		/// Reference to the second vector to compare.
+		/// </param>
+		/// <returns>
+		/// True if the two objects are substantially equal in value. Otherwise,
+		/// false.
+		/// </returns>
+		[DebuggerStepThrough]
+		public static bool operator ==(FVector3 vectorA, FVector3 vectorB)
+		{
+			bool result = true;
+
+			if((object)vectorA != null && (object)vectorB != null)
+			{
+				result = (
+					(vectorA.mX == vectorB.mX) &&
+					(vectorA.mY == vectorB.mY) &&
+					(vectorA.mZ == vectorB.mZ));
+			}
+			else if((object)vectorA != null || (object)vectorB != null)
+			{
+				result = false;
 			}
 			return result;
 		}
@@ -460,9 +524,9 @@ namespace Geometry
 		{
 			if(source != null && target != null)
 			{
-				target.mValues[vX] = source.mValues[vX];
-				target.mValues[vY] = source.mValues[vY];
-				target.mValues[vZ] = source.mValues[vZ];
+				target.mX = source.mX;
+				target.mY = source.mY;
+				target.mZ = source.mZ;
 			}
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
@@ -479,9 +543,9 @@ namespace Geometry
 		{
 			if(vector != null)
 			{
-				vector.mValues[vX] =
-					vector.mValues[vY] =
-					vector.mValues[vZ] = value;
+				vector.mX =
+					vector.mY =
+					vector.mZ = value;
 			}
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
@@ -504,37 +568,27 @@ namespace Geometry
 		{
 			if(vector != null)
 			{
-				vector.mValues[vX] = x;
-				vector.mValues[vY] = y;
-				vector.mValues[vZ] = z;
+				vector.mX = x;
+				vector.mY = y;
+				vector.mZ = z;
 			}
 		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Clear																																	*
+		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Set the value of the vector.
+		/// Clear the values on the specified vector.
 		/// </summary>
 		/// <param name="vector">
-		/// Reference to the vector to be populated.
+		/// Reference to the vector to clear.
 		/// </param>
-		/// <param name="values">
-		/// Array of values to assign.
-		/// </param>
-		public static void Assign(FVector3 vector, float[] values)
+		public static void Clear(FVector3 vector)
 		{
-			if(vector != null && values?.Length > 0)
+			if(vector != null && !vector.mReadOnly)
 			{
-				if(values.Length > vX)
-				{
-					vector.mValues[vX] = values[vX];
-				}
-				if(values.Length > vY)
-				{
-					vector.mValues[vY] = values[vY];
-				}
-				if(values.Length > vZ)
-				{
-					vector.mValues[vZ] = values[vZ];
-				}
+				vector.X = vector.Y = vector.Z = 0f;
 			}
 		}
 		//*-----------------------------------------------------------------------*
@@ -554,24 +608,26 @@ namespace Geometry
 		/// </returns>
 		public static FVector3 Clone(FVector3 vector)
 		{
-			int count = 0;
-			int index = 0;
 			FVector3 result = new FVector3();
 
 			if(vector != null)
 			{
-				count = vector.mValues.Length;
-				if(result.mValues.Length != count)
-				{
-					result.mValues = new float[count];
-				}
-				for(index = 0; index < count; index ++)
-				{
-					result.mValues[index] = vector.mValues[index];
-				}
+				result.mReadOnly = vector.mReadOnly;
+				result.mX = vector.mX;
+				result.mY = vector.mY;
+				result.mZ = vector.mZ;
 			}
 			return result;
 		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	CoordinateChanged																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Fired when a coordinate has changed.
+		/// </summary>
+		public event FloatPointEventHandler CoordinateChanged;
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
@@ -596,19 +652,48 @@ namespace Geometry
 			if(vector1 != null && vector2 != null)
 			{
 				Assign(result,
-					(vector1.mValues[vY] * vector2.mValues[vZ]) -
-					(vector2.mValues[vY] * vector1.mValues[vZ]),
-					((vector1.mValues[vX] * vector2.mValues[vZ]) -
-					(vector2.mValues[vX] * vector1.mValues[vZ]) * -1f),
-					(vector1.mValues[vX] * vector2.mValues[vY]) -
-					(vector2.mValues[vX] * vector1.mValues[vY]));
+					(vector1.mY * vector2.mZ) -
+					(vector2.mY * vector1.mZ),
+					((vector1.mX * vector2.mZ) -
+					(vector2.mX * vector1.mZ) * -1f),
+					(vector1.mX * vector2.mY) -
+					(vector2.mX * vector1.mY));
 			}
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	DotProduct																														*
+		//* Delta																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the coordinate difference between two vectors.
+		/// </summary>
+		/// <param name="vectorA">
+		/// Reference to the first vector to compare.
+		/// </param>
+		/// <param name="vectorB">
+		/// Reference to the second vector to compare.
+		/// </param>
+		/// <returns>
+		/// Coordinate difference between two vectors.
+		/// </returns>
+		public static FVector3 Delta(FVector3 vectorA, FVector3 vectorB)
+		{
+			FVector3 result = new FVector3();
+
+			if(vectorA != null && vectorB != null)
+			{
+				result.mX = vectorB.mX - vectorA.mX;
+				result.mY = vectorB.mY - vectorA.mY;
+				result.mZ = vectorB.mZ - vectorA.mZ;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	Dot																																		*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return the dot product of the two vectors.
@@ -622,16 +707,16 @@ namespace Geometry
 		/// <returns>
 		/// The dot product of the two vectors.
 		/// </returns>
-		public static float DotProduct(FVector3 vectorA, FVector3 vectorB)
+		public static float Dot(FVector3 vectorA, FVector3 vectorB)
 		{
 			float result = 0f;
 
 			if(vectorA != null && vectorB != null)
 			{
 				result =
-					(vectorA.mValues[vX] * vectorB.mValues[vX]) +
-					(vectorA.mValues[vY] * vectorB.mValues[vY]) +
-					(vectorA.mValues[vZ] * vectorB.mValues[vZ]);
+					(vectorA.mX * vectorB.mX) +
+					(vectorA.mY * vectorB.mY) +
+					(vectorA.mZ * vectorB.mZ);
 			}
 			return result;
 		}
@@ -641,22 +726,28 @@ namespace Geometry
 		//*	Equals																																*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Return a value indicating whether the properties of another vector are
-		/// equal to this one.
+		/// Return a value indicating whether this item's members are equal to the
+		/// members of the caller's item.
 		/// </summary>
-		/// <param name="value">
-		/// Reference to the value to compare.
+		/// <param name="obj">
+		/// Reference to the object to which this value is being compared.
 		/// </param>
 		/// <returns>
-		/// True if the properties in the other object are the same as this one.
-		/// Otherwise, false.
+		/// A value indicating whether this value is substantially equal to the
+		/// caller's provided item.
 		/// </returns>
-		public bool Equals(FVector3 value)
+		public override bool Equals(object obj)
 		{
-			return (value != null &&
-				value.mValues[vX] == this.mValues[vX] &&
-				value.mValues[vY] == this.mValues[vY] &&
-				value.mValues[vZ] == this.mValues[vZ]);
+			bool result = false;
+
+			if(obj is FVector3 @vector)
+			{
+				if(vector.mX == mX && vector.mY == mY && vector.mZ == mZ)
+				{
+					result = true;
+				}
+			}
+			return result;
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -685,11 +776,44 @@ namespace Geometry
 
 			if(vector != null)
 			{
-				result = vector.mValues[vX] == x &&
-					vector.mValues[vY] == y &&
-					vector.mValues[vZ] == z;
+				result = vector.mX == x &&
+					vector.mY == y &&
+					vector.mZ == z;
 			}
 
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetArray																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return an array of values representing the member axes of the provided
+		/// item.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector whose values will be converted.
+		/// </param>
+		/// <returns>
+		/// Reference to a new array of values representing those in the provided
+		/// vector, if found. Otherwise, an empty array.
+		/// </returns>
+		public static float[] GetArray(FVector3 vector)
+		{
+			float[] result = null;
+
+			if(vector != null)
+			{
+				result = new float[3];
+				result[0] = vector.mX;
+				result[1] = vector.mY;
+				result[2] = vector.mZ;
+			}
+			if(result == null)
+			{
+				result = new float[0];
+			}
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
@@ -780,6 +904,29 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	GetHashCode																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the unique hash code for this instance.
+		/// </summary>
+		/// <returns>
+		/// The hash code of this item and value.
+		/// </returns>
+		public override int GetHashCode()
+		{
+			int factor = 0;
+			int result = 2020122801;
+
+			factor = 0 - (int)((double)result * 0.25);
+
+			result *= (factor + mX.GetHashCode());
+			result *= (factor + mY.GetHashCode());
+			result *= (factor + mZ.GetHashCode());
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	GetLineAngle																													*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -808,24 +955,24 @@ namespace Geometry
 				vecA = new FVector3(pointA);
 				vecB = new FVector3(pointB);
 				//	Set the zenith.
-				result.mValues[vZ] =
+				result.mZ =
 					Trig.GetLineAngle(
-						vecA.mValues[vX], vecA.mValues[vY],
-						vecB.mValues[vX], vecB.mValues[vY]);
+						vecA.mX, vecA.mY,
+						vecB.mX, vecB.mY);
 				//	Zero the needle for X, Z.
 				//	Line length is 2D because we don't know anything about Z when
 				//	viewing from the Z axis.
 				length = Trig.GetLineDistance(
-					vecA.mValues[vX], vecA.mValues[vY],
-					vecB.mValues[vX], vecB.mValues[vY]);
-				point = new FPoint(vecA.mValues[vX], vecA.mValues[vY]);
+					vecA.mX, vecA.mY,
+					vecB.mX, vecB.mY);
+				point = new FPoint(vecA.mX, vecA.mY);
 				point = Trig.GetDestPoint(point, 0f, length);
-				vecB.mValues[vX] = point.X;
-				vecB.mValues[vY] = point.Y;
-				result.mValues[vX] =
+				vecB.mX = point.X;
+				vecB.mY = point.Y;
+				result.mX =
 					Trig.GetLineAngle(
-						vecA.mValues[vX], vecA.mValues[vZ],
-						vecB.mValues[vX], vecB.mValues[vZ]);
+						vecA.mX, vecA.mZ,
+						vecB.mX, vecB.mZ);
 			}
 			return result;
 		}
@@ -853,9 +1000,9 @@ namespace Geometry
 			if(vectorA != null && vectorB != null)
 			{
 				return (float)Math.Sqrt(
-					Math.Pow((double)(vectorB.mValues[vX] - vectorA.mValues[vX]), 2d) +
-					Math.Pow((double)(vectorB.mValues[vY] - vectorA.mValues[vY]), 2d) +
-					Math.Pow((double)(vectorB.mValues[vZ] - vectorA.mValues[vZ]), 2d));
+					Math.Pow((double)(vectorB.mX - vectorA.mX), 2d) +
+					Math.Pow((double)(vectorB.mY - vectorA.mY), 2d) +
+					Math.Pow((double)(vectorB.mZ - vectorA.mZ), 2d));
 			}
 			return result;
 		}
@@ -890,9 +1037,9 @@ namespace Geometry
 			if(point != null)
 			{
 				Assign(result,
-					destinationX - point.mValues[vX],
-					destinationY - point.mValues[vY],
-					destinationZ - point.mValues[vZ]);
+					destinationX - point.mX,
+					destinationY - point.mY,
+					destinationZ - point.mZ);
 			}
 			return result;
 		}
@@ -1004,8 +1151,8 @@ namespace Geometry
 						{
 							dir = Normalize(rayLengths);
 							w0 = rayBase - faceCoordinates[triP0];
-							a = 0f - DotProduct(n, w0);
-							b = DotProduct(n, dir);
+							a = 0f - Dot(n, w0);
+							b = Dot(n, dir);
 							if(Math.Abs(b) < double.Epsilon)
 							{
 								//	Ray is parallel to the plane.
@@ -1039,12 +1186,12 @@ namespace Geometry
 							//	Intersect ray point with plane.
 							result = rayBase + (dir * r);
 							//	Check to see if result is inside face.
-							uu = DotProduct(u, u);
-							uv = DotProduct(u, v);
-							vv = DotProduct(v, v);
+							uu = Dot(u, u);
+							uv = Dot(u, v);
+							vv = Dot(v, v);
 							w = result - faceCoordinates[triP0];
-							wu = DotProduct(w, u);
-							wv = DotProduct(w, v);
+							wu = Dot(w, u);
+							wv = Dot(w, v);
 							D = (uv * uv) - (uu * vv);
 							//	Get and test parametric coordinates.
 							s = ((uv * wv) - (vv * wu)) / D;
@@ -1091,17 +1238,46 @@ namespace Geometry
 		/// </returns>
 		public static FVector3 Invert(FVector3 vector)
 		{
-			int count = 0;
-			int index = 0;
 			FVector3 result = new FVector3();
 
 			if(vector != null)
 			{
-				count = vector.mValues.Length;
-				for(index = 0; index < count; index ++)
-				{
-					result.mValues[index] = 0f - vector.mValues[index];
-				}
+				result.mX = 0f - vector.mX;
+				result.mY = 0f - vector.mY;
+				result.mZ = 0f - vector.mZ;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* IsDifferent																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether two vectors are different.
+		/// </summary>
+		/// <param name="vectorA">
+		/// Reference to the first vector to compare.
+		/// </param>
+		/// <param name="vectorB">
+		/// Reference to the second vector to compare.
+		/// </param>
+		/// <returns>
+		/// True if the two vectors are different. Otherwise, false.
+		/// </returns>
+		public static bool IsDifferent(FVector3 vectorA, FVector3 vectorB)
+		{
+			bool result = false;
+
+			if(vectorA != null && vectorB != null)
+			{
+				result = vectorA.mX != vectorB.mX ||
+					vectorA.mY != vectorB.mY ||
+					vectorA.mZ != vectorB.mZ;
+			}
+			else if(vectorA != null || vectorB != null)
+			{
+				result = true;
 			}
 			return result;
 		}
@@ -1121,22 +1297,12 @@ namespace Geometry
 		/// </returns>
 		public static bool IsEmpty(FVector3 vector)
 		{
-			int count = 0;
-			int index = 0;
 			bool result = true;
 
 			if(vector != null &&
-				vector.mValues.Length > 0)
+				(vector.mX != 0f || vector.mY != 0f || vector.mZ != 0f))
 			{
-				count = vector.mValues.Length;
-				for(index = 0; index < count; index ++)
-				{
-					if(vector.mValues[index] != 0f)
-					{
-						result = false;
-						break;
-					}
-				}
+				result = false;
 			}
 			return result;
 		}
@@ -1175,14 +1341,43 @@ namespace Geometry
 		/// </returns>
 		public static float Length(FVector3 vector)
 		{
+			//float result = 0f;
+
+			//if(vector != null)
+			//{
+			//	result = (float)Math.Sqrt(
+			//		Math.Pow((double)vector.mX, 2d) +
+			//		Math.Pow((double)vector.mY, 2d) +
+			//		Math.Pow((double)vector.mZ, 2d));
+			//}
+			//return result;
+			return Magnitude(vector);
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Magnitude																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the absolute magnitude of the provided point.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector for which the magnitude will be found.
+		/// </param>
+		/// <returns>
+		/// The absolute magnitude of the caller's point.
+		/// </returns>
+		public static float Magnitude(FVector3 vector)
+		{
 			float result = 0f;
 
 			if(vector != null)
 			{
 				result = (float)Math.Sqrt(
-					Math.Pow((double)vector.mValues[vX], 2d) +
-					Math.Pow((double)vector.mValues[vY], 2d) +
-					Math.Pow((double)vector.mValues[vZ], 2d));
+					(double)(
+					vector.mX * vector.mX +
+					vector.mY * vector.mY +
+					vector.mZ * vector.mZ));
 			}
 			return result;
 		}
@@ -1213,16 +1408,46 @@ namespace Geometry
 				m = mask.ToLower();
 				if(m.IndexOf("x") == -1)
 				{
-					result.mValues[vX] = vector.mValues[vX];
+					result.mX = vector.mX;
 				}
 				if(m.IndexOf("y") == -1)
 				{
-					result.mValues[vY] = vector.mValues[vY];
+					result.mY = vector.mY;
 				}
 				if(m.IndexOf("z") == -1)
 				{
-					result.mValues[vZ] = vector.mValues[vZ];
+					result.mZ = vector.mZ;
 				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	MiddlePoint																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the middle coordinate between two points.
+		/// </summary>
+		/// <param name="vectorA">
+		/// Reference to the first vector to test.
+		/// </param>
+		/// <param name="vectorB">
+		/// Reference to the second vector to test.
+		/// </param>
+		/// <returns>
+		/// Reference to a vector that represents the exact middle coordinate of
+		/// the caller's virtual line.
+		/// </returns>
+		public static FVector3 MiddlePoint(FVector3 vectorA, FVector3 vectorB)
+		{
+			FVector3 result = new FVector3();
+
+			if(vectorA != null && vectorB != null)
+			{
+				result.X = (vectorA.X + vectorB.X) / 2f;
+				result.Y = (vectorA.Y + vectorB.Y) / 2f;
+				result.Z = (vectorA.Z + vectorB.Z) / 2f;
 			}
 			return result;
 		}
@@ -1262,15 +1487,15 @@ namespace Geometry
 					{
 						next = points[index + 1];
 					}
-					result.mValues[vX] +=
-						(current.mValues[vY] - next.mValues[vY]) *
-						(current.mValues[vZ] + next.mValues[vZ]);
-					result.mValues[vY] +=
-						(current.mValues[vZ] - next.mValues[vZ]) *
-						(current.mValues[vX] + next.mValues[vX]);
-					result.mValues[vZ] +=
-						(current.mValues[vX] - next.mValues[vX]) *
-						(current.mValues[vY] + next.mValues[vY]);
+					result.mX +=
+						(current.mY - next.mY) *
+						(current.mZ + next.mZ);
+					result.mY +=
+						(current.mZ - next.mZ) *
+						(current.mX + next.mX);
+					result.mZ +=
+						(current.mX - next.mX) *
+						(current.mY + next.mY);
 				}
 			}
 			return Normalize(result);
@@ -1303,12 +1528,168 @@ namespace Geometry
 				length = Length(vector);
 				if(length != 0.0f)
 				{
-					result.mValues[0] = vector.mValues[0] / length;
-					result.mValues[1] = vector.mValues[1] / length;
-					result.mValues[2] = vector.mValues[2] / length;
+					result.mX = vector.mX / length;
+					result.mY = vector.mY / length;
+					result.mZ = vector.mZ / length;
 				}
 			}
 			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Offset																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a new instance the caller's vector, translated by the specified
+		/// offset.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to be offset.
+		/// </param>
+		/// <param name="dx">
+		/// X distance from the original vector.
+		/// </param>
+		/// <param name="dy">
+		/// Y distance from the original vector.
+		/// </param>
+		/// <param name="dz">
+		/// Z distance from the original vector.
+		/// </param>
+		/// <returns>
+		/// Reference to a new vector at the specified offset from the original.
+		/// </returns>
+		public static FVector3 Offset(FVector3 vector,
+			float dx, float dy, float dz)
+		{
+			FVector3 result = null;
+
+			if(vector != null)
+			{
+				result = new FVector3(vector.mX + dx, vector.mY + dy, vector.mZ + dz);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Parse																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Parse a coordinate string and return its FVector3 representation.
+		/// </summary>
+		/// <param name="coordinate">
+		/// The coordinate string to parse.
+		/// </param>
+		/// <param name="allowNull">
+		/// Value indicating whether to allow a null return value if the input
+		/// string was invalid.
+		/// </param>
+		/// <returns>
+		/// Newly created FPoint value representing the caller's input, if
+		/// that input was legal or allowNull was false. Otherwise, a null value.
+		/// </returns>
+		public static FVector3 Parse(string coordinate, bool allowNull = false)
+		{
+			bool bX = false;
+			bool bY = false;
+			bool bZ = false;
+			int index = 0;
+			MatchCollection matches = null;
+			FPoint3 result = null;
+			string text = "";
+
+			if(coordinate?.Length > 0)
+			{
+				text = coordinate.Trim();
+				if(text.StartsWith("{") && text.EndsWith("}"))
+				{
+					//	JSON object.
+					try
+					{
+						result = JsonConvert.DeserializeObject<FPoint3>(coordinate);
+					}
+					catch { }
+				}
+				else
+				{
+					//	Freehand.
+					matches = Regex.Matches(coordinate, ResourceMain.rxCoordinate);
+					if(matches.Count > 0)
+					{
+						result = new FPoint3();
+						foreach(Match matchItem in matches)
+						{
+							text = GetValue(matchItem, "label").ToLower();
+							switch(text)
+							{
+								case "x":
+									result.mX = ToFloat(GetValue(matchItem, "number"));
+									bX = true;
+									break;
+								case "y":
+									result.mY = ToFloat(GetValue(matchItem, "number"));
+									bY = true;
+									break;
+								case "z":
+									result.mZ = ToFloat(GetValue(matchItem, "number"));
+									bZ = true;
+									break;
+								default:
+									switch(index)
+									{
+										case 0:
+											if(!bX)
+											{
+												result.mX = ToFloat(GetValue(matchItem, "number"));
+												bX = true;
+											}
+											break;
+										case 1:
+											if(!bY)
+											{
+												result.mY = ToFloat(GetValue(matchItem, "number"));
+												bY = true;
+											}
+											break;
+										case 2:
+											if(!bZ)
+											{
+												result.mZ = ToFloat(GetValue(matchItem, "number"));
+												bZ = true;
+											}
+											break;
+									}
+									break;
+							}
+							index++;
+						}
+					}
+				}
+			}
+			if(result == null && !allowNull)
+			{
+				result = new FPoint3();
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	ReadOnly																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Private member for <see cref="ReadOnly">ReadOnly</see>.
+		/// </summary>
+		protected bool mReadOnly = false;
+		/// <summary>
+		/// Get/Set a value indicating whether this item is read-only.
+		/// </summary>
+		[JsonIgnore]
+		public bool ReadOnly
+		{
+			get { return mReadOnly; }
+			set { mReadOnly = value; }
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -1330,9 +1711,9 @@ namespace Geometry
 
 			if(vector != null)
 			{
-				result.mValues[vX] = vector.mValues[vX] * -1f;
-				result.mValues[vY] = vector.mValues[vY] * -1f;
-				result.mValues[vZ] = vector.mValues[vZ] * -1f;
+				result.mX = vector.mX * -1f;
+				result.mY = vector.mY * -1f;
+				result.mZ = vector.mZ * -1f;
 			}
 			return result;
 		}
@@ -1502,19 +1883,73 @@ namespace Geometry
 		/// <returns>
 		/// Vector with scaling applied.
 		/// </returns>
-		public static FVector3 Scale(FVector3 vector, FVector3 scale)
+		public static FVector3 Scale(FVector3 vector, float scale)
 		{
-			FVector3 result = null;
+			FVector3 result = new FVector3();
 
-			if(vector != null && scale != null)
+			if(vector != null)
 			{
-				result = vector * scale;
-			}
-			else
-			{
-				result = new FVector3();
+				result.mX = vector.mX * scale;
+				result.mY = vector.mY * scale;
+				result.mZ = vector.mZ * scale;
 			}
 			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the scaled vector.
+		/// </summary>
+		/// <param name="vector">
+		/// Vector to scale.
+		/// </param>
+		/// <param name="scale">
+		/// Scale to apply.
+		/// </param>
+		/// <returns>
+		/// Vector with scaling applied.
+		/// </returns>
+		public static FVector3 Scale(FVector3 vector, FVector3 scale)
+		{
+			FVector3 result = new FVector3();
+
+			if(vector != null)
+			{
+				result.mX = vector.mX * scale.mX;
+				result.mY = vector.mY * scale.mY;
+				result.mZ = vector.mZ * scale.mZ;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* SetArray																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Set the specified vector's values from the contents of the provided
+		/// array.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector whose values will be converted.
+		/// </param>
+		/// <param name="values">
+		/// Reference to an array of values to transfer to the properties of
+		/// the vector.
+		/// </param>
+		public static void SetArray(FVector3 vector, float[] values)
+		{
+			if(vector != null && values?.Length > 0)
+			{
+				vector.mX = values[0];
+				if(values.Length > 1)
+				{
+					vector.mY = values[1];
+				}
+				if(values.Length > 2)
+				{
+					vector.mZ = values[2];
+				}
+			}
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -1561,7 +1996,7 @@ namespace Geometry
 
 			if(vector != null)
 			{
-				result = vector.mValues[vX] + vector.mValues[vY] + vector.mValues[vZ];
+				result = vector.mX + vector.mY + vector.mZ;
 			}
 			return result;
 		}
@@ -1587,7 +2022,7 @@ namespace Geometry
 			if(vector != null)
 			{
 				Assign(result,
-					vector.mValues[vX], vector.mValues[vZ], vector.mValues[vY]);
+					vector.mX, vector.mZ, vector.mY);
 			}
 			return result;
 		}
@@ -1612,11 +2047,33 @@ namespace Geometry
 			if(rayAngle != null)
 			{
 				FVector3.Assign(result,
-					Trig.RadToDeg(rayAngle.mValues[vX]),
-					Trig.RadToDeg(rayAngle.mValues[vY]),
-					Trig.RadToDeg(rayAngle.mValues[vZ]));
+					Trig.RadToDeg(rayAngle.mX),
+					Trig.RadToDeg(rayAngle.mY),
+					Trig.RadToDeg(rayAngle.mZ));
 			}
 			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	ToString																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the string representation of this item.
+		/// </summary>
+		/// <returns>
+		/// String representation of the values of this point.
+		/// </returns>
+		public override string ToString()
+		{
+			StringBuilder result = new StringBuilder();
+
+			result.Append($"{mX:0.000}");
+			result.Append(',');
+			result.Append($"{mY:0.000}");
+			result.Append(',');
+			result.Append($"{mZ:0.000}");
+			return result.ToString();
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -1634,40 +2091,36 @@ namespace Geometry
 		/// </param>
 		public static void TransferValues(FVector3 source, FVector3 target)
 		{
-			Assign(source, target);
+			if(source != null && target != null)
+			{
+				target.mReadOnly = source.mReadOnly;
+				target.mX = source.mX;
+				target.mY = source.mY;
+				target.mZ = source.mZ;
+			}
 		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	ToString																															*
+		//* Translate																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Return the string representation of this item.
+		/// Translate the values of the caller's vector by the provided offset.
 		/// </summary>
-		/// <returns>
-		/// String representation of this item.
-		/// </returns>
-		public override string ToString()
+		/// <param name="vector">
+		/// Reference to the vector to be translated.
+		/// </param>
+		/// <param name="offset">
+		/// Reference to the offset to apply to the point.
+		/// </param>
+		public static void Translate(FVector3 vector, FVector3 offset)
 		{
-			return
-				$"{mValues[vX]:0.000}, " +
-				$"{mValues[vY]:0.000}, " +
-				$"{mValues[vZ]:0.000}";
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	Values																																*
-		//*-----------------------------------------------------------------------*
-		private float[] mValues = new float[3];
-		/// <summary>
-		/// Get/Set a reference to the base array of values.
-		/// </summary>
-		[JsonIgnore]
-		public float[] Values
-		{
-			get { return mValues; }
-			set { mValues = value; }
+			if(vector != null && offset != null)
+			{
+				vector.mX += offset.mX;
+				vector.mY += offset.mY;
+				vector.mZ += offset.mZ;
+			}
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -1675,13 +2128,30 @@ namespace Geometry
 		//*	X																																			*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Get/Set the X coordinate of this value.
+		/// Private member for <see cref="X">X</see>.
+		/// </summary>
+		protected float mX = 0f;
+		/// <summary>
+		/// Get/Set the x coordinate.
 		/// </summary>
 		[JsonProperty(Order = 0)]
 		public float X
 		{
-			get { return mValues[vX]; }
-			set { mValues[vX] = value; }
+			get { return mX; }
+			set
+			{
+				float original = mX;
+
+				if(!mReadOnly)
+				{
+					mX = value;
+					if(original != value)
+					{
+						OnCoordinateChanged(
+							new FloatPointEventArgs("X", value, original));
+					}
+				}
+			}
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -1689,13 +2159,30 @@ namespace Geometry
 		//*	Y																																			*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Get/Set the Y coordinate of this value.
+		/// Private member for <see cref="Y">Y</see>.
+		/// </summary>
+		protected float mY = 0f;
+		/// <summary>
+		/// Get/Set the y coordinate.
 		/// </summary>
 		[JsonProperty(Order = 1)]
 		public float Y
 		{
-			get { return mValues[vY]; }
-			set { mValues[vY] = value; }
+			get { return mY; }
+			set
+			{
+				float original = mY;
+
+				if(!mReadOnly)
+				{
+					mY = value;
+					if(original != value)
+					{
+						OnCoordinateChanged(
+							new FloatPointEventArgs("Y", value, original));
+					}
+				}
+			}
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -1703,13 +2190,30 @@ namespace Geometry
 		//*	Z																																			*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Get/Set the Z coordinate of this value.
+		/// Private member for <see cref="Z">Z</see>.
 		/// </summary>
-		[JsonProperty(Order = 2)]
+		protected float mZ = 0f;
+		/// <summary>
+		/// Get/Set the y coordinate.
+		/// </summary>
+		[JsonProperty(Order = 1)]
 		public float Z
 		{
-			get { return mValues[vZ]; }
-			set { mValues[vZ] = value; }
+			get { return mZ; }
+			set
+			{
+				float original = mZ;
+
+				if(!mReadOnly)
+				{
+					mZ = value;
+					if(original != value)
+					{
+						OnCoordinateChanged(
+							new FloatPointEventArgs("Z", value, original));
+					}
+				}
+			}
 		}
 		//*-----------------------------------------------------------------------*
 

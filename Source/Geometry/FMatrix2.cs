@@ -118,18 +118,26 @@ namespace Geometry
 		public static FVector2 Multiply(FMatrix2 matrix, FVector2 vector)
 		{
 			int col = 0;
+			float[] inputValues = null;
+			float[] outputValues = null;
 			int row = 0;
 			FVector2 result = new FVector2();
 			float value = 0f;   //	Output value.
 
-			for(row = 0; row < 2; row++)
+			if(matrix != null && vector != null)
 			{
-				value = 0;
-				for(col = 0; col < 2; col++)
+				inputValues = FVector2.GetArray(vector);
+				outputValues = new float[2];
+				for(row = 0; row < 2; row++)
 				{
-					value += vector.Values[col] * matrix.Values[row, col];
+					value = 0;
+					for(col = 0; col < 2; col++)
+					{
+						value += inputValues[col] * matrix.Values[row, col];
+					}
+					outputValues[row] = value;
 				}
-				result.Values[row] = value;
+				FVector2.SetArray(result, outputValues);
 			}
 			return result;
 		}
@@ -138,23 +146,23 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 		//*	Rotate																																*
 		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Rotate the 2D point by a specified angle, in radians.
-		/// </summary>
-		/// <param name="point">
-		/// Reference to the point to be rotated.
-		/// </param>
-		/// <param name="theta">
-		/// The angle by which to rotate the point, in radians.
-		/// </param>
-		/// <returns>
-		/// The rotated point, relative to 0,0.
-		/// </returns>
-		public static FPoint Rotate(FPoint point, float theta)
-		{
-			return Rotate((FVector2)point, theta);
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		///// <summary>
+		///// Rotate the 2D point by a specified angle, in radians.
+		///// </summary>
+		///// <param name="point">
+		///// Reference to the point to be rotated.
+		///// </param>
+		///// <param name="theta">
+		///// The angle by which to rotate the point, in radians.
+		///// </param>
+		///// <returns>
+		///// The rotated point, relative to 0,0.
+		///// </returns>
+		//public static FPoint Rotate(FPoint point, float theta)
+		//{
+		//	return Rotate(point, theta);
+		//}
+		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
 		/// Rotate the 2D vector by a specified angle, in radians.
 		/// </summary>

@@ -218,22 +218,174 @@ namespace Geometry
 		public static FVector3 Multiply(FMatrix3 matrix, FVector3 vector)
 		{
 			int col = 0;
+			float[] inputValues = null;
+			float[] outputValues = null;
 			int row = 0;
 			FVector3 result = new FVector3();
 			float value = 0;   //	Output value.
 
-			for(row = 0; row < 3; row++)
+			if(matrix != null && vector != null)
 			{
-				value = 0;
-				for(col = 0; col < 3; col++)
+				inputValues = FVector3.GetArray(vector);
+				outputValues = new float[3];
+				for(row = 0; row < 3; row++)
 				{
-					value += vector.Values[col] * matrix.Values[row, col];
+					value = 0;
+					for(col = 0; col < 3; col++)
+					{
+						value += inputValues[col] * matrix.Values[row, col];
+					}
+					outputValues[row] = value;
 				}
-				result.Values[row] = value;
+				FVector3.SetArray(result, outputValues);
 			}
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
+
+		////*-----------------------------------------------------------------------*
+		////*	Rotate																																*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Rotate the 3D point by a specified angle, in radians.
+		///// </summary>
+		///// <param name="point">
+		///// Reference to the point to be rotated.
+		///// </param>
+		///// <param name="thetaX">
+		///// The angle around the X axis by which to rotate the point, in radians.
+		///// </param>
+		///// <param name="thetaY">
+		///// The angle around the Y axis by which to rotate the point, in radians.
+		///// </param>
+		///// <param name="thetaZ">
+		///// The angle around the Z axis by which to rotate the point, in radians.
+		///// </param>
+		///// <param name="upAxis">
+		///// The optional 'up' direction axis used to help determine which axis is
+		///// yaw.
+		///// </param>
+		///// <returns>
+		///// The rotated 3D point, relative to 0,0,0.
+		///// </returns>
+		///// <remarks>
+		///// <para>
+		///// The order of rotations is Yaw, Pitch, Roll, with the UpDirection
+		///// helping to distinguish which axis is Yaw.
+		///// </para>
+		///// <para>
+		///// Yaw, pitch and roll are descriptions from the perspective of the pilot.
+		///// <list type="bullet">
+		///// <item>Yaw is left/right turning rotation with a constant
+		///// horizon.</item>
+		///// <item>Pitch is forward/back rotation.</item>
+		///// <item>Roll is wingtip left/right rotation.</item>
+		///// </list>
+		///// </para>
+		///// </remarks>
+		//public static FPoint3 Rotate(FPoint3 point,
+		//	float thetaX, float thetaY, float thetaZ,
+		//	AxisType upAxis = AxisType.Z)
+		//{
+		//	FPoint3 result = null;
+
+		//	if(point != null)
+		//	{
+		//		result = FPoint3.Clone(point);
+		//		switch(upAxis)
+		//		{
+		//			case AxisType.X:
+		//				if(thetaZ != 0f)
+		//				{
+		//					result = RotateZ(result, thetaZ);
+		//				}
+		//				if(thetaY != 0f)
+		//				{
+		//					result = RotateY(result, thetaY);
+		//				}
+		//				if(thetaX != 0f)
+		//				{
+		//					result = RotateX(result, thetaX);
+		//				}
+		//				break;
+		//			case AxisType.Y:
+		//				if(thetaX != 0f)
+		//				{
+		//					result = RotateX(result, thetaX);
+		//				}
+		//				if(thetaZ != 0f)
+		//				{
+		//					result = RotateZ(result, thetaZ);
+		//				}
+		//				if(thetaY != 0f)
+		//				{
+		//					result = RotateY(result, thetaY);
+		//				}
+		//				break;
+		//			case AxisType.Z:
+		//			default:
+		//				if(thetaX != 0f)
+		//				{
+		//					result = RotateX(result, thetaX);
+		//				}
+		//				if(thetaY != 0f)
+		//				{
+		//					result = RotateY(result, thetaY);
+		//				}
+		//				if(thetaZ != 0f)
+		//				{
+		//					result = RotateZ(result, thetaZ);
+		//				}
+		//				break;
+		//		}
+		//	}
+		//	return result;
+		//}
+		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		///// <summary>
+		///// Rotate the 3D point by a specified angle, in radians.
+		///// </summary>
+		///// <param name="point">
+		///// Reference to the point to be rotated.
+		///// </param>
+		///// <param name="theta">
+		///// The angles around the X, Y, and Z axis by which to rotate the point, in
+		///// radians.
+		///// </param>
+		///// <param name="upAxis">
+		///// The optional 'up' direction axis used to help determine which axis is
+		///// yaw.
+		///// </param>
+		///// <returns>
+		///// The rotated 3D point, relative to 0,0,0.
+		///// </returns>
+		///// <remarks>
+		///// <para>
+		///// The order of rotations is Yaw, Pitch, Roll, with the UpDirection
+		///// helping to distinguish which axis is Yaw.
+		///// </para>
+		///// <para>
+		///// Yaw, pitch and roll are descriptions from the perspective of the pilot.
+		///// <list type="bullet">
+		///// <item>Yaw is left/right turning rotation with a constant
+		///// horizon.</item>
+		///// <item>Pitch is forward/back rotation.</item>
+		///// <item>Roll is wingtip left/right rotation.</item>
+		///// </list>
+		///// </para>
+		///// </remarks>
+		//public static FPoint3 Rotate(FPoint3 point,
+		//	FVector3 theta, AxisType upAxis = AxisType.Z)
+		//{
+		//	FPoint3 result = null;
+
+		//	if(point != null && theta != null)
+		//	{
+		//		result = Rotate(point, theta.X, theta.Y, theta.Z, upAxis);
+		//	}
+		//	return result;
+		//}
+		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
 		//*	Rotate																																*
@@ -241,24 +393,24 @@ namespace Geometry
 		/// <summary>
 		/// Rotate the 3D point by a specified angle, in radians.
 		/// </summary>
-		/// <param name="point">
-		/// Reference to the point to be rotated.
+		/// <param name="vector">
+		/// Reference to the vector to be rotated.
 		/// </param>
 		/// <param name="thetaX">
-		/// The angle around the X axis by which to rotate the point, in radians.
+		/// The angle around the X axis by which to rotate the vector, in radians.
 		/// </param>
 		/// <param name="thetaY">
-		/// The angle around the Y axis by which to rotate the point, in radians.
+		/// The angle around the Y axis by which to rotate the vector, in radians.
 		/// </param>
 		/// <param name="thetaZ">
-		/// The angle around the Z axis by which to rotate the point, in radians.
+		/// The angle around the Z axis by which to rotate the vector, in radians.
 		/// </param>
 		/// <param name="upAxis">
 		/// The optional 'up' direction axis used to help determine which axis is
 		/// yaw.
 		/// </param>
 		/// <returns>
-		/// The rotated 3D point, relative to 0,0,0.
+		/// The rotated 3D vector, relative to 0,0,0.
 		/// </returns>
 		/// <remarks>
 		/// <para>
@@ -275,15 +427,15 @@ namespace Geometry
 		/// </list>
 		/// </para>
 		/// </remarks>
-		public static FPoint3 Rotate(FPoint3 point,
+		public static FVector3 Rotate(FVector3 vector,
 			float thetaX, float thetaY, float thetaZ,
 			AxisType upAxis = AxisType.Z)
 		{
-			FPoint3 result = null;
+			FVector3 result = null;
 
-			if(point != null)
+			if(vector != null)
 			{
-				result = FPoint3.Clone(point);
+				result = FPoint3.Clone(vector);
 				switch(upAxis)
 				{
 					case AxisType.X:
@@ -337,19 +489,19 @@ namespace Geometry
 		/// <summary>
 		/// Rotate the 3D point by a specified angle, in radians.
 		/// </summary>
-		/// <param name="point">
-		/// Reference to the point to be rotated.
+		/// <param name="vector">
+		/// Reference to the vector to be rotated.
 		/// </param>
 		/// <param name="theta">
-		/// The angles around the X, Y, and Z axis by which to rotate the point, in
-		/// radians.
+		/// The angles around the X, Y, and Z axis by which to rotate the vector,
+		/// in radians.
 		/// </param>
 		/// <param name="upAxis">
 		/// The optional 'up' direction axis used to help determine which axis is
 		/// yaw.
 		/// </param>
 		/// <returns>
-		/// The rotated 3D point, relative to 0,0,0.
+		/// The rotated 3D vector, relative to 0,0,0.
 		/// </returns>
 		/// <remarks>
 		/// <para>
@@ -366,14 +518,14 @@ namespace Geometry
 		/// </list>
 		/// </para>
 		/// </remarks>
-		public static FPoint3 Rotate(FPoint3 point,
+		public static FVector3 Rotate(FVector3 vector,
 			FVector3 theta, AxisType upAxis = AxisType.Z)
 		{
-			FPoint3 result = null;
+			FVector3 result = null;
 
-			if(point != null && theta != null)
+			if(vector != null && theta != null)
 			{
-				result = Rotate(point, theta.X, theta.Y, theta.Z, upAxis);
+				result = Rotate(vector, theta.X, theta.Y, theta.Z, upAxis);
 			}
 			return result;
 		}
@@ -382,24 +534,24 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 		//*	RotateX																																*
 		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Rotate the point by the specified angle and return the new value to
-		/// the caller.
-		/// </summary>
-		/// <param name="point">
-		/// Point containing the source value to rotate.
-		/// </param>
-		/// <param name="theta">
-		/// The angle of rotation to apply to the axis, in radians.
-		/// </param>
-		/// <returns>
-		/// New point containing the rotated coordinates.
-		/// </returns>
-		public static FPoint3 RotateX(FPoint3 point, float theta)
-		{
-			return (FPoint3)RotateX((FVector3)point, theta);
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		///// <summary>
+		///// Rotate the point by the specified angle and return the new value to
+		///// the caller.
+		///// </summary>
+		///// <param name="point">
+		///// Point containing the source value to rotate.
+		///// </param>
+		///// <param name="theta">
+		///// The angle of rotation to apply to the axis, in radians.
+		///// </param>
+		///// <returns>
+		///// New point containing the rotated coordinates.
+		///// </returns>
+		//public static FPoint3 RotateX(FPoint3 point, float theta)
+		//{
+		//	return new FPoint3(RotateX((FVector3)point, theta));
+		//}
+		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
 		/// Rotate the vector by the specified angle and return the new value to
 		/// the caller.
@@ -441,24 +593,24 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 		//*	RotateY																																*
 		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Rotate the point by the specified angle and return the new value to
-		/// the caller.
-		/// </summary>
-		/// <param name="point">
-		/// Point containing the source value to rotate.
-		/// </param>
-		/// <param name="theta">
-		/// The angle of rotation to apply to the axis, in radians.
-		/// </param>
-		/// <returns>
-		/// New vector containing the rotated coordinates.
-		/// </returns>
-		public static FPoint3 RotateY(FPoint3 point, float theta)
-		{
-			return (FPoint3)RotateY((FVector3)point, theta);
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		///// <summary>
+		///// Rotate the point by the specified angle and return the new value to
+		///// the caller.
+		///// </summary>
+		///// <param name="point">
+		///// Point containing the source value to rotate.
+		///// </param>
+		///// <param name="theta">
+		///// The angle of rotation to apply to the axis, in radians.
+		///// </param>
+		///// <returns>
+		///// New vector containing the rotated coordinates.
+		///// </returns>
+		//public static FPoint3 RotateY(FPoint3 point, float theta)
+		//{
+		//	return new FPoint3(RotateY((FVector3)point, theta));
+		//}
+		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
 		/// Rotate the vector by the specified angle and return the new value to
 		/// the caller.
@@ -500,24 +652,24 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 		//*	RotateZ																																*
 		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Rotate the opint by the specified angle and return the new value to
-		/// the caller.
-		/// </summary>
-		/// <param name="point">
-		/// Point containing the source value to rotate.
-		/// </param>
-		/// <param name="theta">
-		/// The angle of rotation to apply to the axis, in radians.
-		/// </param>
-		/// <returns>
-		/// New vector containing the rotated coordinates.
-		/// </returns>
-		public static FPoint3 RotateZ(FPoint3 point, float theta)
-		{
-			return (FPoint3)RotateZ((FVector3)point, theta);
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		///// <summary>
+		///// Rotate the opint by the specified angle and return the new value to
+		///// the caller.
+		///// </summary>
+		///// <param name="point">
+		///// Point containing the source value to rotate.
+		///// </param>
+		///// <param name="theta">
+		///// The angle of rotation to apply to the axis, in radians.
+		///// </param>
+		///// <returns>
+		///// New vector containing the rotated coordinates.
+		///// </returns>
+		//public static FPoint3 RotateZ(FPoint3 point, float theta)
+		//{
+		//	return new FPoint3(RotateZ((FVector3)point, theta));
+		//}
+		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
 		/// Rotate the vector by the specified angle and return the new value to
 		/// the caller.
@@ -559,23 +711,23 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 		//*	Scale																																	*
 		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Scale a point by the specified translation.
-		/// </summary>
-		/// <param name="point">
-		/// Reference point.
-		/// </param>
-		/// <param name="scale">
-		/// Scale for the X and Y axes.
-		/// </param>
-		/// <returns>
-		/// Scaled point.
-		/// </returns>
-		public static FPoint Scale(FPoint point, FPoint scale)
-		{
-			return Scale((FVector2)point, (FVector2)scale);
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		///// <summary>
+		///// Scale a point by the specified translation.
+		///// </summary>
+		///// <param name="point">
+		///// Reference point.
+		///// </param>
+		///// <param name="scale">
+		///// Scale for the X and Y axes.
+		///// </param>
+		///// <returns>
+		///// Scaled point.
+		///// </returns>
+		//public static FPoint Scale(FPoint point, FPoint scale)
+		//{
+		//	return new FPoint(Scale((FVector2)point, (FVector2)scale));
+		//}
+		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
 		/// Scale a vector by the specified translation.
 		/// </summary>
@@ -596,10 +748,12 @@ namespace Geometry
 
 			if(point != null && scale != null)
 			{
-				matrix.Values[0, 0] = scale.Values[0];
-				matrix.Values[1, 1] = scale.Values[1];
+				matrix.Values[0, 0] = scale.X;
+				matrix.Values[1, 1] = scale.Y;
 				source = new FVector3();
-				source.Values = new float[] { point.Values[0], point.Values[1], 1f };
+				source.X = point.X;
+				source.Y = point.Y;
+				source.Z = 1f;
 				result = Multiply(matrix, source);
 			}
 			return result;
@@ -609,23 +763,23 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 		//*	Translate																															*
 		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Translate a point by the specified translation.
-		/// </summary>
-		/// <param name="point">
-		/// Reference point.
-		/// </param>
-		/// <param name="translation">
-		/// Distance by which to move the point.
-		/// </param>
-		/// <returns>
-		/// Translated point.
-		/// </returns>
-		public static FPoint Translate(FPoint point, FPoint translation)
-		{
-			return Translate((FVector2)point, (FVector2)translation);
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		///// <summary>
+		///// Translate a point by the specified translation.
+		///// </summary>
+		///// <param name="point">
+		///// Reference point.
+		///// </param>
+		///// <param name="translation">
+		///// Distance by which to move the point.
+		///// </param>
+		///// <returns>
+		///// Translated point.
+		///// </returns>
+		//public static FPoint Translate(FPoint point, FPoint translation)
+		//{
+		//	return new FPoint(Translate((FVector2)point, (FVector2)translation));
+		//}
+		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
 		/// Translate a vector by the specified translation.
 		/// </summary>
@@ -644,9 +798,11 @@ namespace Geometry
 			FVector3 result = new FVector3();
 			FVector3 source = new FVector3();
 
-			matrix.Values[0, 2] = translation.Values[0];
-			matrix.Values[1, 2] = translation.Values[1];
-			source.Values = new float[] { point.Values[0], point.Values[1], 1f };
+			matrix.Values[0, 2] = translation.X;
+			matrix.Values[1, 2] = translation.Y;
+			source.X = point.X;
+			source.Y = point.Y;
+			source.Z = 1f;
 			result = Multiply(matrix, source);
 			return result;
 		}
