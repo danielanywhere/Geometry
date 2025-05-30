@@ -43,6 +43,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.2530.4054 | Added the class **FRotation3** to specifically handle the concept of 3D Euler rotations. The new class is very similar to **FPoint3**. |
 | 25.2429.4547 | Repaired a bug in **Linear.Lerp(FVector3, FVector3)**; Breaking changes: **FloatPointEventArgs** now supports a list of axis tracking values, instead of the fixed properties X and Y. This allows any number of axis-related value events to be tracked. **FloatPoint3EventArgs** and **FloatPoint3EventHandler** have been replaced by **FloatPointEventArgs** and **FloatPointEventHandler**, respectively. **FVector3.DotProduct** has been renamed to **FVector3.Dot** to maintain naming consistency with other similar classes. |
 | 25.2422.4040 | Upgrades: **Camera3D** and **CameraOrtho** cameras now support change in view using the **CameraDistance** and **Rotation** properties, instead of **LookAt**. However, bear in mind that **LookAt** can also initially be used to accurately set **CameraDistance**; **FVector3.GetEulerAngle** function has been added; Error in **FVector3.GetDestPoint** has been repaired. |
 | 25.2414.4032 | Optimization: **Camera3D** ScaleX and ScaleY values are now only calculated when display information changes, reducing the total number of multiplications per vertex from 21 to 17 and the total number of divisions from 6 to 2. |

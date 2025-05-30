@@ -110,6 +110,9 @@ descriptor classes that can be used generically anywhere:
 -   **FPoint3**. A three-dimensional single precision floating-point
     coordinate.
 
+-   **FRotation3**. A three-dimensional single precision floating-point
+    rotation, similar to a point.
+
 -   **FScale**. A single floating-point scaling value.
 
 -   **FSize**. A single floating-point size.
