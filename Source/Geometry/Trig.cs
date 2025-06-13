@@ -1355,6 +1355,20 @@ namespace Geometry
 		/// <returns>
 		/// Degrees equivalent of the specified radians.
 		/// </returns>
+		public static float RadToDeg(double radians)
+		{
+			return (float)(radians * 57.2957795130823d);
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the degrees equivalent of the specified radian value.
+		/// </summary>
+		/// <param name="radians">
+		/// Radians to convert.
+		/// </param>
+		/// <returns>
+		/// Degrees equivalent of the specified radians.
+		/// </returns>
 		public static float RadToDeg(float radians)
 		{
 			return radians * 57.2957795130823f;

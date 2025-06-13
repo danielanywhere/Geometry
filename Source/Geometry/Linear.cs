@@ -89,9 +89,31 @@ namespace Geometry
 		/// The linear interpolated value between start and end as indicated by
 		/// the progress value.
 		/// </returns>
+		public static double Lerp(double start, double end, double progress)
+		{
+			return start * (1d - progress) + end * progress;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the linear interpolation of the scalar value between start and
+		/// end representing the specified progress as a value between 0 and 1.
+		/// </summary>
+		/// <param name="start">
+		/// The starting position.
+		/// </param>
+		/// <param name="end">
+		/// The ending position.
+		/// </param>
+		/// <param name="progress">
+		/// The progress of completion between the start and end values.
+		/// </param>
+		/// <returns>
+		/// The linear interpolated value between start and end as indicated by
+		/// the progress value.
+		/// </returns>
 		public static float Lerp(float start, float end, float progress)
 		{
-			return start * (1 - progress) + end * progress;
+			return start * (1f - progress) + end * progress;
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>

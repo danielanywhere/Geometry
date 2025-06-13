@@ -86,6 +86,22 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	_Indexer																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value from the specified row and column of the matrix.
+		/// </summary>
+		public float this[int row, int col]
+		{
+			get
+			{
+				return this[row, col];
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+
+		//*-----------------------------------------------------------------------*
 		//* * operator overload																										*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -103,6 +119,41 @@ namespace Geometry
 		public static FMatrix4 operator *(FMatrix4 a, FMatrix4 b)
 		{
 			return FMatrix4.Multiply(a, b);
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* ColumnToPoint																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a reference to a 3D point representing the values in the
+		/// specified column of the provided matrix.
+		/// </summary>
+		/// <param name="matrix">
+		/// Reference to the matrix containing the values to copy.
+		/// </param>
+		/// <param name="columnIndex">
+		/// 0-based ordinal index of the column to copy.
+		/// </param>
+		/// <returns>
+		/// Reference to a new single precision floating-point 3D point containing
+		/// values from the specified column, if the matrix and column were
+		/// legitimate. Otherwise, an empty FPoint3.
+		/// </returns>
+		public static FPoint3 ColumnToPoint(FMatrix4 matrix, int columnIndex)
+		{
+			FPoint3 result = new FPoint3();
+
+			if(matrix != null &&
+				matrix.mValues.GetLength(0) > 3 &&
+				matrix.mValues.GetLength(1) > 3 &&
+				columnIndex > -1 && columnIndex < 4)
+			{
+				result.X = matrix.mValues[0, columnIndex];
+				result.Y = matrix.mValues[1, columnIndex];
+				result.Z = matrix.mValues[2, columnIndex];
+			}
+			return result;
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -445,6 +496,66 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetRotationMatrixX																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a rotation matrix for rotation around the X axis.
+		/// </summary>
+		/// <param name="theta">
+		/// The angle by which to rotate.
+		/// </param>
+		/// <returns>
+		/// Reference to a rotation matrix, 
+		/// </returns>
+		public static FMatrix4 GetRotationMatrixX(float theta)
+		{
+			float ct = (float)Math.Cos((double)theta);
+			float st = (float)Math.Sin((double)theta);
+
+			//	X.
+			FMatrix4 result = new FMatrix4(new float[4, 4]
+			{
+				{ 1f, 0f, 0f, 0f },
+				{ 0f, ct, -st, 0f },
+				{ 0f, st, ct, 0f },
+				{ 0f, 0f, 0f, 1f }
+			});
+
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetRotationMatrixY																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a rotation matrix for rotation around the Y axis.
+		/// </summary>
+		/// <param name="theta">
+		/// The angle by which to rotate.
+		/// </param>
+		/// <returns>
+		/// Reference to a rotation matrix, 
+		/// </returns>
+		public static FMatrix4 GetRotationMatrixY(float theta)
+		{
+			float ct = (float)Math.Cos((double)theta);
+			float st = (float)Math.Sin((double)theta);
+
+			//	Y.
+			FMatrix4 result = new FMatrix4(new float[4, 4]
+			{
+				{ ct, 0f, st, 0f },
+				{ 0f, 1f, 0f, 0f },
+				{ -st, 0f, ct, 0f },
+				{ 0f, 0f, 0f, 1f }
+			});
+
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* GetRotationMatrixYawPitchRoll
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -524,6 +635,36 @@ namespace Geometry
 					result = Multiply(Multiply(yMatrix, xMatrix), zMatrix);
 					break;
 			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetRotationMatrixZ																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a rotation matrix for rotation around the Z axis.
+		/// </summary>
+		/// <param name="theta">
+		/// The angle by which to rotate.
+		/// </param>
+		/// <returns>
+		/// Reference to a rotation matrix, 
+		/// </returns>
+		public static FMatrix4 GetRotationMatrixZ(float theta)
+		{
+			float ct = (float)Math.Cos((double)theta);
+			float st = (float)Math.Sin((double)theta);
+
+			//	Z.
+			FMatrix4 result = new FMatrix4(new float[4, 4]
+			{
+				{ ct, -st, 0f, 0f },
+				{ st, ct, 0f, 0f },
+				{ 0f, 0f, 1f, 0f },
+				{ 0f, 0f, 0f, 1f }
+			});
+
 			return result;
 		}
 		//*-----------------------------------------------------------------------*
@@ -769,6 +910,41 @@ namespace Geometry
 					outputValues[row] = value;
 				}
 				FVector4.SetArray(result, outputValues);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* RowToPoint																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a reference to a 3D point representing the values in the
+		/// specified row of the provided matrix.
+		/// </summary>
+		/// <param name="matrix">
+		/// Reference to the matrix containing the values to copy.
+		/// </param>
+		/// <param name="rowIndex">
+		/// 0-based ordinal index of the row to copy.
+		/// </param>
+		/// <returns>
+		/// Reference to a new single precision floating-point 3D point containing
+		/// values from the specified column, if the matrix and column were
+		/// legitimate. Otherwise, an empty FPoint3.
+		/// </returns>
+		public static FPoint3 RowToPoint(FMatrix4 matrix, int rowIndex)
+		{
+			FPoint3 result = new FPoint3();
+
+			if(matrix != null &&
+				matrix.mValues.GetLength(0) > 3 &&
+				matrix.mValues.GetLength(1) > 3 &&
+				rowIndex > -1 && rowIndex < 4)
+			{
+				result.X = matrix.mValues[rowIndex, 0];
+				result.Y = matrix.mValues[rowIndex, 1];
+				result.Z = matrix.mValues[rowIndex, 2];
 			}
 			return result;
 		}

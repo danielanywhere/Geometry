@@ -110,6 +110,12 @@ descriptor classes that can be used generically anywhere:
 -   **FPoint3**. A three-dimensional single precision floating-point
     coordinate.
 
+-   **FQuaternion**. A quaternion rotation, complete with FromAxisAngle
+    / ToAxisAngle, FromEuler / ToEuler (ZYX order), FromPitchRollYaw /
+    ToPitchRollYaw (XYZ order), both Lerp and Slerp, Multiplication,
+    Division, Dot Product and all of the other methods and functionality
+    you would expect.
+
 -   **FRotation3**. A three-dimensional single precision floating-point
     rotation, similar to a point.
 

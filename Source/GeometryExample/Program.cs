@@ -805,6 +805,531 @@ namespace GeometryExample
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* TestQuaternionAdd																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test quaternion addition.
+		/// </summary>
+		private static void TestQuaternionAdd()
+		{
+			FQuaternion q1 = new FQuaternion(0.813f, 0.355f, 0.377f, 0.266f);
+			FQuaternion q2 = new FQuaternion(0.339f, 0.352f, 0.140f, 0.861f);
+			FQuaternion q3 = FQuaternion.Add(q1, q2);
+
+			Console.WriteLine("** Testing Quaternion Addition **");
+			Console.WriteLine($"{q1} +\r\n{q2} =\r\n{q3}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionClone																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test quaternion clone.
+		/// </summary>
+		private static void TestQuaternionClone()
+		{
+			FQuaternion q1 = new FQuaternion(0.596f, 0.007f, 0.380f, 0.707f);
+			FQuaternion q2 = FQuaternion.Clone(q1);
+
+			Console.WriteLine("** Testing Quaternion Cloning **");
+			Console.WriteLine($"Original:     {q1}");
+			Console.WriteLine($"Clone:        {q2}");
+			q1.X = 0.5741f;
+			q1.Y = 0.6036f;
+			q1.Z = 0.3831f;
+			q1.W = 0.3992f;
+			Console.WriteLine($"Orig Changed: {q1}");
+			Console.WriteLine($"Clone:        {q2}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionConcatenate																							*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test quaternion concatenate.
+		/// </summary>
+		private static void TestQuaternionConcatenate()
+		{
+			FQuaternion q1 = new FQuaternion(0.610f, 0.357f, 0.538f, 0.460f);
+			FQuaternion q2 = new FQuaternion(0.355f, 0.574f, 0.640f, 0.367f);
+			FQuaternion q3 = FQuaternion.Concatenate(q1, q2);
+
+			Console.WriteLine("** Testing Quaternion Concatenation **");
+			Console.WriteLine($"{q1} cat\r\n{q2} =\r\n{q3}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionConjugate																								*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test quaternion conjugate.
+		/// </summary>
+		private static void TestQuaternionConjugate()
+		{
+			FQuaternion q1 = new FQuaternion(0.375f, 0.436f, 0.334f, 0.747f);
+			FQuaternion q2 = FQuaternion.Conjugate(q1);
+
+			Console.WriteLine("** Testing Quaternion Conjugation **");
+			Console.WriteLine($"{q1} conjugated =\r\n{q2}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionDivide																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test quaternion division.
+		/// </summary>
+		private static void TestQuaternionDivide()
+		{
+			FQuaternion q1 = new FQuaternion(0.667f, 0.430f, 0.002f, 0.608f);
+			FQuaternion q2 = new FQuaternion(0.815f, 0.517f, 0.058f, 0.255f);
+			FQuaternion q3 = FQuaternion.Divide(q1, q2);
+
+			Console.WriteLine("** Testing Quaternion Division **");
+			Console.WriteLine($"{q1} /\r\n{q2} =\r\n{q3}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionDot																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test quaternion dot product.
+		/// </summary>
+		private static void TestQuaternionDot()
+		{
+			FQuaternion q1 = new FQuaternion(0.608f, 0.249f, 0.753f, 0.036f);
+			FQuaternion q2 = new FQuaternion(0.673f, 0.648f, 0.351f, 0.069f);
+			float dot = FQuaternion.Dot(q1, q2);
+
+			Console.WriteLine("** Testing Quaternion Dot Product'ing **");
+			Console.WriteLine($"{q1} dot\r\n{q2} =\r\n{dot:0.000}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionEquals																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test equality of two quaternions.
+		/// </summary>
+		private static void TestQuaternionEquals()
+		{
+			FQuaternion q1 = new FQuaternion(0.503f, 0.557f, 0.620f, 0.231f);
+			FQuaternion q2 = new FQuaternion(0.503f, 0.557f, 0.620f, 0.231f);
+
+			Console.WriteLine("** Testing Quaternion Equivalency **");
+			Console.WriteLine($"{q1} ==\r\n{q2} ?\r\n{q1.Equals(q2)}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionFromAxisAngle																						*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test new quaternion from axis angle.
+		/// </summary>
+		private static void TestQuaternionFromAxisAngle()
+		{
+			float angle = Trig.DegToRad(90f);
+			FVector3 v1 = new FVector3(1f, 0f, 0f);
+			FVector4 v2 = null;
+			FQuaternion q1 = FQuaternion.FromAxisAngle(v1, angle);
+
+			Console.WriteLine("** Testing Quaternion From Axis Angle **");
+			Console.WriteLine($"Vector: {v1}, Angle: {angle:0.000} ->\r\n{q1}");
+			Console.WriteLine("Expecting above: X:0.707, Y:0, Z:0, W:0.707");
+			v2 = FQuaternion.ToAxisAngle(q1);
+			Console.WriteLine($"Translated Back (Angle in W): {v2}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionFromEuler																								*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test new quaternion from Tait-Euler rotation.
+		/// </summary>
+		private static void TestQuaternionFromEuler()
+		{
+			FVector3 v1 = new FVector3(0f, Trig.DegToRad(45f), Trig.DegToRad(45f));
+			FQuaternion q1 = FQuaternion.FromEuler(v1);
+
+			Console.WriteLine("** Testing Quaternion From Euler Rotation (ZYX) **");
+			Console.WriteLine($"Vector: {v1} ->\r\n{q1}");
+			v1 = FQuaternion.ToEuler(q1);
+			Console.WriteLine($"Converted back to Euler: {v1}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		////*-----------------------------------------------------------------------*
+		////* TestQuaternionFromMatrix																							*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Test new quaternion from 4x4 matrix.
+		///// </summary>
+		//private static void TestQuaternionFromMatrix()
+		//{
+		//	Console.WriteLine("** Testing Quaternion From Matrix **");
+		//}
+		////*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionFromPitchRollYaw																				*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test new quaternion from pitch, roll, and yaw (XYZ order).
+		/// </summary>
+		private static void TestQuaternionFromPitchRollYaw()
+		{
+			float fP = Trig.DegToRad(45f);
+			float fR = Trig.DegToRad(45f);
+			float fY = Trig.DegToRad(0f);
+			FQuaternion q1 = FQuaternion.FromPitchRollYaw(fP, fR, fY);
+			FVector3 v1 = null;
+
+			Console.WriteLine(
+				"** Testing Quaternion From Pitch, Roll, Yaw (XYZ) **");
+			Console.WriteLine($"PRY: {fP:0.000},{fR:0.000},{fY:0.000} ->\r\n{q1}");
+			v1 = FQuaternion.ToPitchRollYaw(q1);
+			Console.WriteLine($"Converted back to PRY: {v1}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionFromXRotation																						*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test new quaternion from an X-only rotation.
+		/// </summary>
+		private static void TestQuaternionFromXRotation()
+		{
+			float angle = Trig.DegToRad(20f);
+			FQuaternion q1 = FQuaternion.FromXRotation(angle);
+			FVector3 v1 = null;
+
+			Console.WriteLine("** Testing Quaternion From X Rotation **");
+			Console.WriteLine($"Angle: {angle:0.000} ->\r\n{q1}");
+			v1 = FQuaternion.ToEuler(q1);
+			Console.WriteLine($"Converted back: {v1}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionFromYRotation																						*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test new quaternion from a Y-only rotation.
+		/// </summary>
+		private static void TestQuaternionFromYRotation()
+		{
+			float angle = Trig.DegToRad(30f);
+			FQuaternion q1 = FQuaternion.FromYRotation(angle);
+			FVector3 v1 = null;
+
+			Console.WriteLine("** Testing Quaternion From Y Rotation **");
+			Console.WriteLine($"Angle: {angle:0.000} ->\r\n{q1}");
+			v1 = FQuaternion.ToEuler(q1);
+			Console.WriteLine($"Converted back: {v1}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionFromZRotation																						*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test new quaternion from a Z-only rotation.
+		/// </summary>
+		private static void TestQuaternionFromZRotation()
+		{
+			float angle = Trig.DegToRad(40f);
+			FQuaternion q1 = FQuaternion.FromZRotation(angle);
+			FVector3 v1 = null;
+
+			Console.WriteLine("** Testing Quaternion From Z Rotation **");
+			Console.WriteLine($"Angle: {angle:0.000} ->\r\n{q1}");
+			v1 = FQuaternion.ToEuler(q1);
+			Console.WriteLine($"Converted back: {v1}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionInverse																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test inversion of quaternions.
+		/// </summary>
+		private static void TestQuaternionInverse()
+		{
+			FQuaternion q1 = new FQuaternion(0.161f, 0.032f, 0.056f, 0.963f);
+			FQuaternion q2 = FQuaternion.Inverse(q1);
+
+			Console.WriteLine("** Testing Quaternion Inverse **");
+			Console.WriteLine($"{q1} inverse =\r\n{q2}\r\n");
+
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionIsIdentity																							*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test identity indication on a quaternion.
+		/// </summary>
+		private static void TestQuaternionIsIdentity()
+		{
+			FQuaternion q1 = new FQuaternion(0.434f, 0.630f, 0.397f, 0.507f);
+
+			Console.WriteLine("** Testing if Quaternion Is Identity **");
+			Console.WriteLine($"{q1} identity? {FQuaternion.IsIdentity(q1)}");
+			FQuaternion.SetIdentity(q1);
+			Console.WriteLine($"{q1} identity? {FQuaternion.IsIdentity(q1)}\r\n");
+
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionLength																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test quaternion length (magnitude).
+		/// </summary>
+		private static void TestQuaternionLength()
+		{
+			float fL = 0f;
+			FQuaternion q1 = new FQuaternion(0.393f, 0.432f, 0.511f, 0.677f);
+
+			fL = FQuaternion.Length(q1);
+
+			Console.WriteLine("** Testing Quaternion Length **");
+			Console.WriteLine($"{q1} length (expecting ~ 1.03) =\r\n{fL:0.000}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionLerp																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test linear interpolation on quaternions.
+		/// </summary>
+		private static void TestQuaternionLerp()
+		{
+			float fP = 0.5f;
+			FQuaternion q1 = new FQuaternion(0.226f, 0.342f, 0.430f, 0.902f);
+			FQuaternion q2 = new FQuaternion(0.185f, 0.384f, 0.343f, 0.625f);
+			FQuaternion q3 = FQuaternion.Lerp(q1, q2, fP);
+
+			Console.WriteLine("** Testing Quaternion Lerp **");
+			Console.WriteLine($"{q1} lerp {fP:0.0} ->\r\n{q2} =\r\n{q3}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionMagnitudeSquared																				*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test quaternion magnitude squared.
+		/// </summary>
+		private static void TestQuaternionMagnitudeSquared()
+		{
+			FQuaternion q1 = new FQuaternion(0.374f, 0.546f, 0.938f, 0.522f);
+			float fM = FQuaternion.MagnitudeSquared(q1);
+
+			Console.WriteLine("** Testing Quaternion Magnitude Squared **");
+			Console.WriteLine($"{q1} m2 = {fM:0.000}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionMultiply																								*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test quaternion multiplication.
+		/// </summary>
+		private static void TestQuaternionMultiply()
+		{
+			FQuaternion q1 = new FQuaternion(0.315f, 0.926f, 0.690f, 0.428f);
+			FQuaternion q2 = new FQuaternion(0.205f, 0.105f, 0.222f, 0.246f);
+			FQuaternion q3 = FQuaternion.Multiply(q1, q2);
+
+			Console.WriteLine("** Testing Quaternion Multiplication **");
+			Console.WriteLine($"{q1} X\r\n{q2} =\r\n{q3}\r\n");
+
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionNegate																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test negation on quaternions.
+		/// </summary>
+		private static void TestQuaternionNegate()
+		{
+			FQuaternion q1 = new FQuaternion(0.300f, 0.500f, 0.609f, 0.599f);
+			FQuaternion q2 = FQuaternion.Negate(q1);
+
+			Console.WriteLine("** Testing Quaternion Negation **");
+			Console.WriteLine($"{q1} negated =\r\n{q2}\r\n");
+
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionNormalize																								*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test normalization on quaternions.
+		/// </summary>
+		private static void TestQuaternionNormalize()
+		{
+			FQuaternion q1 = new FQuaternion(0.545f, 0.269f, 0.830f, 0.223f);
+			FQuaternion q2 = FQuaternion.Normalize(q1);
+
+			Console.WriteLine("** Testing Quaternion Normalization **");
+			Console.WriteLine($"{q1} normalized =\r\n{q2}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		////*-----------------------------------------------------------------------*
+		////* TestQuaternionRotate																									*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Test rotation on quaternions.
+		///// </summary>
+		//private static void TestQuaternionRotate()
+		//{
+		//	Console.WriteLine("** Testing Quaternion Rotation **");
+		//}
+		////*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionSet																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test setting quaternion values.
+		/// </summary>
+		private static void TestQuaternionSet()
+		{
+			FQuaternion q1 = new FQuaternion(0.139f, 0.049f, 0.579f, 0.059f);
+
+			Console.WriteLine("** Testing Quaternion Set Values **");
+			Console.WriteLine($"Starting value: {q1}");
+			Console.WriteLine($"Setting to: {0.225f},{0.041f},{0.292f},{0.911f}");
+			FQuaternion.Set(q1, 0.225f, 0.041f, 0.292f, 0.911f);
+			Console.WriteLine($"After set:      {q1}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+			//*-----------------------------------------------------------------------*
+			//* TestQuaternionSetIdentity																							*
+			//*-----------------------------------------------------------------------*
+			/// <summary>
+			/// Test setting quaternion to identity value.
+			/// </summary>
+		private static void TestQuaternionSetIdentity()
+		{
+			FQuaternion q1 = new FQuaternion(0.067f, 0.917f, 0.428f, 0.377f);
+
+			Console.WriteLine("** Testing Quaternion Identity Set **");
+			Console.WriteLine($"Before reset: {q1}");
+			FQuaternion.SetIdentity(q1);
+			Console.WriteLine($"After reset:  {q1}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionSLerp																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test spherical linear interpolation on quaternions.
+		/// </summary>
+		private static void TestQuaternionSLerp()
+		{
+			float fP = 0.5f;
+			FQuaternion q1 = new FQuaternion(0.489f, 0.428f, 0.007f, 0.396f);
+			FQuaternion q2 = new FQuaternion(0.430f, 0.269f, 1.000f, 0.015f);
+			FQuaternion q3 = FQuaternion.Lerp(q1, q2, fP);
+
+			Console.WriteLine("** Testing Quaternion SLerp **");
+			Console.WriteLine($"{q1} slerp {fP:0.0} ->\r\n{q2} =\r\n{q3}\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionSubtract																								*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test subtraction on quaternions.
+		/// </summary>
+		private static void TestQuaternionSubtract()
+		{
+			FQuaternion q1 = new FQuaternion(0.762f, 0.767f, 0.981f, 0.159f);
+			FQuaternion q2 = new FQuaternion(0.168f, 0.735f, 0.242f, 0.902f);
+			FQuaternion q3 = FQuaternion.Subtract(q1, q2);
+
+			Console.WriteLine("** Testing Quaternion Subtraction **");
+			Console.WriteLine($"{q1} -\r\n{q2} =\r\n{q3}\r\n");
+
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestQuaternionToAxisAngle																							*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test creating a vector direction axis and an angle on a quaternion.
+		/// </summary>
+		private static void TestQuaternionToAxisAngle()
+		{
+			FQuaternion q1 = new FQuaternion(0.707f, 0f, 0f, 0.707f);
+			FVector4 v4 = FQuaternion.ToAxisAngle(q1);
+
+			Console.WriteLine("** Testing Quaternion To Axis Angle **");
+			Console.WriteLine($"Axis angle of {q1} =\r\n{v4}");
+			Console.WriteLine("Expecting above: X:1.000, Y:0, Z:0, W:1.571\r\n");
+		}
+		//*-----------------------------------------------------------------------*
+
+		////*-----------------------------------------------------------------------*
+		////* TestQuaternionToEuler																									*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Test creating Tait-Euler rotation vectors with ZYX ordering on
+		///// quaternions.
+		///// </summary>
+		//private static void TestQuaternionToEuler()
+		//{
+		//	FQuaternion q1 = new FQuaternion(0.402f, 0.970f, 0.801f, 0.855f);
+		//	FVector3 v3 = FQuaternion.ToEuler(q1);
+
+		//	Console.WriteLine("** Testing Quaternion To Euler Rotation (ZYX) **");
+		//	Console.WriteLine($"{q1} to euler =\r\n{v3:0.000}\r\n");
+		//}
+		////*-----------------------------------------------------------------------*
+
+		////*-----------------------------------------------------------------------*
+		////* TestQuaternionToPitchRollYaw																					*
+		////*-----------------------------------------------------------------------*
+		///// <summary>
+		///// Test creating Tait-Euler rotation vectors with XYZ ordering on
+		///// quaternions.
+		///// </summary>
+		//private static void TestQuaternionToPitchRollYaw()
+		//{
+		//	FQuaternion q1 = new FQuaternion(0.951f, 0.004f, 0.742f, 0.148f);
+		//	FVector3 v3 = FQuaternion.ToPitchRollYaw(q1);
+
+		//	Console.WriteLine("** Testing Quaternion To Euler Rotation (XYZ) **");
+		//	Console.WriteLine($"{q1} to pitch,roll,yaw =\r\n{v3:0.000}\r\n");
+		//}
+		////*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* TestShapeVertices																											*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -1079,6 +1604,44 @@ namespace GeometryExample
 			List<FPoint> points = null;
 			float time = 0f;
 			int index = 0;
+
+			//	Quaternions.
+			TestQuaternionAdd();
+			TestQuaternionClone();
+			TestQuaternionConcatenate();
+			TestQuaternionConjugate();
+			TestQuaternionDivide();
+			TestQuaternionDot();
+			TestQuaternionEquals();
+			TestQuaternionFromAxisAngle();
+			TestQuaternionFromEuler();
+			//	Not yet implemented.
+			//TestQuaternionFromMatrix();
+			TestQuaternionFromPitchRollYaw();
+			TestQuaternionFromXRotation();
+			TestQuaternionFromYRotation();
+			TestQuaternionFromZRotation();
+			TestQuaternionInverse();
+			TestQuaternionIsIdentity();
+			TestQuaternionLength();
+			TestQuaternionLerp();
+			TestQuaternionMagnitudeSquared();
+			TestQuaternionMultiply();
+			TestQuaternionNegate();
+			TestQuaternionNormalize();
+			//	Not yet implemented.
+			//TestQuaternionRotate();
+			TestQuaternionSet();
+			TestQuaternionSetIdentity();
+			TestQuaternionSLerp();
+			TestQuaternionSubtract();
+			TestQuaternionToAxisAngle();
+			//	The following two items are tested inline with the FromX variations.
+			//TestQuaternionToEuler();
+			//TestQuaternionToPitchRollYaw();
+
+
+
 
 			//	Test Camera3D rotation mode.
 			Test3DRotationMode();

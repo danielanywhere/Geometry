@@ -1923,6 +1923,35 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* Set																																		*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Set the values of the specified vector using an abbreviated method.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to set.
+		/// </param>
+		/// <param name="x">
+		/// X value.
+		/// </param>
+		/// <param name="y">
+		/// Y value.
+		/// </param>
+		/// <param name="z">
+		/// Z value.
+		/// </param>
+		public static void Set(FVector3 vector, float x, float y, float z)
+		{
+			if(vector != null)
+			{
+				vector.mX = x;
+				vector.mY = y;
+				vector.mZ = z;
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* SetArray																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

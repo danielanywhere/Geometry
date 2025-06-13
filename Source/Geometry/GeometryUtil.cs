@@ -100,6 +100,55 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* CopySign																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a floating-point value with the magnitude of its first argument
+		/// and the sign of its second argument
+		/// </summary>
+		/// <param name="magnitude">
+		/// The magnitude to use.
+		/// </param>
+		/// <param name="sign">
+		/// The sign to use.
+		/// </param>
+		/// <returns>
+		/// The caller's magnitude, in the indicated sign.
+		/// </returns>
+		public static double CopySign(double magnitude, double sign)
+		{
+			return Math.Abs(magnitude) * (sign >= 0d ? 1d : -1d);
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return a floating-point value with the magnitude of its first argument
+		/// and the sign of its second argument
+		/// </summary>
+		/// <param name="magnitude">
+		/// The magnitude to use.
+		/// </param>
+		/// <param name="sign">
+		/// The sign to use.
+		/// </param>
+		/// <returns>
+		/// The caller's magnitude, in the indicated sign.
+		/// </returns>
+		public static float CopySign(float magnitude, float sign)
+		{
+			return (float)(Math.Abs((double)magnitude) * (sign >= 0f ? 1d : -1d));
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Epsilon																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// The smallest practical number in this version.
+		/// </summary>
+		public static readonly float Epsilon = 1e-6f;
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* GetValue																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
