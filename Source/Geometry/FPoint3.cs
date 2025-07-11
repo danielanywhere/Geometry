@@ -546,9 +546,18 @@ namespace Geometry
 
 			if(point != null)
 			{
-				result.mX = 0f - point.mX;
-				result.mY = 0f - point.mY;
-				result.mZ = 0f - point.mZ;
+				if(point.mX != 0f)
+				{
+					result.mX = 1f / point.mX;
+				}
+				if(point.mY != 0f)
+				{
+					result.mY = 1f / point.mY;
+				}
+				if(point.mZ != 0f)
+				{
+					result.mZ = 1f / point.mZ;
+				}
 			}
 			return result;
 		}
@@ -579,6 +588,32 @@ namespace Geometry
 				result.X = (pointA.X + pointB.X) / 2f;
 				result.Y = (pointA.Y + pointB.Y) / 2f;
 				result.Z = (pointA.Z + pointB.Z) / 2f;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Negate																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Negate the values of the caller's coordinate.
+		/// </summary>
+		/// <param name="point">
+		/// Reference to the point to be negated.
+		/// </param>
+		/// <returns>
+		/// Reference to the caller's point with negated values.
+		/// </returns>
+		public static FPoint3 Negate(FPoint3 point)
+		{
+			FPoint3 result = new FPoint3();
+
+			if (point != null)
+			{
+				result.mX = 0f - point.mX;
+				result.mY = 0f - point.mY;
+				result.mZ = 0f - point.mZ;
 			}
 			return result;
 		}

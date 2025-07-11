@@ -221,6 +221,75 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	NormalizeAngleDegrees																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the normalized representation of an angle within one full sweep
+		/// of 360 degrees.
+		/// </summary>
+		/// <param name="degrees">
+		/// The angle to normalize, in degrees.
+		/// </param>
+		/// <returns>
+		/// Representation of the caller's angle, normalized to one full sweep,
+		/// in degrees.
+		/// </returns>
+		public static float NormalizeAngleDegrees(float degrees)
+		{
+			float result = degrees;
+
+			while(result >= 360f)
+			{
+				result -= 360f;
+			}
+			while(result < 0)
+			{
+				result += 360f;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	NormalizeAngleRadians																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the normalized representation of an angle within one full sweep
+		/// of 360 degrees.
+		/// </summary>
+		/// <param name="radians">
+		/// The angle to normalize, in radians.
+		/// </param>
+		/// <returns>
+		/// Representation of the caller's angle, normalized to one full sweep,
+		/// in radians.
+		/// </returns>
+		public static float NormalizeAngleRadians(float radians)
+		{
+			float result = radians;
+
+			while(result >= TwoPi)
+			{
+				result -= TwoPi;
+			}
+			while(result < 0)
+			{
+				result += TwoPi;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* OnePi																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Session-wide reusable PI value.
+		/// </summary>
+		public static readonly float OnePi = (float)Math.PI;
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* ReverseSourcePolarity																									*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -445,6 +514,35 @@ namespace Geometry
 		public static readonly float TwoPi = (float)(Math.PI * 2f);
 		//*-----------------------------------------------------------------------*
 
+		//*-----------------------------------------------------------------------*
+		//* ZeroCenterDegrees																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a representation of the caller's angle where zero is the center.
+		/// </summary>
+		/// <param name="angle">
+		/// The angle to convert, centered at 180 degrees.
+		/// </param>
+		/// <returns>
+		/// The caller's angle, in degrees, where zero is the center and the
+		/// extents are +180/-180.
+		/// </returns>
+		public static float ZeroCenterDegrees(float angle)
+		{
+			float result = NormalizeAngleDegrees(angle);
+
+			//	Limit the original angle.
+			if(result > 180f)
+			{
+				result = 0f - (360f - result);
+			}
+			else if(result < -180f)
+			{
+				result += 360f;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
 
 	}
 	//*-------------------------------------------------------------------------*

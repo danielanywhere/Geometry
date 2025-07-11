@@ -205,7 +205,7 @@ namespace Geometry
 				workingPath = FPath.Clone(path);
 				center = GetCenter(workingPath);
 				//	Translate to origin.
-				Translate(workingPath, FPoint.Invert(center));
+				Translate(workingPath, FPoint.Negate(center));
 				//	Rotate and translate back.
 				foreach(FPoint pointItem in workingPath)
 				{

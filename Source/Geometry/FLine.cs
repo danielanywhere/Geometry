@@ -44,14 +44,37 @@ namespace Geometry
 		//*	_Constructor																													*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Create a new Instance of the FLine Item.
+		/// Create a new instance of the FLine item.
 		/// </summary>
 		public FLine()
 		{
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
-		/// Create a new Instance of the FLine Item.
+		/// Create a new instance of the FLine item.
+		/// </summary>
+		/// <param name="x1">
+		/// X coordinate of the first point.
+		/// </param>
+		/// <param name="y1">
+		/// Y coordinate of the first point.
+		/// </param>
+		/// <param name="x2">
+		/// X coordinate of the second point.
+		/// </param>
+		/// <param name="y2">
+		/// Y coordinate of the second point.
+		/// </param>
+		public FLine(float x1, float y1, float x2, float y2)
+		{
+			mPointA.X = x1;
+			mPointA.Y = y1;
+			mPointB.X = x2;
+			mPointB.Y = y2;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Create a new instance of the FLine item.
 		/// </summary>
 		/// <param name="pointA">
 		/// Reference to the first point in the new line.
@@ -96,6 +119,34 @@ namespace Geometry
 				result.mPointA.Y = source.mPointA.Y;
 				result.mPointB.X = source.mPointB.X;
 				result.mPointB.Y = source.mPointB.Y;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetCenter																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the center point of the specified line.
+		/// </summary>
+		/// <param name="line">
+		/// Reference to the line to be inspected.
+		/// </param>
+		/// <returns>
+		/// Reference to the center point of the provided line, if legitimate.
+		/// Otherwise, null.
+		/// </returns>
+		public static FPoint GetCenter(FLine line)
+		{
+			FPoint result = null;
+
+			if(line != null)
+			{
+				result = new FPoint(
+					line.mPointA.X + ((line.mPointB.X - line.mPointA.X) / 2f),
+					line.mPointA.Y + ((line.mPointB.Y - line.mPointA.Y) / 2f)
+					);
 			}
 			return result;
 		}
@@ -303,7 +354,7 @@ namespace Geometry
 							((workingLine.mPointB.Y - workingLine.mPointA.Y) / 2f));
 					location = FPoint.Clone(workingLine.mPointA);
 					//	Translate to origin.
-					Translate(workingLine, FPoint.Invert(center));
+					Translate(workingLine, FPoint.Negate(center));
 					//	Rotate and translate back.
 					point = FPoint.Rotate(workingLine.mPointA, rotation);
 					FPoint.Translate(point, center);
@@ -862,6 +913,101 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* Scale																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the scale of the two lines.
+		/// </summary>
+		/// <param name="newLine">
+		/// Reference to the new line (numerator).
+		/// </param>
+		/// <param name="oldLine">
+		/// Reference to the old or original line (denominator).
+		/// </param>
+		/// <returns>
+		/// Reference to the newly created scale containing the scaling factor
+		/// between the caller's two lines.
+		/// </returns>
+		public static FScale Scale(FLine newLine, FLine oldLine)
+		{
+			float newHeight = 0f;
+			float newWidth = 0f;
+			float oldHeight = 0f;
+			float oldWidth = 0f;
+			FScale result = new FScale();
+
+			if(newLine != null && oldLine != null)
+			{
+				newWidth = newLine.mPointB.X - newLine.mPointA.X;
+				newHeight = newLine.mPointB.Y - newLine.mPointA.Y;
+				oldWidth = oldLine.mPointB.X - oldLine.mPointA.X;
+				oldHeight = oldLine.mPointB.Y - oldLine.mPointA.Y;
+				if(oldWidth != 0f)
+				{
+					result.ScaleX = newWidth / oldWidth;
+				}
+				if(oldHeight != 0f)
+				{
+					result.ScaleY = newHeight / oldHeight;
+				}
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the scaled version of the provided line with the specified
+		/// scale.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the reference line.
+		/// </param>
+		/// <param name="scale">
+		/// The scale to apply to the caller's line.
+		/// </param>
+		/// <returns>
+		/// The representation of the caller's line, where the specified scale
+		/// has been applied.
+		/// </returns>
+		public static FLine Scale(FLine source, float scale)
+		{
+			FLine result = new FLine();
+
+			if(source != null)
+			{
+				result.mPointA = FPoint.Scale(source.mPointA, scale);
+				result.mPointB = FPoint.Scale(source.mPointB, scale);
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the scaled version of the provided line with the specified
+		/// scale.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the reference line.
+		/// </param>
+		/// <param name="scale">
+		/// The scale to apply to the caller's line.
+		/// </param>
+		/// <returns>
+		/// The representation of the caller's line, where the specified scale
+		/// has been applied.
+		/// </returns>
+		public static FLine Scale(FLine source, FScale scale)
+		{
+			FLine result = new FLine();
+
+			if(source != null && scale != null)
+			{
+				result.mPointA = FPoint.Scale(source.mPointA, scale.ScaleX);
+				result.mPointB = FPoint.Scale(source.mPointB, scale.ScaleY);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	TransferValues																												*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -948,7 +1094,7 @@ namespace Geometry
 						angle -= HalfPi;
 						break;
 				}
-				point = Trig.GetDestPoint(target.mPointA, angle, offset);
+				point = (FPoint)Trig.GetDestPoint(target.mPointA, angle, offset);
 				Translate(target, FPoint.Delta(point, target.mPointA));
 			}
 		}

@@ -143,6 +143,10 @@ namespace Geometry
 		protected virtual void OnCenterChanged(FloatPointEventArgs e)
 		{
 			CenterChanged?.Invoke(this, e);
+			if(e != null)
+			{
+				OnShapeChanged(e);
+			}
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -158,7 +162,14 @@ namespace Geometry
 		/// </param>
 		protected virtual void OnRadiusXChanged(FloatEventArgs e)
 		{
+			FloatPointEventArgs fpe = null;
+
 			RadiusXChanged?.Invoke(this, e);
+			if(e != null)
+			{
+				fpe = new FloatPointEventArgs("RadiusX", e.NewValue, e.OriginalValue);
+				OnShapeChanged(fpe);
+			}
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -174,7 +185,53 @@ namespace Geometry
 		/// </param>
 		protected virtual void OnRadiusYChanged(FloatEventArgs e)
 		{
+			FloatPointEventArgs fpe = null;
+
 			RadiusYChanged?.Invoke(this, e);
+			if(e != null)
+			{
+				fpe = new FloatPointEventArgs("RadiusY", e.NewValue, e.OriginalValue);
+				OnShapeChanged(fpe);
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* OnRotationChanged																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Raises the RotationChanged event when the value of the Rotation
+		/// property has changed.
+		/// </summary>
+		/// <param name="e">
+		/// Float event arguments.
+		/// </param>
+		protected virtual void OnRotationChanged(FloatEventArgs e)
+		{
+			FloatPointEventArgs fpe = null;
+
+			RotationChanged?.Invoke(this, e);
+			if(e != null)
+			{
+				fpe = new FloatPointEventArgs("Rotation", e.NewValue, e.OriginalValue);
+				OnShapeChanged(fpe);
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* OnShapeChanged																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Raises the ShapeChanged event when a notable property of the shape
+		/// has changed.
+		/// </summary>
+		/// <param name="e">
+		/// Float point event arguments.
+		/// </param>
+		protected virtual void OnShapeChanged(FloatPointEventArgs e)
+		{
+			ShapeChanged?.Invoke(this, e);
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -752,10 +809,47 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetPointOnEllipseEdge																									*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a reference the specified point on the edge of the ellipse that
+		/// corresponds to the reference point given.
+		/// </summary>
+		/// <param name="ellipse">
+		/// Reference to the ellipse to test.
+		/// </param>
+		/// <param name="point">
+		/// Reference to the point whose matching edge point will be found.
+		/// </param>
+		/// <returns>
+		/// Reference to a point that lies directly on the edge of the provided
+		/// ellipse at the same angle from center as the specified reference.
+		/// </returns>
+		public static FVector2 GetPointOnEllipseEdge(FEllipse ellipse,
+			FVector2 point)
+		{
+			float angle = 0f;
+			FVector2 result = new FVector2();
+
+			if(ellipse != null && point != null &&
+					ellipse.RadiusX == 0f || ellipse.RadiusY == 0f)
+			{
+				angle = Trig.GetLineAngle(ellipse.Center.X, ellipse.Center.Y,
+					point.X, point.Y);
+				result.X = (float)((double)ellipse.Center.X +
+					(double)ellipse.RadiusX * Math.Cos((double)angle));
+				result.Y = (float)((double)ellipse.Center.Y +
+					(double)ellipse.RadiusY * Math.Sin((double)angle));
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* GetVertices																														*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Return the vertices of the area.
+		/// Return the vertices of the edge of the ellipse.
 		/// </summary>
 		/// <param name="ellipse">
 		/// Reference to the ellipse whose vertices will be inspected.
@@ -763,19 +857,19 @@ namespace Geometry
 		/// <param name="pointCount">
 		/// Count of discrete points to enumerate.
 		/// </param>
-		/// <param name="rotation">
-		/// Optional angle of local shape rotatation, in radians.
+		/// <param name="startOffsetAngle">
+		/// The starting offset angle, relative to the shape, to draw, in radians.
 		/// </param>
 		/// <returns>
 		/// Reference to a list of floating-point points representing the vertices
-		/// of the area.
+		/// of the edge of the ellipse.
 		/// </returns>
 		/// <remarks>
 		/// When rotation is 0, the first point occurs on the
 		/// vector +X,0 from center.
 		/// </remarks>
 		public static List<FPoint> GetVertices(FEllipse ellipse, int pointCount,
-			float rotation = 0f)
+			float startOffsetAngle = 0f)
 		{
 			float angle = 0f;
 			float count = 0f;
@@ -785,15 +879,19 @@ namespace Geometry
 			FPoint point = null;
 			List<FPoint> points = new List<FPoint>();
 			List<FPoint> result = new List<FPoint>();
+			float rotation = 0f;
 
 			if(ellipse != null && pointCount != 0)
 			{
+				rotation = ellipse.mRotation;
 				count = (float)pointCount;
 				increment = GeometryUtil.TwoPi / count;
 				for(index = 0f; index < count; index++)
 				{
 					angle = index * increment;
-					points.Add(GetCoordinateAtAngle(ellipse, angle));
+					points.Add(
+						GetCoordinateAtAngle(ellipse,
+							angle + startOffsetAngle - rotation));
 				}
 				if(rotation == 0f)
 				{
@@ -807,7 +905,92 @@ namespace Geometry
 					//	rotated, then translated back to center.
 					foreach(FPoint pointItem in points)
 					{
-						FPoint.Translate(pointItem, FPoint.Invert(center));
+						FPoint.Translate(pointItem, FPoint.Negate(center));
+						point = FPoint.Rotate(pointItem, rotation);
+						FPoint.Translate(point, center);
+						result.Add(point);
+					}
+				}
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetVerticesInArc																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the vertices of the edge of the ellipse, along the arc,
+		/// beginning at the starting angle and moving through specified sweep.
+		/// </summary>
+		/// <param name="ellipse">
+		/// Reference to the ellipse whose vertices will be inspected.
+		/// </param>
+		/// <param name="pointCount">
+		/// Count of discrete points to enumerate.
+		/// </param>
+		/// <param name="startAngle">
+		/// The starting offset angle, relative to the shape, to draw, in radians.
+		/// </param>
+		/// <param name="sweepAngle">
+		/// The angle of sweep to encompass, in radians. This value can be positive
+		/// or negative.
+		/// </param>
+		/// <returns>
+		/// Reference to a list of floating-point points representing the vertices
+		/// of the arc.
+		/// </returns>
+		/// <remarks>
+		/// <para>
+		/// When rotation is 0, the first point occurs on the
+		/// vector +X,0 from center.
+		/// </para>
+		/// <para>
+		/// Unlike the full ellipse, whose end point is implied to be the start
+		/// point, the arc has explicit starting and ending points at the beginning
+		/// and ending points of its sweep. If the point count is 2, for example,
+		/// the points of the arc will be at the beginning and end, as opposed to
+		/// the beginning and center, as would be the case with the closed path.
+		/// </para>
+		/// </remarks>
+		public static List<FPoint> GetVerticesInArc(FEllipse ellipse,
+			int pointCount, float startAngle, float sweepAngle)
+		{
+			float angle = 0f;
+			float count = 0f;
+			FPoint center = null;
+			float increment = 0f;
+			float index = 0f;
+			FPoint point = null;
+			List<FPoint> points = new List<FPoint>();
+			List<FPoint> result = new List<FPoint>();
+			float rotation = 0f;
+
+			if(ellipse != null && pointCount > 1 && sweepAngle != 0f)
+			{
+				rotation = ellipse.mRotation;
+				count = (float)pointCount;
+				increment = sweepAngle / (count - 1f);
+				for(index = 0f; index < count; index++)
+				{
+					angle = index * increment;
+					points.Add(
+						GetCoordinateAtAngle(ellipse,
+							angle + startAngle - rotation));
+				}
+				if(rotation == 0f)
+				{
+					result.AddRange(points);
+				}
+				else
+				{
+					//	Rotate the points around the local center.
+					center = FPoint.Clone(ellipse.Center);
+					//	Each point will need to be translated to origin,
+					//	rotated, then translated back to center.
+					foreach(FPoint pointItem in points)
+					{
+						FPoint.Translate(pointItem, FPoint.Negate(center));
 						point = FPoint.Rotate(pointItem, rotation);
 						FPoint.Translate(point, center);
 						result.Add(point);
@@ -907,6 +1090,44 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* IsPointOnEllipse																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a value indicating whether the specified point is on the
+		/// provided ellipse.
+		/// </summary>
+		/// <param name="ellipse">
+		/// Reference to the ellipse to test.
+		/// </param>
+		/// <param name="point">
+		/// Reference to the point to check.
+		/// </param>
+		/// <returns>
+		/// True if the specified point is on the edge of the ellipse. Otherwise,
+		/// false.
+		/// </returns>
+		public static bool IsPointOnEllipse(FEllipse ellipse, FVector2 point)
+		{
+			bool result = false;
+			double diff = 0d;
+
+			if(ellipse != null && point != null &&
+				ellipse.RadiusX != 0f && ellipse.RadiusY != 0f)
+			{
+				diff =
+					(
+						(Math.Pow((double)point.X - (double)ellipse.Center.X, 2d) /
+						Math.Pow((double)ellipse.RadiusX, 2d)) +
+						(Math.Pow((double)point.Y - (double)ellipse.Center.Y, 2d) /
+						Math.Pow((double)ellipse.RadiusY, 2d))
+					);
+				result = (Math.Abs(diff - 1d) < GeometryUtil.Epsilon);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	RadiusX																																*
 		//*-----------------------------------------------------------------------*
 		private float mRadiusX = 0f;
@@ -970,6 +1191,41 @@ namespace Geometry
 		/// Fired when the y-axis radius value has changed.
 		/// </summary>
 		public event FloatEventHandler RadiusYChanged;
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	Rotation																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Private member for <see cref="Rotation">Rotation</see>.
+		/// </summary>
+		private float mRotation = 0f;
+		/// <summary>
+		/// Get/Set the current absolute rotation of the shape, in radians.
+		/// </summary>
+		public float Rotation
+		{
+			get { return mRotation; }
+			set
+			{
+				float original = mRotation;
+
+				mRotation = value;
+				if(original != value)
+				{
+					OnRotationChanged(new FloatEventArgs(value, original));
+				}
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* RotationChanged																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Fired when the value of the shape's Rotation property has changed.
+		/// </summary>
+		public event FloatEventHandler RotationChanged;
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
@@ -1037,6 +1293,15 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* ShapeChanged																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Fired when a notable property of the shape has changed.
+		/// </summary>
+		public event FloatPointEventHandler ShapeChanged;
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* TransferValues																												*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -1073,6 +1338,88 @@ namespace Geometry
 						new FloatEventArgs(source.mRadiusY, originalRadiusY));
 				}
 			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TryPlaceEllipseEdgeOnLine																							*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Attempt to place the edge of the provided ellipse on the supplied line
+		/// such that both points of the line touch the edge.
+		/// </summary>
+		/// <param name="ellipse">
+		/// Reference to the ellipse to be moved.
+		/// </param>
+		/// <param name="line">
+		/// Reference to a stationary line whose end points both need to touch the
+		/// edge of the ellipse.
+		/// </param>
+		/// <param name="bulgeUp">
+		/// Value indicating whether the resulting bulge should be facing
+		/// relatively up on the Y axis, or down.
+		/// </param>
+		/// <param name="center">
+		/// Reference to the output vector, if found.
+		/// </param>
+		/// <returns>
+		/// True if a match was found. Otherwise, false.
+		/// </returns>
+		public static bool TryPlaceEllipseEdgeOnLine(FEllipse ellipse, FLine line,
+			bool bulgeUp, out FVector2 center)
+		{
+			FVector2 aPrime = null;
+			FVector2 bPrime = null;
+			FVector2 centerPrime = null;
+			FVector2 diffPoint = null;
+			double distance = 0d;
+			float hyp = 0f;
+			FVector2 midPoint = null;
+			FVector2 perpendicular = null;
+			FVector2 pointA = null;
+			FVector2 pointB = null;
+			float radiusX = 0f;
+			float radiusY = 0f;
+			bool result = false;
+
+			center = null;
+			if(ellipse != null && ellipse.RadiusX != 0f && ellipse.RadiusY != 0f &&
+				line != null)
+			{
+				pointA = line.PointA;
+				pointB = line.PointB;
+				radiusX = ellipse.RadiusX;
+				radiusY = ellipse.RadiusY;
+
+				//	Normalize ellipse space.
+				aPrime = new FVector2(pointA.X / radiusX, pointA.Y / radiusY);
+				bPrime = new FVector2(pointB.X / radiusX, pointB.Y / radiusY);
+
+				//	Midpoint.
+				midPoint = (aPrime + bPrime) / 2f;
+				diffPoint = bPrime - aPrime;
+				distance = (double)FVector2.Length(diffPoint);
+
+				//	The midpoint must be within 1 radius of both points.
+				if(distance / 2d <= 1d)
+				{
+					hyp = (float)Math.Sqrt(1d - (distance / 2d) * (distance / 2d));
+					perpendicular = new FVector2(-diffPoint.Y, diffPoint.X);
+					perpendicular = FVector2.Normalize(perpendicular);
+					if(bulgeUp)
+					{
+						centerPrime = midPoint + hyp * perpendicular;
+					}
+					else
+					{
+						centerPrime = midPoint - hyp * perpendicular;
+					}
+					center =
+						new FVector2(centerPrime.X * radiusX, centerPrime.Y * radiusY);
+					result = true;
+				}
+			}
+			return result;
 		}
 		//*-----------------------------------------------------------------------*
 

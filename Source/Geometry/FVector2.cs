@@ -214,6 +214,64 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* _Operator scalar / FPoint																							*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the result of a scalar divided by a point.
+		/// </summary>
+		/// <param name="scalar">
+		/// The scalar divisor.
+		/// </param>
+		/// <param name="point">
+		/// The point divident.
+		/// </param>
+		/// <returns>
+		/// Result of the multiplication.
+		/// </returns>
+		public static FVector2 operator /(float scalar, FVector2 point)
+		{
+			FVector2 result = new FVector2();
+
+			if(point != null)
+			{
+				if(point.mX != 0f)
+				{
+					result.mX = scalar / point.mX;
+				}
+				if(point.mY != 0f)
+				{
+					result.mY = scalar / point.mY;
+				}
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the result of a point divided by a scalar.
+		/// </summary>
+		/// <param name="point">
+		/// The point divisor.
+		/// </param>
+		/// <param name="scalar">
+		/// The scalar dividend.
+		/// </param>
+		/// <returns>
+		/// Result of the multiplication.
+		/// </returns>
+		public static FVector2 operator /(FVector2 point, float scalar)
+		{
+			FVector2 result = new FVector2();
+
+			if(point != null && scalar != 0f)
+			{
+				result.mX = point.mX / scalar;
+				result.mY = point.mY / scalar;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* _Operator +																														*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -558,8 +616,14 @@ namespace Geometry
 
 			if(vector != null)
 			{
-				result.mX = 0f - vector.mX;
-				result.mY = 0f - vector.mY;
+				if(vector.mX != 0f)
+				{
+					result.mX = 1f / vector.mX;
+				}
+				if(vector.mY != 0f)
+				{
+					result.mY = 1f / vector.mY;
+				}
 			}
 			return result;
 		}
@@ -623,6 +687,24 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	Length																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the length of the vector.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to measure.
+		/// </param>
+		/// <returns>
+		/// Length of the pure vector.
+		/// </returns>
+		public static float Length(FVector2 vector)
+		{
+			return Magnitude(vector);
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* Magnitude																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -642,6 +724,34 @@ namespace Geometry
 			{
 				result = (float)Math.Sqrt(
 					(double)(vector.mX * vector.mX + vector.mY * vector.mY));
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* MagnitudeSquared																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the magnitude of the vector squared.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to inspect.
+		/// </param>
+		/// <returns>
+		/// The magnitude of the supplied vector squared.
+		/// </returns>
+		public static float MagnitudeSquared(FVector2 vector)
+		{
+			float result = 0f;
+			double x = 0d;
+			double y = 0d;
+
+			if(vector != null)
+			{
+				x = (double)vector.mX;
+				y = (double)vector.mY;
+				result = (float)((x * x) + (y * y));
 			}
 			return result;
 		}
@@ -671,6 +781,65 @@ namespace Geometry
 			{
 				result.X = (vectorA.X + vectorB.X) / 2f;
 				result.Y = (vectorA.Y + vectorB.Y) / 2f;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Negate																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Negate the values of the caller's coordinate.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to be negated.
+		/// </param>
+		/// <returns>
+		/// Reference to the caller's vector with negated values.
+		/// </returns>
+		public static FVector2 Negate(FVector2 vector)
+		{
+			FVector2 result = new FVector2();
+
+			if (vector != null)
+			{
+				result.mX = 0f - vector.mX;
+				result.mY = 0f - vector.mY;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Normalize																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Normalize the values of the provided vector to unit value.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to convert.
+		/// </param>
+		/// <returns>
+		/// Normalized version of the caller's vector.
+		/// </returns>
+		/// <remarks>
+		/// The normalized value of the vector represents each leg as a percentage
+		/// of object's total length.
+		/// </remarks>
+		public static FVector2 Normalize(FVector2 vector)
+		{
+			float length = 0f;
+			FVector2 result = new FVector2();
+
+			if(vector != null)
+			{
+				length = Length(vector);
+				if(length != 0.0f)
+				{
+					result.mX = vector.mX / length;
+					result.mY = vector.mY / length;
+				}
 			}
 			return result;
 		}
@@ -898,6 +1067,31 @@ namespace Geometry
 				result.mY = vector.mY * scale;
 			}
 			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Set																																		*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Set the values of the vector in an abbreviated call.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector whose values will be set.
+		/// </param>
+		/// <param name="x">
+		/// The X value to assign.
+		/// </param>
+		/// <param name="y">
+		/// The Y value to assign.
+		/// </param>
+		public static void Set(FVector2 vector, float x, float y)
+		{
+			if(vector != null)
+			{
+				vector.X = x;
+				vector.Y = y;
+			}
 		}
 		//*-----------------------------------------------------------------------*
 

@@ -166,16 +166,16 @@ namespace Geometry
 		/// <summary>
 		/// Rotate the 2D vector by a specified angle, in radians.
 		/// </summary>
-		/// <param name="point">
+		/// <param name="vector">
 		/// Reference to the vector to be rotated.
 		/// </param>
 		/// <param name="theta">
-		/// The angle by which to rotate the point, in radians.
+		/// The angle by which to rotate the vector, in radians.
 		/// </param>
 		/// <returns>
-		/// The rotated point, relative to 0,0.
+		/// The rotated vector, relative to 0,0.
 		/// </returns>
-		public static FVector2 Rotate(FVector2 point, float theta)
+		public static FVector2 Rotate(FVector2 vector, float theta)
 		{
 			FMatrix2 matrix = new FMatrix2();
 			FVector2 result = new FVector2();
@@ -185,7 +185,7 @@ namespace Geometry
 			matrix.Values[1, 0] = (float)Math.Sin(theta);
 			matrix.Values[1, 1] = (float)Math.Cos(theta);
 
-			result = Multiply(matrix, point);
+			result = Multiply(matrix, vector);
 			return result;
 		}
 		//*-----------------------------------------------------------------------*

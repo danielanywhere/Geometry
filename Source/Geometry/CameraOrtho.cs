@@ -255,7 +255,7 @@ namespace Geometry
 #if ShowTrace
 				Trace.WriteLine("Camera3D.UpdatePositions. Break here...");
 #endif
-				mCamUp = FVector3.Invert(FVector3.Normalize(FVector3.CrossProduct(mCamRight, mCamForward)));
+				mCamUp = FVector3.Negate(FVector3.Normalize(FVector3.CrossProduct(mCamRight, mCamForward)));
 			}
 			else
 			{

@@ -1592,6 +1592,19 @@ namespace Geometry
 				sinY_cosP = 2d * ((w * z) + (x * y));
 				cosY_cosP = 1d - 2d * ((y * y) + (z * z));
 				result.Z = (float)Math.Atan2(sinY_cosP, cosY_cosP);
+
+				if(float.IsNaN(result.X))
+				{
+					result.X = 0f;
+				}
+				if(float.IsNaN(result.Y))
+				{
+					result.Y = 0f;
+				}
+				if(float.IsNaN(result.Z))
+				{
+					result.Z = 0f;
+				}
 			}
 			return result;
 		}
@@ -1647,6 +1660,18 @@ namespace Geometry
 				cosY = 1d - 2d * ((x * x) + (y * y));
 				result.Z = (float)Math.Atan2(sinY, cosY);
 
+				if(float.IsNaN(result.X))
+				{
+					result.X = 0f;
+				}
+				if(float.IsNaN(result.Y))
+				{
+					result.Y = 0f;
+				}
+				if(float.IsNaN(result.Z))
+				{
+					result.Z = 0f;
+				}
 			}
 			return result;
 		}

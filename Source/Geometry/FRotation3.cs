@@ -537,7 +537,7 @@ namespace Geometry
 		//* Invert																																*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Invert the values of the caller's coordinate.
+		/// Invert the values of the caller's rotation.
 		/// </summary>
 		/// <param name="rotation">
 		/// Reference to the rotation to be inverted.
@@ -551,9 +551,18 @@ namespace Geometry
 
 			if(rotation != null)
 			{
-				result.mX = 0f - rotation.mX;
-				result.mY = 0f - rotation.mY;
-				result.mZ = 0f - rotation.mZ;
+				if(rotation.mX != 0f)
+				{
+					result.mX = 1f / rotation.mX;
+				}
+				if(rotation.mY != 0f)
+				{
+					result.mY = 1f / rotation.mY;
+				}
+				if(rotation.mZ != 0f)
+				{
+					result.mZ = 1f / rotation.mZ;
+				}
 			}
 			return result;
 		}
@@ -585,6 +594,32 @@ namespace Geometry
 				result.X = (rotationA.X + rotationB.X) / 2f;
 				result.Y = (rotationA.Y + rotationB.Y) / 2f;
 				result.Z = (rotationA.Z + rotationB.Z) / 2f;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Negate																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Negate the values of the caller's coordinate.
+		/// </summary>
+		/// <param name="rotation">
+		/// Reference to the rotation to be negated.
+		/// </param>
+		/// <returns>
+		/// Reference to the caller's rotation with inverted values.
+		/// </returns>
+		public static FRotation3 Negate(FRotation3 rotation)
+		{
+			FRotation3 result = new FRotation3();
+
+			if (rotation != null)
+			{
+				result.mX = 0f - rotation.mX;
+				result.mY = 0f - rotation.mY;
+				result.mZ = 0f - rotation.mZ;
 			}
 			return result;
 		}

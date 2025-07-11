@@ -70,8 +70,8 @@ namespace Geometry
 		/// To match AutoCAD's hard-coded angular orientation, this method
 		/// always uses the Cartesian drawing space.
 		/// </remarks>
-		public static List<FPoint> CalcAutoCADBulge(
-			FPoint previousPoint, FPoint currentPoint,
+		public static List<FVector2> CalcAutoCADBulge(
+			FVector2 previousPoint, FVector2 currentPoint,
 			float bulge, float sweepStep)
 		{
 			float angleCenter = 0;
@@ -82,16 +82,16 @@ namespace Geometry
 			float bulgeAngle = 0;
 			float bulgeAngleRemain = 0;
 			float bulgeAntiAngle = 0;
-			FPoint centerPoint = new FPoint(0, 0);
+			FVector2 centerPoint = new FVector2(0, 0);
 			DirectionEnum direction =
 				GetDirection(previousPoint, currentPoint, DrawingSpaceEnum.Cartesian);
 			float lineAngle = 0;
 			float lineDist1 = 0;
 			float lineDist2 = 0;
-			FPoint midPoint = new FPoint();
+			FVector2 midPoint = new FVector2();
 			float pointAngle = GetLineAngle(previousPoint, currentPoint);
 			float radius = 0;
-			List<FPoint> points = new List<FPoint>();
+			List<FVector2> points = new List<FVector2>();
 
 			if(sweepStep == 0)
 			{
@@ -420,10 +420,10 @@ namespace Geometry
 		/// <returns>
 		/// Destination coordinate, as a double precision point.
 		/// </returns>
-		public static FPoint GetDestPoint(float centerX, float centerY,
+		public static FVector2 GetDestPoint(float centerX, float centerY,
 			float angle, float distance)
 		{
-			FPoint rv = new FPoint(); //	Return value.
+			FVector2 rv = new FVector2(); //	Return value.
 
 			rv.X = centerX + (distance * (float)Math.Cos(angle));
 			rv.Y = centerY + (distance * (float)Math.Sin(angle));
@@ -446,14 +446,14 @@ namespace Geometry
 		/// The destation point of a vector from a central point, if found.
 		/// Otherwise, null.
 		/// </returns>
-		public static FPoint GetDestPoint(FPoint center, float angle,
+		public static FVector2 GetDestPoint(FVector2 center, float angle,
 			float distance)
 		{
-			FPoint rv = null; //	Return value.
+			FVector2 rv = null; //	Return value.
 
 			if(center != null)
 			{
-				rv = new FPoint();
+				rv = new FVector2();
 				rv.X = center.X + (distance * (float)Math.Cos(angle));
 				rv.Y = center.Y + (distance * (float)Math.Sin(angle));
 			}
@@ -530,8 +530,8 @@ namespace Geometry
 		/// <returns>
 		/// Direction mask with 8 point resolution.
 		/// </returns>
-		public static DirectionEnum GetDirection(FPoint startPoint,
-			FPoint endPoint,
+		public static DirectionEnum GetDirection(FVector2 startPoint,
+			FVector2 endPoint,
 			DrawingSpaceEnum drawingSpace = DrawingSpaceEnum.Display)
 		{
 			DirectionEnum result = DirectionEnum.None;
@@ -600,7 +600,7 @@ namespace Geometry
 		/// Reference to a line parallel to and inside of the caller's specified
 		/// line, with reference to the specified thickness.
 		/// </returns>
-		public static FLine GetInsideParallelLine(FPoint pointA, FPoint pointB,
+		public static FLine GetInsideParallelLine(FVector2 pointA, FVector2 pointB,
 			ArcDirectionEnum orientation, float thickness)
 		{
 			float angle = 0f;
@@ -612,8 +612,8 @@ namespace Geometry
 				if(thickness == 0)
 				{
 					//	If the parallel area is zero, then source line is target line.
-					FPoint.TransferValues(pointA, result.PointA);
-					FPoint.TransferValues(pointB, result.PointB);
+					FVector2.TransferValues(pointA, result.PointA);
+					FVector2.TransferValues(pointB, result.PointB);
 				}
 				else
 				{
@@ -671,7 +671,7 @@ namespace Geometry
 		/// Reference to a line parallel to and inside of the caller's specified
 		/// line, with reference to the specified thickness.
 		/// </returns>
-		public static FLine GetInsideParallelLine(FPoint pointA, FPoint pointB,
+		public static FLine GetInsideParallelLine(FVector2 pointA, FVector2 pointB,
 			float thickness, WindingOrientationEnum orientation,
 			DrawingSpaceEnum drawingSpace = DrawingSpaceEnum.Display)
 		{
@@ -909,7 +909,7 @@ namespace Geometry
 		/// <returns>
 		/// Angle of the line, in radians.
 		/// </returns>
-		public static float GetLineAngle(FPoint vertex1, FPoint vertex2)
+		public static float GetLineAngle(FVector2 vertex1, FVector2 vertex2)
 		{
 			return GetLineAngle(vertex1.X, vertex1.Y, vertex2.X, vertex2.Y);
 		}
@@ -1003,7 +1003,7 @@ namespace Geometry
 		/// <returns>
 		/// Absolute distance between two points.
 		/// </returns>
-		public static float GetLineDistance(FPoint vertex1, FPoint vertex2)
+		public static float GetLineDistance(FVector2 vertex1, FVector2 vertex2)
 		{
 			return GetLineDistance(vertex1.X, vertex1.Y, vertex2.X, vertex2.Y);
 		}
@@ -1120,8 +1120,9 @@ namespace Geometry
 			float hypotenuse)
 		{
 			//	C<sup>2</sup> = A<sup>2</sup> - B<sup>2</sup>
-			return
-				(float)(Math.Sqrt(Math.Pow(hypotenuse, 2) - Math.Pow(adjacent, 2)));
+			return (float)(Math.Sqrt(
+					Math.Abs(Math.Pow(hypotenuse, 2) - Math.Pow(adjacent, 2))));
+
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -1207,12 +1208,12 @@ namespace Geometry
 		/// </para>
 		/// </remarks>
 		public static ArcDirectionEnum GetPathOrientation(
-			List<FPoint> path)
+			List<FVector2> path)
 		{
 			int count = 0;
 			int index = 0;
-			FPoint point1 = null;
-			FPoint point2 = null;
+			FVector2 point1 = null;
+			FVector2 point2 = null;
 			ArcDirectionEnum result = ArcDirectionEnum.None;
 			List<double> tallies = new List<double>();
 			double total = 0d;
@@ -1273,7 +1274,7 @@ namespace Geometry
 		/// </para>
 		/// </remarks>
 		public static WindingOrientationEnum GetPathOrientation(
-			List<FPoint> path,
+			List<FVector2> path,
 			DrawingSpaceEnum drawingSpace = DrawingSpaceEnum.Display)
 		{
 			ArcDirectionEnum natural = GetPathOrientation(path);
@@ -1428,13 +1429,13 @@ namespace Geometry
 		/// 360 or less than 0, as appropriate for the direction of cast,
 		/// respectively.
 		/// </remarks>
-		public static List<FPoint> SegmentCurve(FPoint centerPoint,
+		public static List<FVector2> SegmentCurve(FVector2 centerPoint,
 			float radius, float startAngle, float sweepAngle, float stepAngle)
 		{
-			FPoint currentPoint = null;
+			FVector2 currentPoint = null;
 			float currentRad = 0;
-			FPoint endPoint = new FPoint(0, 0);
-			List<FPoint> points = new List<FPoint>();
+			FVector2 endPoint = new FVector2(0, 0);
+			List<FVector2> points = new List<FVector2>();
 			float startRad = DegToRad(startAngle);
 			float stepRad = DegToRad(stepAngle);
 			float stopAngle = startAngle + sweepAngle;
@@ -1448,7 +1449,7 @@ namespace Geometry
 					currentRad < stopRad;
 					currentRad += stepRad)
 				{
-					currentPoint = new FPoint(
+					currentPoint = new FVector2(
 						centerPoint.X + GetLineAdjFromAngHyp(currentRad, radius),
 						centerPoint.Y + GetLineOppFromAngHyp(currentRad, radius)
 					);
@@ -1462,7 +1463,7 @@ namespace Geometry
 					currentRad > stopRad;
 					currentRad -= stepRad)
 				{
-					currentPoint = new FPoint(
+					currentPoint = new FVector2(
 						centerPoint.X + GetLineAdjFromAngHyp(currentRad, radius),
 						centerPoint.Y + GetLineOppFromAngHyp(currentRad, radius)
 					);

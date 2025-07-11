@@ -604,6 +604,34 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetCenter																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the center point of the specified area.
+		/// </summary>
+		/// <param name="area">
+		/// Reference to the area to be inspected.
+		/// </param>
+		/// <returns>
+		/// Reference to the center point of the provided area, if legitimate.
+		/// Otherwise, null.
+		/// </returns>
+		public static FPoint GetCenter(FArea area)
+		{
+			FPoint result = null;
+
+			if(area != null)
+			{
+				result = new FPoint(
+					area.Left + ((area.Right - area.Left) / 2f),
+					area.Top + ((area.Bottom - area.Top) / 2f)
+					);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* GetIntersections																											*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -847,7 +875,7 @@ namespace Geometry
 						workingArea.mTop + (workingArea.Height / 2f));
 					location = new FPoint(workingArea.mLeft, workingArea.mTop);
 					//	Translate to origin.
-					Translate(workingArea, FPoint.Invert(center));
+					Translate(workingArea, FPoint.Negate(center));
 					//	Rotate and translate back.
 					point =
 						FPoint.Rotate(workingArea.mRight, workingArea.mTop, rotation);

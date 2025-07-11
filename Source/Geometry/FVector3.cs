@@ -945,7 +945,7 @@ namespace Geometry
 		public static FVector3 GetLineAngle(FVector3 pointA, FVector3 pointB)
 		{
 			float length = 0f;
-			FPoint point = null;
+			FVector2 point = null;
 			FVector3 result = new FVector3();
 			FVector3 vecA = null;
 			FVector3 vecB = null;
@@ -1242,9 +1242,18 @@ namespace Geometry
 
 			if(vector != null)
 			{
-				result.mX = 0f - vector.mX;
-				result.mY = 0f - vector.mY;
-				result.mZ = 0f - vector.mZ;
+				if(vector.mX != 0f)
+				{
+					result.mX = 0f - vector.mX;
+				}
+				if(vector.mY != 0f)
+				{
+					result.mY = 0f - vector.mY;
+				}
+				if(vector.mZ != 0f)
+				{
+					result.mZ = 0f - vector.mZ;
+				}
 			}
 			return result;
 		}
@@ -1384,6 +1393,36 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* MagnitudeSquared																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the magnitude of the vector squared.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to inspect.
+		/// </param>
+		/// <returns>
+		/// The magnitude of the supplied vector squared.
+		/// </returns>
+		public static float MagnitudeSquared(FVector3 vector)
+		{
+			float result = 0f;
+			double x = 0d;
+			double y = 0d;
+			double z = 0d;
+
+			if(vector != null)
+			{
+				x = (double)vector.mX;
+				y = (double)vector.mY;
+				z = (double)vector.mZ;
+				result = (float)((x * x) + (y * y) + (z * z));
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	Mask																																	*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -1448,6 +1487,33 @@ namespace Geometry
 				result.X = (vectorA.X + vectorB.X) / 2f;
 				result.Y = (vectorA.Y + vectorB.Y) / 2f;
 				result.Z = (vectorA.Z + vectorB.Z) / 2f;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Negate																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a copy of the caller's vector where the values have been
+		/// negated.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to negate.
+		/// </param>
+		/// <returns>
+		/// A copy of the caller's vector where the values have been negated.
+		/// </returns>
+		public static FVector3 Negate(FVector3 vector)
+		{
+			FVector3 result = new FVector3();
+
+			if (vector != null)
+			{
+				result.mX = 0f - vector.mX;
+				result.mY = 0f - vector.mY;
+				result.mZ = 0f - vector.mZ;
 			}
 			return result;
 		}

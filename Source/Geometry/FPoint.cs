@@ -538,6 +538,41 @@ namespace Geometry
 			}
 			return result;
 		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the closest point to the check-point.
+		/// </summary>
+		/// <param name="checkPoint">
+		/// The check point to which the closest point in the list will be found.
+		/// </param>
+		/// <param name="points">
+		/// Reference to a list of points to be compared.
+		/// </param>
+		/// <returns>
+		/// A point corresponding to the location of the closest point in the
+		/// list.
+		/// </returns>
+		public static FPoint ClosestPoint(FPoint checkPoint, List<FPoint> points)
+		{
+			List<float> distances = new List<float>();
+			int minIndex = -1;
+			float minValue = 0;
+			FPoint result = null;
+
+			if(checkPoint != null && points?.Count > 0)
+			{
+				foreach(FPoint pointItem in points)
+				{
+					distances.Add(
+						Math.Abs(Trig.GetLineDistance(
+							checkPoint.mX, checkPoint.mY, pointItem.X, pointItem.Y)));
+				}
+				minValue = distances.Min();
+				minIndex = distances.IndexOf(minValue);
+				result = points[minIndex];
+			}
+			return result;
+		}
 		//*-----------------------------------------------------------------------*
 
 		////*-----------------------------------------------------------------------*
@@ -634,6 +669,36 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetCenter																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the center point of the collection of points.
+		/// </summary>
+		/// <param name="points">
+		/// Reference to the collection of points to be inspected.
+		/// </param>
+		/// <returns>
+		/// Reference to the center point of the provided point list, if
+		/// legitimate. Otherwise, an empty point.
+		/// </returns>
+		/// <remarks>
+		/// This function returns the centroid or center of mass of the object.
+		/// </remarks>
+		public static FPoint GetCenter(List<FPoint> points)
+		{
+			FPoint result = null;
+
+			if(points?.Count > 0)
+			{
+				result = new FPoint(
+					points.Average(x => x.mX),
+					points.Average(y => y.mY));
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	GetHashCode																														*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -665,7 +730,8 @@ namespace Geometry
 		/// Reference to the point to be inverted.
 		/// </param>
 		/// <returns>
-		/// Reference to the caller's point with inverted values.
+		/// Reference to the caller's point with the reciprocal of the
+		/// incoming values.
 		/// </returns>
 		public static FPoint Invert(FPoint point)
 		{
@@ -673,8 +739,14 @@ namespace Geometry
 
 			if(point != null)
 			{
-				result.mX = 0f - point.mX;
-				result.mY = 0f - point.mY;
+				if(point.mX != 0f)
+				{
+					result.mX = 1f / point.mX;
+				}
+				if(point.mY != 0f)
+				{
+					result.mY = 1f / point.mY;
+				}
 			}
 			return result;
 		}
@@ -785,6 +857,31 @@ namespace Geometry
 			{
 				result.X = (pointA.X + pointB.X) / 2f;
 				result.Y = (pointA.Y + pointB.Y) / 2f;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* Negate																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Negate the values of the caller's coordinate.
+		/// </summary>
+		/// <param name="point">
+		/// Reference to the point to be negated.
+		/// </param>
+		/// <returns>
+		/// Reference to the caller's point with negated values.
+		/// </returns>
+		public static FPoint Negate(FPoint point)
+		{
+			FPoint result = new FPoint();
+
+			if(point != null)
+			{
+				result.mX = 0f - point.mX;
+				result.mY = 0f - point.mY;
 			}
 			return result;
 		}

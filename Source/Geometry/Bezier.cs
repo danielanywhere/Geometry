@@ -226,7 +226,7 @@ namespace Geometry
 						angle = Trig.GetLineAngle(pointCurrent, pointNext);
 						// Jump to the end of the current segment as new reference point.
 						pointCurrent =
-							Trig.GetDestPoint(pointCurrent, angle, lengthSegment);
+							(FPoint)Trig.GetDestPoint(pointCurrent, angle, lengthSegment);
 						result.Add(pointCurrent);
 					}
 				}
@@ -522,7 +522,7 @@ namespace Geometry
 						angle = Trig.GetLineAngle(pointCurrent, pointNext);
 						// Jump to the end of the current segment as new reference point.
 						pointCurrent =
-							Trig.GetDestPoint(pointCurrent, angle, lengthSegment);
+							(FPoint)Trig.GetDestPoint(pointCurrent, angle, lengthSegment);
 						result.Add(pointCurrent);
 					}
 				}

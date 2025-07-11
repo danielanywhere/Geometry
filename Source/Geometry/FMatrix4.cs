@@ -158,6 +158,46 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* ColumnToVector																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a reference to a 4D vector representing the values in the
+		/// specified column of the provided matrix.
+		/// </summary>
+		/// <param name="matrix">
+		/// Reference to the matrix containing the values to copy.
+		/// </param>
+		/// <param name="columnIndex">
+		/// 0-based ordinal index of the column to copy.
+		/// </param>
+		/// <returns>
+		/// Reference to a new single precision floating-point 4D vector containing
+		/// values from the specified column, if the matrix and column were
+		/// legitimate. Otherwise, an empty FVector4.
+		/// </returns>
+		/// <remarks>
+		/// To maintain compatibility with 3D vectors, 'W' is treated as the
+		/// fourth element of the column.
+		/// </remarks>
+		public static FVector4 ColumnToVector(FMatrix4 matrix, int columnIndex)
+		{
+			FVector4 result = new FVector4();
+
+			if(matrix != null &&
+				matrix.mValues.GetLength(0) > 3 &&
+				matrix.mValues.GetLength(1) > 3 &&
+				columnIndex > -1 && columnIndex < 4)
+			{
+				result.X = matrix.mValues[0, columnIndex];
+				result.Y = matrix.mValues[1, columnIndex];
+				result.Z = matrix.mValues[2, columnIndex];
+				result.W = matrix.mValues[3, columnIndex];
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* GetCofactors																													*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -930,7 +970,7 @@ namespace Geometry
 		/// </param>
 		/// <returns>
 		/// Reference to a new single precision floating-point 3D point containing
-		/// values from the specified column, if the matrix and column were
+		/// values from the specified row, if the matrix and column were
 		/// legitimate. Otherwise, an empty FPoint3.
 		/// </returns>
 		public static FPoint3 RowToPoint(FMatrix4 matrix, int rowIndex)
@@ -945,6 +985,46 @@ namespace Geometry
 				result.X = matrix.mValues[rowIndex, 0];
 				result.Y = matrix.mValues[rowIndex, 1];
 				result.Z = matrix.mValues[rowIndex, 2];
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* RowToVector																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return a reference to a 4D vector representing the values in the
+		/// specified row of the provided matrix.
+		/// </summary>
+		/// <param name="matrix">
+		/// Reference to the matrix containing the values to copy.
+		/// </param>
+		/// <param name="rowIndex">
+		/// 0-based ordinal index of the row to copy.
+		/// </param>
+		/// <returns>
+		/// Reference to a new single precision floating-point 4D vector containing
+		/// values from the specified row, if the matrix and column were
+		/// legitimate. Otherwise, an empty FVector4.
+		/// </returns>
+		/// <remarks>
+		/// To maintain compatibility with 3D vectors, 'W' is treated as the
+		/// fourth element of the row.
+		/// </remarks>
+		public static FVector4 RowToVector(FMatrix4 matrix, int rowIndex)
+		{
+			FVector4 result = new FVector4();
+
+			if(matrix != null &&
+				matrix.mValues.GetLength(0) > 3 &&
+				matrix.mValues.GetLength(1) > 3 &&
+				rowIndex > -1 && rowIndex < 4)
+			{
+				result.X = matrix.mValues[rowIndex, 0];
+				result.Y = matrix.mValues[rowIndex, 1];
+				result.Z = matrix.mValues[rowIndex, 2];
+				result.W = matrix.mValues[rowIndex, 3];
 			}
 			return result;
 		}

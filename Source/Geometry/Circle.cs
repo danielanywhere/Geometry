@@ -238,7 +238,7 @@ namespace Geometry
 				angleStart = Trig.GetLineAngle(center, start);
 				angleEnd = Trig.GetLineAngle(center, end);
 
-				endActual = Trig.GetDestPoint(center, angleEnd, radius);
+				endActual = (FPoint)Trig.GetDestPoint(center, angleEnd, radius);
 				samples.Add(endActual);
 
 				crossings = GetQuadrantCrossings(angleStart, angleEnd, winding);
@@ -259,22 +259,22 @@ namespace Geometry
 					//	Quadrant boundaries are spanned by the shape.
 					if(crossings.Contains(0))
 					{
-						samples.Add(
+						samples.Add((FPoint)
 							Trig.GetDestPoint(center, 0.5f * (float)Math.PI, radius));
 					}
 					if(crossings.Contains(1))
 					{
-						samples.Add(
+						samples.Add((FPoint)
 							Trig.GetDestPoint(center, 1.0f * (float)Math.PI, radius));
 					}
 					if(crossings.Contains(2))
 					{
-						samples.Add(
+						samples.Add((FPoint)
 							Trig.GetDestPoint(center, 1.5f * (float)Math.PI, radius));
 					}
 					if(crossings.Contains(3))
 					{
-						samples.Add(
+						samples.Add((FPoint)
 							Trig.GetDestPoint(center, 0.0f * (float)Math.PI, radius));
 					}
 				}
@@ -685,7 +685,7 @@ namespace Geometry
 				space = TwoPi / (float)vertexCount;
 				for(index = 0; index < vertexCount; index++)
 				{
-					result.Add(Trig.GetDestPoint(center, angle, radius));
+					result.Add((FPoint)Trig.GetDestPoint(center, angle, radius));
 					angle += space;
 				}
 			}

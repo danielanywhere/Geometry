@@ -213,6 +213,46 @@ namespace Geometry
 		/// <param name="originalValue">
 		/// The original value to record.
 		/// </param>
+		public FloatPointEventArgs(FPoint newValue, FPoint originalValue)
+		{
+			float nX = 0f;
+			float nY = 0f;
+			float oX = 0f;
+			float oY = 0f;
+
+			if(newValue != null)
+			{
+				nX = newValue.X;
+				nY = newValue.Y;
+			}
+			if(originalValue != null)
+			{
+				oX = originalValue.X;
+				oY = originalValue.Y;
+			}
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "X",
+				NewValue = nX,
+				OriginalValue = oX
+			});
+			mValues.Add(new AxisValueTrackerItem()
+			{
+				AxisName = "Y",
+				NewValue = nY,
+				OriginalValue = oY
+			});
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Create a new instance of the FloatPointEventArgs Item.
+		/// </summary>
+		/// <param name="newValue">
+		/// The new value to record.
+		/// </param>
+		/// <param name="originalValue">
+		/// The original value to record.
+		/// </param>
 		public FloatPointEventArgs(FVector2 newValue, FVector2 originalValue)
 		{
 			float nX = 0f;

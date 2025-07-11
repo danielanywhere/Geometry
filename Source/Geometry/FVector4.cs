@@ -153,6 +153,34 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	_Implicit FVector4 = FPoint																						*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Cast the FPoint instance to an FVector4.
+		/// </summary>
+		/// <param name="value">
+		/// Reference to the point to be converted.
+		/// </param>
+		/// <returns>
+		/// Reference to a newly created FVector4 representing the values in
+		/// the caller's point.
+		/// </returns>
+		public static implicit operator FVector4(FPoint value)
+		{
+			FVector4 result = new FVector4();
+
+			if(value != null)
+			{
+				result.mX = value.X;
+				result.mY = value.Y;
+				result.mZ = 0f;
+				result.mW = 1f;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	_Implicit FVector4 = FPoint3																					*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -174,6 +202,34 @@ namespace Geometry
 				result.mX = value.X;
 				result.mY = value.Y;
 				result.mZ = value.Z;
+				result.mW = 1f;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	_Implicit FVector4 = FVector2																					*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Cast the FVector2 instance to an FVector4.
+		/// </summary>
+		/// <param name="value">
+		/// Reference to the point to be converted.
+		/// </param>
+		/// <returns>
+		/// Reference to a newly created FVector4 representing the values in
+		/// the caller's point.
+		/// </returns>
+		public static implicit operator FVector4(FVector2 value)
+		{
+			FVector4 result = new FVector4();
+
+			if(value != null)
+			{
+				result.mX = value.X;
+				result.mY = value.Y;
+				result.mZ = 0f;
 				result.mW = 1f;
 			}
 			return result;
@@ -789,7 +845,7 @@ namespace Geometry
 		public static FVector4 GetLineAngle(FVector4 pointA, FVector4 pointB)
 		{
 			float length = 0f;
-			FPoint point = null;
+			FVector2 point = null;
 			FVector4 result = new FVector4();
 			FVector4 vecA = null;
 			FVector4 vecB = null;
