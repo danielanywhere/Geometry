@@ -1047,7 +1047,7 @@ namespace Geometry
 		/// </returns>
 		public static FPoint Scale(FPoint point, FPoint scale)
 		{
-			return (FPoint)FMatrix3.Scale((FVector2)point, (FVector2)scale);
+			return new FPoint(FMatrix3.Scale((FVector2)point, (FVector2)scale));
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>

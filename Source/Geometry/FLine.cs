@@ -1094,7 +1094,7 @@ namespace Geometry
 						angle -= HalfPi;
 						break;
 				}
-				point = (FPoint)Trig.GetDestPoint(target.mPointA, angle, offset);
+				point = new FPoint(Trig.GetDestPoint(target.mPointA, angle, offset));
 				Translate(target, FPoint.Delta(point, target.mPointA));
 			}
 		}
