@@ -91,7 +91,7 @@ namespace Geometry
 		/// <param name="pointB">
 		/// Reference to the second point of a cartesian line.
 		/// </param>
-		public SlopeInterceptItem(FPoint pointA, FPoint pointB)
+		public SlopeInterceptItem(FVector2 pointA, FVector2 pointB)
 		{
 			mBaseLine = new FLine(pointA, pointB);
 			Convert(this, pointA, pointB);
@@ -164,7 +164,7 @@ namespace Geometry
 		/// Reference to the second end of the existing line.
 		/// </param>
 		public static void Convert(SlopeInterceptItem target,
-			FPoint pointA, FPoint pointB)
+			FVector2 pointA, FVector2 pointB)
 		{
 			//	y = (m * x) + b
 			//	m = (y2 - y1) / (x2 - x1)
@@ -227,7 +227,7 @@ namespace Geometry
 		/// <returns>
 		/// The algebraic slope of the line (y2 - y1) / (x2 - x1).
 		/// </returns>
-		public static float GetSlope(FPoint pointA, FPoint pointB)
+		public static float GetSlope(FVector2 pointA, FVector2 pointB)
 		{
 			//	m = (y2 - y1) / (x2 - x1)
 			float result = 0f;   //	Vertical line by default.
@@ -263,7 +263,7 @@ namespace Geometry
 		/// </returns>
 		public static bool HasIntersection(SlopeInterceptItem slope, FLine line)
 		{
-			FPoint pointC = Intersect(slope, new SlopeInterceptItem(line));
+			FVector2 pointC = Intersect(slope, new SlopeInterceptItem(line));
 			bool result = false;
 
 			if(!double.IsNaN(pointC.X) && !double.IsNaN(pointC.Y))
@@ -304,15 +304,15 @@ namespace Geometry
 		/// Reference to a double point indicating where the caller's lines
 		/// intersected, if an intersection was found. Otherwise, null.
 		/// </returns>
-		public static FPoint Intersect(SlopeInterceptItem lineA,
+		public static FVector2 Intersect(SlopeInterceptItem lineA,
 			SlopeInterceptItem lineB)
 		{
 			float distX = 0f;
 			float distY = 0f;
 			float perX = 0f;
 			float perY = 0f;
-			FPoint result =
-				new FPoint(float.NegativeInfinity, float.NegativeInfinity);
+			FVector2 result =
+				new FVector2(float.NegativeInfinity, float.NegativeInfinity);
 
 			if(lineA.mB != 0 && lineB.mB != 0)
 			{

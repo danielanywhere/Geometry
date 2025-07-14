@@ -225,7 +225,7 @@ namespace Geometry
 		/// <param name="locationBottomRight">
 		/// The bottom right location.
 		/// </param>
-		public FArea(FPoint locationTopLeft, FPoint locationBottomRight)
+		public FArea(FVector2 locationTopLeft, FVector2 locationBottomRight)
 		{
 			if(locationTopLeft != null)
 			{
@@ -258,7 +258,7 @@ namespace Geometry
 		/// <param name="size">
 		/// The shape of the area.
 		/// </param>
-		public FArea(FPoint location, FSize size)
+		public FArea(FVector2 location, FSize size)
 		{
 			if(location != null)
 			{
@@ -616,13 +616,13 @@ namespace Geometry
 		/// Reference to the center point of the provided area, if legitimate.
 		/// Otherwise, null.
 		/// </returns>
-		public static FPoint GetCenter(FArea area)
+		public static FVector2 GetCenter(FArea area)
 		{
-			FPoint result = null;
+			FVector2 result = null;
 
 			if(area != null)
 			{
-				result = new FPoint(
+				result = new FVector2(
 					area.Left + ((area.Right - area.Left) / 2f),
 					area.Top + ((area.Bottom - area.Top) / 2f)
 					);
@@ -647,12 +647,12 @@ namespace Geometry
 		/// Reference to a list of points where the two areas intersect, if found.
 		/// Otherwise, an empty list.
 		/// </returns>
-		public static List<FPoint> GetIntersections(FArea area1, FArea area2)
+		public static List<FVector2> GetIntersections(FArea area1, FArea area2)
 		{
 			List<FLine> lines1 = null;
 			List<FLine> lines2 = null;
-			FPoint point = null;
-			List<FPoint> result = new List<FPoint>();
+			FVector2 point = null;
+			List<FVector2> result = new List<FVector2>();
 
 			if(area1 != null && area2 != null)
 			{
@@ -686,11 +686,11 @@ namespace Geometry
 		/// Reference to a list of points where the supplied line intersects with
 		/// the specified rectangle, if found. Otherwise, an empty list.
 		/// </returns>
-		public static List<FPoint> GetIntersections(FArea area, FLine line)
+		public static List<FVector2> GetIntersections(FArea area, FLine line)
 		{
 			List<FLine> lines = null;
-			FPoint point = null;
-			List<FPoint> result = new List<FPoint>();
+			FVector2 point = null;
+			List<FVector2> result = new List<FVector2>();
 
 			if(area != null && line != null)
 			{
@@ -739,7 +739,7 @@ namespace Geometry
 		public static List<FLine> GetLines(FArea area, float rotation = 0f)
 		{
 			int index = 0;
-			List<FPoint> points = null;
+			List<FVector2> points = null;
 			List<FLine> result = new List<FLine>();
 
 			if(!FArea.IsEmpty(area))
@@ -750,17 +750,17 @@ namespace Geometry
 					result.AddRange(new FLine[]
 					{
 					new FLine(
-						new FPoint(area.Right, area.Top),
-						new FPoint(area.Left, area.Top)),
+						new FVector2(area.Right, area.Top),
+						new FVector2(area.Left, area.Top)),
 					new FLine(
-						new FPoint(area.Left, area.Top),
-						new FPoint(area.Left, area.Bottom)),
+						new FVector2(area.Left, area.Top),
+						new FVector2(area.Left, area.Bottom)),
 					new FLine(
-						new FPoint(area.Left, area.Bottom),
-						new FPoint(area.Right, area.Bottom)),
+						new FVector2(area.Left, area.Bottom),
+						new FVector2(area.Right, area.Bottom)),
 					new FLine(
-						new FPoint(area.Right, area.Bottom),
-						new FPoint(area.Right, area.Top))
+						new FVector2(area.Right, area.Bottom),
+						new FVector2(area.Right, area.Top))
 					});
 				}
 				else
@@ -790,9 +790,9 @@ namespace Geometry
 		///// Reference to a new point containing the area's location, if legitimate.
 		///// Otherwise, an empty point.
 		///// </returns>
-		//public static FPoint GetLocation(FArea area)
+		//public static FVector2 GetLocation(FArea area)
 		//{
-		//	FPoint result = new FPoint();
+		//	FVector2 result = new FVector2();
 
 		//	if(area != null)
 		//	{
@@ -845,12 +845,12 @@ namespace Geometry
 		/// Reference to a list of floating-point points representing the vertices
 		/// of the area.
 		/// </returns>
-		public static List<FPoint> GetVertices(FArea area, float rotation = 0f)
+		public static List<FVector2> GetVertices(FArea area, float rotation = 0f)
 		{
-			FPoint center = null;
-			FPoint location = null;
-			FPoint point = null;
-			List<FPoint> result = new List<FPoint>();
+			FVector2 center = null;
+			FVector2 location = null;
+			FVector2 point = null;
+			List<FVector2> result = new List<FVector2>();
 			FArea workingArea = null;
 
 			if(area != null)
@@ -858,40 +858,40 @@ namespace Geometry
 				if(rotation == 0f)
 				{
 					//	Vertices with no rotation is much faster.
-					result.AddRange(new FPoint[]
+					result.AddRange(new FVector2[]
 					{
-						new FPoint(area.mRight, area.mTop),
-						new FPoint(area.mLeft, area.mTop),
-						new FPoint(area.mLeft, area.mBottom),
-						new FPoint(area.mRight, area.mBottom)
+						new FVector2(area.mRight, area.mTop),
+						new FVector2(area.mLeft, area.mTop),
+						new FVector2(area.mLeft, area.mBottom),
+						new FVector2(area.mRight, area.mBottom)
 					});
 				}
 				else
 				{
 					//	Avoid affecting the caller's area object.
 					workingArea = Clone(area);
-					center = new FPoint(
+					center = new FVector2(
 						workingArea.mLeft + (workingArea.Width / 2f),
 						workingArea.mTop + (workingArea.Height / 2f));
-					location = new FPoint(workingArea.mLeft, workingArea.mTop);
+					location = new FVector2(workingArea.mLeft, workingArea.mTop);
 					//	Translate to origin.
-					Translate(workingArea, FPoint.Negate(center));
+					Translate(workingArea, FVector2.Negate(center));
 					//	Rotate and translate back.
 					point =
-						FPoint.Rotate(workingArea.mRight, workingArea.mTop, rotation);
-					FPoint.Translate(point, center);
+						FVector2.Rotate(workingArea.mRight, workingArea.mTop, rotation);
+					FVector2.Translate(point, center);
 					result.Add(point);
 					point =
-						FPoint.Rotate(workingArea.mLeft, workingArea.mTop, rotation);
-					FPoint.Translate(point, center);
+						FVector2.Rotate(workingArea.mLeft, workingArea.mTop, rotation);
+					FVector2.Translate(point, center);
 					result.Add(point);
 					point =
-						FPoint.Rotate(workingArea.mLeft, workingArea.mBottom, rotation);
-					FPoint.Translate(point, center);
+						FVector2.Rotate(workingArea.mLeft, workingArea.mBottom, rotation);
+					FVector2.Translate(point, center);
 					result.Add(point);
 					point =
-						FPoint.Rotate(workingArea.mRight, workingArea.mBottom, rotation);
-					FPoint.Translate(point, center);
+						FVector2.Rotate(workingArea.mRight, workingArea.mBottom, rotation);
+					FVector2.Translate(point, center);
 					result.Add(point);
 				}
 			}
@@ -1116,7 +1116,7 @@ namespace Geometry
 		/// True if the caller's point is located at one of the corners of the
 		/// supplied area.
 		/// </returns>
-		public static bool IsPointAtCorner(FArea area, FPoint point)
+		public static bool IsPointAtCorner(FArea area, FVector2 point)
 		{
 			bool result = false;
 
@@ -1178,20 +1178,20 @@ namespace Geometry
 		/// Area to inspect.
 		/// </param>
 		/// <returns>
-		/// Reference to the FPoint representing the location of the caller's
-		/// area, if found. Otherwise, an empty FPoint.
+		/// Reference to the FVector2 representing the location of the caller's
+		/// area, if found. Otherwise, an empty FVector2.
 		/// </returns>
-		public static FPoint Location(FArea area)
+		public static FVector2 Location(FArea area)
 		{
-			FPoint result = null;
+			FVector2 result = null;
 
 			if(area != null)
 			{
-				result = new FPoint(area.mLeft, area.mTop);
+				result = new FVector2(area.mLeft, area.mTop);
 			}
 			else
 			{
-				result = new FPoint();
+				result = new FVector2();
 			}
 			return result;
 		}
@@ -1216,20 +1216,20 @@ namespace Geometry
 		/// Area to inspect.
 		/// </param>
 		/// <returns>
-		/// Reference to the FPoint representing the opposite location of the
-		/// caller's area, if found. Otherwise, an empty FPoint.
+		/// Reference to the FVector2 representing the opposite location of the
+		/// caller's area, if found. Otherwise, an empty FVector2.
 		/// </returns>
-		public static FPoint LocationOpposite(FArea area)
+		public static FVector2 LocationOpposite(FArea area)
 		{
-			FPoint result = null;
+			FVector2 result = null;
 
 			if(area != null)
 			{
-				result = new FPoint(area.mRight, area.mBottom);
+				result = new FVector2(area.mRight, area.mBottom);
 			}
 			else
 			{
-				result = new FPoint();
+				result = new FVector2();
 			}
 			return result;
 		}
@@ -1268,7 +1268,7 @@ namespace Geometry
 		/// <param name="newLocation">
 		/// The new location for the area.
 		/// </param>
-		public static void MoveTo(FArea area, FPoint newLocation)
+		public static void MoveTo(FArea area, FVector2 newLocation)
 		{
 			if(area != null && !area.mReadOnly && newLocation != null)
 			{
@@ -1483,7 +1483,7 @@ namespace Geometry
 		/// <param name="location">
 		/// Reference to the location to set.
 		/// </param>
-		public static void SetLocation(FArea area, FPoint location)
+		public static void SetLocation(FArea area, FVector2 location)
 		{
 			if(area != null && !area.mReadOnly && location != null)
 			{
@@ -1699,14 +1699,14 @@ namespace Geometry
 					target.OnLeftChanged(new FloatEventArgs(source.mLeft, originalLeft));
 					target.OnLocationChanged(
 						new FloatPointEventArgs(
-							Location(source), new FPoint(originalLeft, originalTop)));
+							Location(source), new FVector2(originalLeft, originalTop)));
 				}
 				if(originalTop != source.mTop)
 				{
 					target.OnTopChanged(new FloatEventArgs(source.mTop, originalTop));
 					target.OnLocationChanged(
 						new FloatPointEventArgs(
-							Location(source), new FPoint(originalLeft, originalTop)));
+							Location(source), new FVector2(originalLeft, originalTop)));
 				}
 				if(originalRight != source.mRight)
 				{
@@ -1755,7 +1755,7 @@ namespace Geometry
 		/// <param name="offset">
 		/// The offset by which to move the area.
 		/// </param>
-		public static void Translate(FArea area, FPoint offset)
+		public static void Translate(FArea area, FVector2 offset)
 		{
 			if(area != null && !area.mReadOnly && offset != null)
 			{

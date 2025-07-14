@@ -27,7 +27,7 @@ namespace Geometry
 	/// <summary>
 	/// Collection of points.
 	/// </summary>
-	public class FPath : List<FPoint>
+	public class FPath : List<FVector2>
 	{
 		//*************************************************************************
 		//*	Private																																*
@@ -53,9 +53,9 @@ namespace Geometry
 		/// <returns>
 		/// Reference to the newly created and added point.
 		/// </returns>
-		public FPoint Add(float x, float y)
+		public FVector2 Add(float x, float y)
 		{
-			FPoint result = new FPoint();
+			FVector2 result = new FVector2();
 			result.X = x;
 			result.Y = y;
 			this.Add(result);
@@ -83,9 +83,9 @@ namespace Geometry
 
 			if(source != null)
 			{
-				foreach(FPoint pointItem in source)
+				foreach(FVector2 pointItem in source)
 				{
-					result.Add(FPoint.Clone(pointItem));
+					result.Add(FVector2.Clone(pointItem));
 				}
 			}
 			return result;
@@ -105,9 +105,9 @@ namespace Geometry
 		/// Reference to the point at the center the aggregate of points in the
 		/// path.
 		/// </returns>
-		public static FPoint GetCenter(List<FPoint> path)
+		public static FVector2 GetCenter(List<FVector2> path)
 		{
-			FPoint result = new FPoint(-1.0f, -1.0f);
+			FVector2 result = new FVector2(-1.0f, -1.0f);
 			float xa = 0.0f;     //	X Max.
 			float xc = 0.0f;     //	X Center.
 			float xi = 0.0f;     //	X Min.
@@ -156,7 +156,7 @@ namespace Geometry
 		{
 			int count = 0;
 			int index = 0;
-			List<FPoint> points = null;
+			List<FVector2> points = null;
 			List<FLine> result = new List<FLine>();
 
 			if(path != null)
@@ -192,11 +192,11 @@ namespace Geometry
 		/// Reference to a list of floating-point points representing the vertices
 		/// of the area.
 		/// </returns>
-		public static List<FPoint> GetVertices(FPath path, float rotation = 0f)
+		public static List<FVector2> GetVertices(FPath path, float rotation = 0f)
 		{
-			FPoint center = null;
-			FPoint point = null;
-			List<FPoint> result = new List<FPoint>();
+			FVector2 center = null;
+			FVector2 point = null;
+			List<FVector2> result = new List<FVector2>();
 			FPath workingPath = null;
 
 			if(path != null)
@@ -205,12 +205,12 @@ namespace Geometry
 				workingPath = FPath.Clone(path);
 				center = GetCenter(workingPath);
 				//	Translate to origin.
-				Translate(workingPath, FPoint.Negate(center));
+				Translate(workingPath, FVector2.Negate(center));
 				//	Rotate and translate back.
-				foreach(FPoint pointItem in workingPath)
+				foreach(FVector2 pointItem in workingPath)
 				{
-					point = FPoint.Rotate(pointItem, rotation);
-					FPoint.Translate(point, center);
+					point = FVector2.Rotate(pointItem, rotation);
+					FVector2.Translate(point, center);
 					result.Add(point);
 				}
 			}
@@ -262,7 +262,7 @@ namespace Geometry
 		/// True if the specified point exists within the polygon. Otherwise,
 		/// false.
 		/// </returns>
-		public static bool IsPointInPolygon(List<FPoint> path, FPoint point,
+		public static bool IsPointInPolygon(List<FVector2> path, FVector2 point,
 			bool allowEdge = true)
 		{
 			bool bContinue = true;
@@ -271,8 +271,8 @@ namespace Geometry
 			int j = 0;            //	Trailing vertex index.
 			float resolution = 0.0005f;
 			bool result = false;  //	Cooresponds to an odd number of nodes.
-			FPoint vi = null;
-			FPoint vj = null;
+			FVector2 vi = null;
+			FVector2 vj = null;
 			float x = 0f;        //	Point under test.
 			float y = 0f;        //	Point under test.
 
@@ -344,7 +344,7 @@ namespace Geometry
 		/// <returns>
 		/// The maximum X value found in the collection.
 		/// </returns>
-		public static float MaxX(List<FPoint> path)
+		public static float MaxX(List<FVector2> path)
 		{
 			float result = 0.0f;
 
@@ -369,7 +369,7 @@ namespace Geometry
 		/// <returns>
 		/// The maximum Y value found in the collection.
 		/// </returns>
-		public static float MaxY(List<FPoint> path)
+		public static float MaxY(List<FVector2> path)
 		{
 			float result = 0.0f;
 
@@ -394,7 +394,7 @@ namespace Geometry
 		/// <returns>
 		/// The minimum X value found in the collection.
 		/// </returns>
-		public static float MinX(List<FPoint> path)
+		public static float MinX(List<FVector2> path)
 		{
 			float result = 0.0f;
 
@@ -419,7 +419,7 @@ namespace Geometry
 		/// <returns>
 		/// The minimum Y value found in the collection.
 		/// </returns>
-		public static float MinY(List<FPoint> path)
+		public static float MinY(List<FVector2> path)
 		{
 			float result = 0.0f;
 
@@ -443,13 +443,13 @@ namespace Geometry
 		/// <param name="offset">
 		/// Reference by the axial values by which the path with be moved.
 		/// </param>
-		public static void Translate(FPath path, FPoint offset)
+		public static void Translate(FPath path, FVector2 offset)
 		{
 			if(path != null && offset != null)
 			{
-				foreach(FPoint pointItem in path)
+				foreach(FVector2 pointItem in path)
 				{
-					FPoint.Translate(pointItem, offset);
+					FVector2.Translate(pointItem, offset);
 				}
 			}
 		}

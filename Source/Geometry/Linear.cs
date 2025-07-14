@@ -57,9 +57,9 @@ namespace Geometry
 		/// A reference to the point on the line, relative to point 1,
 		/// identified by t, if found. Otherwise, null.
 		/// </returns>
-		public static FPoint GetLinePoint(FPoint point0, FPoint point1, float t)
+		public static FVector2 GetLinePoint(FVector2 point0, FVector2 point1, float t)
 		{
-			FPoint result = null;
+			FVector2 result = null;
 
 			if(point0 != null && point1 != null)
 			{
@@ -134,47 +134,15 @@ namespace Geometry
 		/// The linear interpolated point value between start and end, as indicated
 		/// by the progress value.
 		/// </returns>
-		public static FPoint Lerp(FPoint start, FPoint end,
+		public static FVector2 Lerp(FVector2 start, FVector2 end,
 			float progress)
 		{
-			FPoint result = new FPoint();
+			FVector2 result = new FVector2();
 
 			if (start != null && end != null)
 			{
 				result.X = Lerp(start.X, end.X, progress);
 				result.Y = Lerp(start.Y, end.Y, progress);
-			}
-			return result;
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
-		/// <summary>
-		/// Return the triple linear interpolation of the values between start and
-		/// end points representing the specified progress as a value between 0 and
-		/// 1.
-		/// </summary>
-		/// <param name="start">
-		/// Reference to the start point to be considered.
-		/// </param>
-		/// <param name="end">
-		/// Reference to the end point to be considered.
-		/// </param>
-		/// <param name="progress">
-		/// Current progress value.
-		/// </param>
-		/// <returns>
-		/// The linear interpolated point value between start and end, as indicated
-		/// by the progress value.
-		/// </returns>
-		public static FPoint3 Lerp(FPoint3 start, FPoint3 end,
-			float progress)
-		{
-			FPoint3 result = new FPoint3();
-
-			if(start != null && end != null)
-			{
-				result.X = Lerp(start.X, end.X, progress);
-				result.Y = Lerp(start.Y, end.Y, progress);
-				result.Z = Lerp(start.Z, end.Z, progress);
 			}
 			return result;
 		}

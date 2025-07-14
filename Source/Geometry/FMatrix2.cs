@@ -158,7 +158,7 @@ namespace Geometry
 		///// <returns>
 		///// The rotated point, relative to 0,0.
 		///// </returns>
-		//public static FPoint Rotate(FPoint point, float theta)
+		//public static FVector2 Rotate(FVector2 point, float theta)
 		//{
 		//	return Rotate(point, theta);
 		//}

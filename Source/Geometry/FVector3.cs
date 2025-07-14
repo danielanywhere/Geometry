@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
@@ -101,103 +102,17 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	_Implicit FPoint = FVector3																						*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Cast the FVector3 instance to an FPoint.
-		/// </summary>
-		/// <param name="value">
-		/// Reference to the vector to be converted.
-		/// </param>
-		/// <returns>
-		/// Reference to a newly created FPoint representing the values in
-		/// the caller's vector.
-		/// </returns>
-		public static implicit operator FPoint(FVector3 value)
-		{
-			FPoint result = new FPoint();
-
-			if(value != null)
-			{
-				result.X = value.mX;
-				result.Y = value.mY;
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
-
-		////*-----------------------------------------------------------------------*
-		////*	_Implicit FPoint3 = FVector3																					*
-		////*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Cast the FVector3 instance to an FPoint3.
-		///// </summary>
-		///// <param name="value">
-		///// Reference to the FVector3 value to be converted.
-		///// </param>
-		///// <returns>
-		///// Reference to a newly created FPoint3 whose values represent those
-		///// in the caller's FVector3 source.
-		///// </returns>
-		//public static implicit operator FPoint3(FVector3 value)
-		//{
-		//	FPoint3 result = new FPoint3();
-
-		//	if(value?.mValues.Length > 0)
-		//	{
-		//		result.X = value.mX;
-		//		if(value.mValues.Length > vY)
-		//		{
-		//			result.Y = value.mY;
-		//		}
-		//		if(value.mValues.Length > vZ)
-		//		{
-		//			result.Z = value.mZ;
-		//		}
-		//	}
-		//	return result;
-		//}
-		////*-----------------------------------------------------------------------*
-
-		////*-----------------------------------------------------------------------*
-		////*	_Implicit FVector3 = FPoint3																					*
-		////*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Cast the FPoint3 instance to an FVector3.
-		///// </summary>
-		///// <param name="value">
-		///// Reference to the point to be converted.
-		///// </param>
-		///// <returns>
-		///// Reference to a newly created FVector3 representing the values in
-		///// the caller's point.
-		///// </returns>
-		//public static implicit operator FVector3(FPoint3 value)
-		//{
-		//	FVector3 result = new FVector3();
-
-		//	if(value != null)
-		//	{
-		//		result.mX = value.X;
-		//		result.mY = value.Y;
-		//		result.mZ = value.Z;
-		//	}
-		//	return result;
-		//}
-		////*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
 		//*	_Implicit FVector2 = FVector3																					*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Cast the FVector3 instance to an FVector2.
 		/// </summary>
 		/// <param name="value">
-		/// Reference to the FVector3 value to be converted.
+		/// Reference to the vector to be converted.
 		/// </param>
 		/// <returns>
-		/// Reference to a newly created FVector2 whose values represent those
-		/// in the caller's FVector3 source.
+		/// Reference to a newly created FVector2 representing the values in
+		/// the caller's vector.
 		/// </returns>
 		public static implicit operator FVector2(FVector3 value)
 		{
@@ -207,36 +122,6 @@ namespace Geometry
 			{
 				result.X = value.mX;
 				result.Y = value.mY;
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	_Operator -																														*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return the result of one vector subtracted from another.
-		/// </summary>
-		/// <param name="minuend">
-		/// The part to be subtracted from.
-		/// </param>
-		/// <param name="subtrahend">
-		/// The amount to subtract.
-		/// </param>
-		/// <returns>
-		/// Reference to the vector subtraction result.
-		/// </returns>
-		public static FVector3 operator -(FVector3 minuend, FVector3 subtrahend)
-		{
-			FVector3 result = new FVector3();
-
-			if(minuend != null && subtrahend != null)
-			{
-				Assign(result,
-					minuend.mX - subtrahend.mX,
-					minuend.mY - subtrahend.mY,
-					minuend.mZ - subtrahend.mZ);
 			}
 			return result;
 		}
@@ -440,6 +325,36 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	_Operator -																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the result of one vector subtracted from another.
+		/// </summary>
+		/// <param name="minuend">
+		/// The part to be subtracted from.
+		/// </param>
+		/// <param name="subtrahend">
+		/// The amount to subtract.
+		/// </param>
+		/// <returns>
+		/// Reference to the vector subtraction result.
+		/// </returns>
+		public static FVector3 operator -(FVector3 minuend, FVector3 subtrahend)
+		{
+			FVector3 result = new FVector3();
+
+			if(minuend != null && subtrahend != null)
+			{
+				Assign(result,
+					minuend.mX - subtrahend.mX,
+					minuend.mY - subtrahend.mY,
+					minuend.mZ - subtrahend.mZ);
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	_Operator !=																													*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -622,6 +537,47 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* ClosestPoint																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the closest point to the check-point.
+		/// </summary>
+		/// <param name="checkPoint">
+		/// The check point to which the closest point in the list will be found.
+		/// </param>
+		/// <param name="points">
+		/// Reference to a list of vectors to be compared.
+		/// </param>
+		/// <returns>
+		/// A vector corresponding to the location of the closest point in the
+		/// list.
+		/// </returns>
+		public static FVector3 ClosestPoint(FVector3 checkPoint,
+			List<FVector3> points)
+		{
+			List<float> distances = new List<float>();
+			int minIndex = -1;
+			float minValue = 0;
+			FVector3 result = null;
+
+			if(checkPoint != null && points?.Count > 0)
+			{
+				foreach(FVector3 pointItem in points)
+				{
+					distances.Add(
+						Math.Abs(Trig.GetLineDistance(
+							checkPoint.mX, checkPoint.mY, checkPoint.mZ,
+							pointItem.X, pointItem.Y, pointItem.Z)));
+				}
+				minValue = distances.Min();
+				minIndex = distances.IndexOf(minValue);
+				result = points[minIndex];
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	CoordinateChanged																											*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -726,31 +682,6 @@ namespace Geometry
 		//*	Equals																																*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Return a value indicating whether this item's members are equal to the
-		/// members of the caller's item.
-		/// </summary>
-		/// <param name="obj">
-		/// Reference to the object to which this value is being compared.
-		/// </param>
-		/// <returns>
-		/// A value indicating whether this value is substantially equal to the
-		/// caller's provided item.
-		/// </returns>
-		public override bool Equals(object obj)
-		{
-			bool result = false;
-
-			if(obj is FVector3 @vector)
-			{
-				if(vector.mX == mX && vector.mY == mY && vector.mZ == mZ)
-				{
-					result = true;
-				}
-			}
-			return result;
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
-		/// <summary>
 		/// Return a value indicating whether the values in the supplied vector
 		/// are equal to the specified elemental associations.
 		/// </summary>
@@ -783,6 +714,31 @@ namespace Geometry
 
 			return result;
 		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return a value indicating whether this item's members are equal to the
+		/// members of the caller's item.
+		/// </summary>
+		/// <param name="obj">
+		/// Reference to the object to which this value is being compared.
+		/// </param>
+		/// <returns>
+		/// A value indicating whether this value is substantially equal to the
+		/// caller's provided item.
+		/// </returns>
+		public override bool Equals(object obj)
+		{
+			bool result = false;
+
+			if(obj is FVector3 @vector)
+			{
+				if(vector.mX == mX && vector.mY == mY && vector.mZ == mZ)
+				{
+					result = true;
+				}
+			}
+			return result;
+		}
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
@@ -813,6 +769,37 @@ namespace Geometry
 			if(result == null)
 			{
 				result = new float[0];
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetCenter																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the center point of the collection of points.
+		/// </summary>
+		/// <param name="points">
+		/// Reference to the collection of points to be inspected.
+		/// </param>
+		/// <returns>
+		/// Reference to the center point of the provided point list, if
+		/// legitimate. Otherwise, an empty point.
+		/// </returns>
+		/// <remarks>
+		/// This function returns the centroid or center of mass of the object.
+		/// </remarks>
+		public static FVector3 GetCenter(List<FVector3> points)
+		{
+			FVector3 result = null;
+
+			if(points?.Count > 0)
+			{
+				result = new FVector3(
+					points.Average(x => x.mX),
+					points.Average(y => y.mY),
+					points.Average(z => z.mZ));
 			}
 			return result;
 		}
@@ -965,7 +952,7 @@ namespace Geometry
 				length = Trig.GetLineDistance(
 					vecA.mX, vecA.mY,
 					vecB.mX, vecB.mY);
-				point = new FPoint(vecA.mX, vecA.mY);
+				point = new FVector2(vecA.mX, vecA.mY);
 				point = Trig.GetDestPoint(point, 0f, length);
 				vecB.mX = point.X;
 				vecB.mY = point.Y;
@@ -979,7 +966,7 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	GetLineDist																														*
+		//*	GetLineDistance																												*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return the distance of the line between the tips of two vectors.
@@ -1652,7 +1639,7 @@ namespace Geometry
 		/// string was invalid.
 		/// </param>
 		/// <returns>
-		/// Newly created FPoint value representing the caller's input, if
+		/// Newly created FVector3 value representing the caller's input, if
 		/// that input was legal or allowNull was false. Otherwise, a null value.
 		/// </returns>
 		public static FVector3 Parse(string coordinate, bool allowNull = false)
@@ -1662,7 +1649,7 @@ namespace Geometry
 			bool bZ = false;
 			int index = 0;
 			MatchCollection matches = null;
-			FPoint3 result = null;
+			FVector3 result = null;
 			string text = "";
 
 			if(coordinate?.Length > 0)
@@ -1673,7 +1660,7 @@ namespace Geometry
 					//	JSON object.
 					try
 					{
-						result = JsonConvert.DeserializeObject<FPoint3>(coordinate);
+						result = JsonConvert.DeserializeObject<FVector3>(coordinate);
 					}
 					catch { }
 				}
@@ -1683,7 +1670,7 @@ namespace Geometry
 					matches = Regex.Matches(coordinate, ResourceMain.rxCoordinate);
 					if(matches.Count > 0)
 					{
-						result = new FPoint3();
+						result = new FVector3();
 						foreach(Match matchItem in matches)
 						{
 							text = GetValue(matchItem, "label").ToLower();
@@ -1735,7 +1722,7 @@ namespace Geometry
 			}
 			if(result == null && !allowNull)
 			{
-				result = new FPoint3();
+				result = new FVector3();
 			}
 			return result;
 		}
@@ -1747,7 +1734,7 @@ namespace Geometry
 		/// <summary>
 		/// Private member for <see cref="ReadOnly">ReadOnly</see>.
 		/// </summary>
-		protected bool mReadOnly = false;
+		private bool mReadOnly = false;
 		/// <summary>
 		/// Get/Set a value indicating whether this item is read-only.
 		/// </summary>
@@ -2225,7 +2212,7 @@ namespace Geometry
 		/// <summary>
 		/// Private member for <see cref="X">X</see>.
 		/// </summary>
-		protected float mX = 0f;
+		private float mX = 0f;
 		/// <summary>
 		/// Get/Set the x coordinate.
 		/// </summary>
@@ -2256,7 +2243,7 @@ namespace Geometry
 		/// <summary>
 		/// Private member for <see cref="Y">Y</see>.
 		/// </summary>
-		protected float mY = 0f;
+		private float mY = 0f;
 		/// <summary>
 		/// Get/Set the y coordinate.
 		/// </summary>
@@ -2287,7 +2274,7 @@ namespace Geometry
 		/// <summary>
 		/// Private member for <see cref="Z">Z</see>.
 		/// </summary>
-		protected float mZ = 0f;
+		private float mZ = 0f;
 		/// <summary>
 		/// Get/Set the y coordinate.
 		/// </summary>
@@ -2308,6 +2295,26 @@ namespace Geometry
 							new FloatPointEventArgs("Z", value, original));
 					}
 				}
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	Zero																																	*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Zero the values of the specified vector.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to be modified.
+		/// </param>
+		public static void Zero(FVector3 vector)
+		{
+			if(!vector.mReadOnly)
+			{
+				vector.mX = 0.0f;
+				vector.mY = 0.0f;
+				vector.mZ = 0.0f;
 			}
 		}
 		//*-----------------------------------------------------------------------*

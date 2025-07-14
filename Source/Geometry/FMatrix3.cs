@@ -283,15 +283,15 @@ namespace Geometry
 		///// </list>
 		///// </para>
 		///// </remarks>
-		//public static FPoint3 Rotate(FPoint3 point,
+		//public static FVector3 Rotate(FVector3 point,
 		//	float thetaX, float thetaY, float thetaZ,
 		//	AxisType upAxis = AxisType.Z)
 		//{
-		//	FPoint3 result = null;
+		//	FVector3 result = null;
 
 		//	if(point != null)
 		//	{
-		//		result = FPoint3.Clone(point);
+		//		result = FVector3.Clone(point);
 		//		switch(upAxis)
 		//		{
 		//			case AxisType.X:
@@ -374,10 +374,10 @@ namespace Geometry
 		///// </list>
 		///// </para>
 		///// </remarks>
-		//public static FPoint3 Rotate(FPoint3 point,
+		//public static FVector3 Rotate(FVector3 point,
 		//	FVector3 theta, AxisType upAxis = AxisType.Z)
 		//{
-		//	FPoint3 result = null;
+		//	FVector3 result = null;
 
 		//	if(point != null && theta != null)
 		//	{
@@ -435,7 +435,7 @@ namespace Geometry
 
 			if(vector != null)
 			{
-				result = FPoint3.Clone(vector);
+				result = FVector3.Clone(vector);
 				switch(upAxis)
 				{
 					case AxisType.X:
@@ -547,9 +547,9 @@ namespace Geometry
 		///// <returns>
 		///// New point containing the rotated coordinates.
 		///// </returns>
-		//public static FPoint3 RotateX(FPoint3 point, float theta)
+		//public static FVector3 RotateX(FVector3 point, float theta)
 		//{
-		//	return new FPoint3(RotateX((FVector3)point, theta));
+		//	return new FVector3(RotateX((FVector3)point, theta));
 		//}
 		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -606,9 +606,9 @@ namespace Geometry
 		///// <returns>
 		///// New vector containing the rotated coordinates.
 		///// </returns>
-		//public static FPoint3 RotateY(FPoint3 point, float theta)
+		//public static FVector3 RotateY(FVector3 point, float theta)
 		//{
-		//	return new FPoint3(RotateY((FVector3)point, theta));
+		//	return new FVector3(RotateY((FVector3)point, theta));
 		//}
 		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -665,9 +665,9 @@ namespace Geometry
 		///// <returns>
 		///// New vector containing the rotated coordinates.
 		///// </returns>
-		//public static FPoint3 RotateZ(FPoint3 point, float theta)
+		//public static FVector3 RotateZ(FVector3 point, float theta)
 		//{
-		//	return new FPoint3(RotateZ((FVector3)point, theta));
+		//	return new FVector3(RotateZ((FVector3)point, theta));
 		//}
 		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -723,9 +723,9 @@ namespace Geometry
 		///// <returns>
 		///// Scaled point.
 		///// </returns>
-		//public static FPoint Scale(FPoint point, FPoint scale)
+		//public static FVector2 Scale(FVector2 point, FVector2 scale)
 		//{
-		//	return new FPoint(Scale((FVector2)point, (FVector2)scale));
+		//	return new FVector2(Scale((FVector2)point, (FVector2)scale));
 		//}
 		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -740,7 +740,7 @@ namespace Geometry
 		/// <returns>
 		/// Scaled point.
 		/// </returns>
-		public static FVector3 Scale(FVector2 point, FVector2 scale)
+		public static FVector2 Scale(FVector2 point, FVector2 scale)
 		{
 			FMatrix3 matrix = new FMatrix3();
 			FVector3 result = new FVector3();
@@ -775,9 +775,9 @@ namespace Geometry
 		///// <returns>
 		///// Translated point.
 		///// </returns>
-		//public static FPoint Translate(FPoint point, FPoint translation)
+		//public static FVector2 Translate(FVector2 point, FVector2 translation)
 		//{
-		//	return new FPoint(Translate((FVector2)point, (FVector2)translation));
+		//	return new FVector2(Translate((FVector2)point, (FVector2)translation));
 		//}
 		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>

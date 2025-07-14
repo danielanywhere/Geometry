@@ -18,7 +18,9 @@
 
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -99,70 +101,8 @@ namespace Geometry
 		}
 		//*-----------------------------------------------------------------------*
 
-		////*-----------------------------------------------------------------------*
-		////*	_Implicit FPoint = FVector2																						*
-		////*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Cast the FVector2 instance to an FPoint.
-		///// </summary>
-		///// <param name="value">
-		///// Reference to the vector to be converted.
-		///// </param>
-		///// <returns>
-		///// Reference to a newly created FPoint representing the values in
-		///// the caller's vector.
-		///// </returns>
-		//public static implicit operator FPoint(FVector2 value)
-		//{
-		//	FPoint result = new FPoint();
-
-		//	if(value != null)
-		//	{
-		//		if(value.mValues.Length > 0)
-		//		{
-		//			result.X = value.mValues[0];
-		//		}
-		//		if(value.mValues.Length > 1)
-		//		{
-		//			result.Y = value.mValues[1];
-		//		}
-		//	}
-		//	return result;
-		//}
-		////*-----------------------------------------------------------------------*
-
-		////*-----------------------------------------------------------------------*
-		////*	_Implicit FVector2 = FPoint																						*
-		////*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Cast the FPoint instance to a FVector2.
-		///// </summary>
-		///// <param name="value">
-		///// Reference to the point to be converted.
-		///// </param>
-		///// <returns>
-		///// Reference to the newly created vector representing the values in the
-		///// caller's point.
-		///// </returns>
-		//public static implicit operator FVector2(FPoint value)
-		//{
-		//	FVector2 result = null;
-
-		//	if(value != null)
-		//	{
-		//		result = new FVector2(value.X, value.Y);
-		//	}
-		//	if(result == null)
-		//	{
-		//		//	Last chance. Safe return.
-		//		result = new FVector2();
-		//	}
-		//	return result;
-		//}
-		////*-----------------------------------------------------------------------*
-
 		//*-----------------------------------------------------------------------*
-		//* _Operator scalar * FPoint																							*
+		//* _Operator scalar * FVector2																							*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return the result of a point multiplied by a scalar.
@@ -214,7 +154,7 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//* _Operator scalar / FPoint																							*
+		//* _Operator scalar / FVector2																						*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
 		/// Return the result of a scalar divided by a point.
@@ -452,6 +392,81 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* ClosestPoint																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the closest point to the check-point.
+		/// </summary>
+		/// <param name="checkPoint">
+		/// The check point to which the closest point in the list will be found.
+		/// </param>
+		/// <param name="areas">
+		/// Reference to a list of areas whose points will be compared.
+		/// </param>
+		/// <returns>
+		/// A vector corresponding to the location of the closest area in the
+		/// list.
+		/// </returns>
+		public static FVector2 ClosestPoint(FVector2 checkPoint, List<FArea> areas)
+		{
+			List<float> distances = new List<float>();
+			int minIndex = -1;
+			float minValue = 0;
+			FVector2 result = null;
+
+			if(checkPoint != null && areas?.Count > 0)
+			{
+				foreach(FArea areaItem in areas)
+				{
+					distances.Add(
+						Math.Abs(Trig.GetLineDistance(
+							checkPoint.mX, checkPoint.mY, areaItem.X, areaItem.Y)));
+				}
+				minValue = distances.Min();
+				minIndex = distances.IndexOf(minValue);
+				result = FArea.Location(areas[minIndex]);
+			}
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Return the closest point to the check-point.
+		/// </summary>
+		/// <param name="checkPoint">
+		/// The check point to which the closest point in the list will be found.
+		/// </param>
+		/// <param name="points">
+		/// Reference to a list of vectors to be compared.
+		/// </param>
+		/// <returns>
+		/// A vector corresponding to the location of the closest point in the
+		/// list.
+		/// </returns>
+		public static FVector2 ClosestPoint(FVector2 checkPoint,
+			List<FVector2> points)
+		{
+			List<float> distances = new List<float>();
+			int minIndex = -1;
+			float minValue = 0;
+			FVector2 result = null;
+
+			if(checkPoint != null && points?.Count > 0)
+			{
+				foreach(FVector2 pointItem in points)
+				{
+					distances.Add(
+						Math.Abs(Trig.GetLineDistance(
+							checkPoint.mX, checkPoint.mY, pointItem.X, pointItem.Y)));
+				}
+				minValue = distances.Min();
+				minIndex = distances.IndexOf(minValue);
+				result = points[minIndex];
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	CoordinateChanged																											*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -571,6 +586,36 @@ namespace Geometry
 			if(result == null)
 			{
 				result = new float[0];
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* GetCenter																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the center point of the collection of points.
+		/// </summary>
+		/// <param name="points">
+		/// Reference to the collection of points to be inspected.
+		/// </param>
+		/// <returns>
+		/// Reference to the center point of the provided point list, if
+		/// legitimate. Otherwise, an empty point.
+		/// </returns>
+		/// <remarks>
+		/// This function returns the centroid or center of mass of the object.
+		/// </remarks>
+		public static FVector2 GetCenter(List<FVector2> points)
+		{
+			FVector2 result = null;
+
+			if(points?.Count > 0)
+			{
+				result = new FVector2(
+					points.Average(x => x.mX),
+					points.Average(y => y.mY));
 			}
 			return result;
 		}
@@ -915,7 +960,7 @@ namespace Geometry
 					matches = Regex.Matches(coordinate, ResourceMain.rxCoordinate);
 					if(matches.Count > 0)
 					{
-						result = new FPoint();
+						result = new FVector2();
 						foreach(Match matchItem in matches)
 						{
 							text = GetValue(matchItem, "label").ToLower();
@@ -983,35 +1028,35 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 		//* Rotate																																*
 		//*-----------------------------------------------------------------------*
-		///// <summary>
-		///// Rotate the caller's vector around the origin.
-		///// </summary>
-		///// <param name="x">
-		///// The X value to be rotated.
-		///// </param>
-		///// <param name="y">
-		///// The Y value to be rotated.
-		///// </param>
-		///// <param name="theta">
-		///// The angle at which to rotate the vector, in radians.
-		///// </param>
-		///// <returns>
-		///// Reference to a representation of the caller's vector after being
-		///// rotated by the specified angle around the origin.
-		///// </returns>
-		//public static FVector2 Rotate(float x, float y, float theta)
-		//{
-		//	FVector2 result = new FVector2();
+		/// <summary>
+		/// Rotate the caller's point around the origin.
+		/// </summary>
+		/// <param name="x">
+		/// The X value to be rotated.
+		/// </param>
+		/// <param name="y">
+		/// The Y value to be rotated.
+		/// </param>
+		/// <param name="theta">
+		/// The angle at which to rotate the point, in radians.
+		/// </param>
+		/// <returns>
+		/// Reference to a representation of the caller's point after being
+		/// rotated by the specified angle around the origin.
+		/// </returns>
+		public static FVector2 Rotate(float x, float y, float theta)
+		{
+			FVector2 result = new FVector2();
 
-		//	result.mX =
-		//		(float)((double)x * Math.Cos((double)theta) -
-		//			(double)y * Math.Sin((double)theta));
-		//	result.mY =
-		//		(float)((double)x * Math.Sin((double)theta) +
-		//			(double)y * Math.Cos((double)theta));
-		//	return result;
-		//}
-		////*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+			result.mX =
+				(float)((double)x * Math.Cos((double)theta) -
+					(double)y * Math.Sin((double)theta));
+			result.mY =
+				(float)((double)x * Math.Sin((double)theta) +
+					(double)y * Math.Cos((double)theta));
+			return result;
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
 		/// Rotate the caller's point around the origin.
 		/// </summary>
@@ -1123,6 +1168,26 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	ToString																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the string representation of this item.
+		/// </summary>
+		/// <returns>
+		/// String representation of the values of this point.
+		/// </returns>
+		public override string ToString()
+		{
+			StringBuilder result = new StringBuilder();
+
+			result.Append($"{mX:0.000}");
+			result.Append(',');
+			result.Append($"{mY:0.000}");
+			return result.ToString();
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	TransferValues																												*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -1166,26 +1231,6 @@ namespace Geometry
 				vector.X += offset.mX;
 				vector.Y += offset.mY;
 			}
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	ToString																															*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Return the string representation of this item.
-		/// </summary>
-		/// <returns>
-		/// String representation of the values of this point.
-		/// </returns>
-		public override string ToString()
-		{
-			StringBuilder result = new StringBuilder();
-
-			result.Append($"{mX:0.000}");
-			result.Append(',');
-			result.Append($"{mY:0.000}");
-			return result.ToString();
 		}
 		//*-----------------------------------------------------------------------*
 

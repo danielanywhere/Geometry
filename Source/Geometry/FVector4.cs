@@ -100,115 +100,6 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	_Implicit FPoint = FVector4																						*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Cast the FVector4 instance to an FPoint.
-		/// </summary>
-		/// <param name="value">
-		/// Reference to the vector to be converted.
-		/// </param>
-		/// <returns>
-		/// Reference to a newly created FPoint representing the values in
-		/// the caller's vector.
-		/// </returns>
-		public static implicit operator FPoint(FVector4 value)
-		{
-			FPoint result = new FPoint();
-
-			if(value != null)
-			{
-				result.X = value.mX;
-				result.Y = value.mY;
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	_Implicit FPoint3 = FVector4																					*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Cast the FVector4 instance to an FPoint3.
-		/// </summary>
-		/// <param name="value">
-		/// Reference to the FVector3 value to be converted.
-		/// </param>
-		/// <returns>
-		/// Reference to a newly created FPoint3 whose values represent those
-		/// in the caller's FVector3 source.
-		/// </returns>
-		public static implicit operator FPoint3(FVector4 value)
-		{
-			FPoint3 result = new FPoint3();
-
-			if(value != null)
-			{
-				result.X = value.mX;
-				result.Y = value.mY;
-				result.Z = value.mZ;
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	_Implicit FVector4 = FPoint																						*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Cast the FPoint instance to an FVector4.
-		/// </summary>
-		/// <param name="value">
-		/// Reference to the point to be converted.
-		/// </param>
-		/// <returns>
-		/// Reference to a newly created FVector4 representing the values in
-		/// the caller's point.
-		/// </returns>
-		public static implicit operator FVector4(FPoint value)
-		{
-			FVector4 result = new FVector4();
-
-			if(value != null)
-			{
-				result.mX = value.X;
-				result.mY = value.Y;
-				result.mZ = 0f;
-				result.mW = 1f;
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
-		//*	_Implicit FVector4 = FPoint3																					*
-		//*-----------------------------------------------------------------------*
-		/// <summary>
-		/// Cast the FPoint3 instance to an FVector4.
-		/// </summary>
-		/// <param name="value">
-		/// Reference to the point to be converted.
-		/// </param>
-		/// <returns>
-		/// Reference to a newly created FVector4 representing the values in
-		/// the caller's point.
-		/// </returns>
-		public static implicit operator FVector4(FPoint3 value)
-		{
-			FVector4 result = new FVector4();
-
-			if(value != null)
-			{
-				result.mX = value.X;
-				result.mY = value.Y;
-				result.mZ = value.Z;
-				result.mW = 1f;
-			}
-			return result;
-		}
-		//*-----------------------------------------------------------------------*
-
-		//*-----------------------------------------------------------------------*
 		//*	_Implicit FVector4 = FVector2																					*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -866,7 +757,7 @@ namespace Geometry
 				length = Trig.GetLineDistance(
 					vecA.mX, vecA.mY,
 					vecB.mX, vecB.mY);
-				point = new FPoint(vecA.mX, vecA.mY);
+				point = new FVector2(vecA.mX, vecA.mY);
 				point = Trig.GetDestPoint(point, 0f, length);
 				vecB.mX = point.X;
 				vecB.mY = point.Y;

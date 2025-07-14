@@ -208,12 +208,12 @@ namespace Geometry
 		/// Reference to the bounding box occupied by the specified arc, if
 		/// legitimate values were presented. Otherwise, a empty rectangle.
 		/// </returns>
-		public static FArea GetArcBoundingBox(FPoint center,
-			FPoint start, FPoint end, ArcDirectionEnum winding)
+		public static FArea GetArcBoundingBox(FVector2 center,
+			FVector2 start, FVector2 end, ArcDirectionEnum winding)
 		{
 			float angleEnd = 0f;
 			float angleStart = 0f;
-			FPoint endActual = null;
+			FVector2 endActual = null;
 			int[] crossings = null;
 			float maxX = 0f;
 			float maxY = 0f;
@@ -221,7 +221,7 @@ namespace Geometry
 			float minY = 0f;
 			float radius = 0f;
 			FArea result = new FArea();
-			List<FPoint> samples = new List<FPoint>();
+			List<FVector2> samples = new List<FVector2>();
 
 			if(center != null && start != null && end != null &&
 				winding != ArcDirectionEnum.None)
@@ -238,7 +238,7 @@ namespace Geometry
 				angleStart = Trig.GetLineAngle(center, start);
 				angleEnd = Trig.GetLineAngle(center, end);
 
-				endActual = new FPoint(Trig.GetDestPoint(center, angleEnd, radius));
+				endActual = new FVector2(Trig.GetDestPoint(center, angleEnd, radius));
 				samples.Add(endActual);
 
 				crossings = GetQuadrantCrossings(angleStart, angleEnd, winding);
@@ -259,22 +259,22 @@ namespace Geometry
 					//	Quadrant boundaries are spanned by the shape.
 					if(crossings.Contains(0))
 					{
-						samples.Add(new FPoint(
+						samples.Add(new FVector2(
 							Trig.GetDestPoint(center, 0.5f * (float)Math.PI, radius)));
 					}
 					if(crossings.Contains(1))
 					{
-						samples.Add(new FPoint(
+						samples.Add(new FVector2(
 							Trig.GetDestPoint(center, 1.0f * (float)Math.PI, radius)));
 					}
 					if(crossings.Contains(2))
 					{
-						samples.Add(new FPoint(
+						samples.Add(new FVector2(
 							Trig.GetDestPoint(center, 1.5f * (float)Math.PI, radius)));
 					}
 					if(crossings.Contains(3))
 					{
-						samples.Add(new FPoint(
+						samples.Add(new FVector2(
 							Trig.GetDestPoint(center, 0.0f * (float)Math.PI, radius)));
 					}
 				}
@@ -316,8 +316,8 @@ namespace Geometry
 		/// Reference to the bounding box occupied by the specified arc, if
 		/// legitimate values were presented. Otherwise, a empty rectangle.
 		/// </returns>
-		public static FArea GetArcBoundingBox(FPoint center,
-			FPoint start, FPoint end, WindingOrientationEnum winding,
+		public static FArea GetArcBoundingBox(FVector2 center,
+			FVector2 start, FVector2 end, WindingOrientationEnum winding,
 			DrawingSpaceEnum drawingSpace = DrawingSpaceEnum.Display)
 		{
 			ArcDirectionEnum angularRevolution = ArcDirectionEnum.None;
@@ -671,12 +671,12 @@ namespace Geometry
 		/// Reference to a list of evenly-spaced vertices around the edge of the
 		/// indicated circle, if valid. Otherwise, an empty list.
 		/// </returns>
-		public static List<FPoint> GetVertices(FPoint center, float radius,
+		public static List<FVector2> GetVertices(FVector2 center, float radius,
 			int vertexCount, float thetaOffset = 0f)
 		{
 			float angle = thetaOffset;
 			int index = 0;
-			List<FPoint> result = new List<FPoint>();
+			List<FVector2> result = new List<FVector2>();
 			float space = 0f;
 
 			if(center != null && radius > 0f && vertexCount > 0)
@@ -685,7 +685,7 @@ namespace Geometry
 				space = TwoPi / (float)vertexCount;
 				for(index = 0; index < vertexCount; index++)
 				{
-					result.Add(new FPoint(Trig.GetDestPoint(center, angle, radius)));
+					result.Add(new FVector2(Trig.GetDestPoint(center, angle, radius)));
 					angle += space;
 				}
 			}

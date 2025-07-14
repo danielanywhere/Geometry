@@ -82,7 +82,7 @@ namespace Geometry
 		/// <param name="pointB">
 		/// Reference to the second point in the new line.
 		/// </param>
-		public FLine(FPoint pointA, FPoint pointB)
+		public FLine(FVector2 pointA, FVector2 pointB)
 		{
 			if(pointA != null)
 			{
@@ -137,13 +137,13 @@ namespace Geometry
 		/// Reference to the center point of the provided line, if legitimate.
 		/// Otherwise, null.
 		/// </returns>
-		public static FPoint GetCenter(FLine line)
+		public static FVector2 GetCenter(FLine line)
 		{
-			FPoint result = null;
+			FVector2 result = null;
 
 			if(line != null)
 			{
-				result = new FPoint(
+				result = new FVector2(
 					line.mPointA.X + ((line.mPointB.X - line.mPointA.X) / 2f),
 					line.mPointA.Y + ((line.mPointB.Y - line.mPointA.Y) / 2f)
 					);
@@ -169,13 +169,13 @@ namespace Geometry
 		/// Reference to the closest point between the caller's line and an
 		/// arbitrary external point, if valid. Otherwise, null.
 		/// </returns>
-		public static FPoint GetClosestPoint(FLine line, FPoint point)
+		public static FVector2 GetClosestPoint(FLine line, FVector2 point)
 		{
-			FPoint ab = null;
+			FVector2 ab = null;
 			float abab = 0f;
-			FPoint ac = null;
+			FVector2 ac = null;
 			float acab = 0f;
-			FPoint result = null;
+			FVector2 result = null;
 			float t = 0f;
 
 			if(!FLine.IsEmpty(line) && point != null)
@@ -183,8 +183,8 @@ namespace Geometry
 				ab = line.PointB - line.PointA;
 				ac = point - line.PointA;
 
-				abab = FPoint.Dot(ab, ab);
-				acab = FPoint.Dot(ac, ab);
+				abab = FVector2.Dot(ab, ab);
+				acab = FVector2.Dot(ac, ab);
 
 				if(abab != 0f)
 				{
@@ -218,7 +218,7 @@ namespace Geometry
 		/// Reference to the first line in the collection containing the caller's
 		/// point, if found. Otherwise, null.
 		/// </returns>
-		public static FLine GetIntersectingLine(List<FLine> lines, FPoint point)
+		public static FLine GetIntersectingLine(List<FLine> lines, FVector2 point)
 		{
 			FLine result = null;
 
@@ -256,7 +256,7 @@ namespace Geometry
 		/// caller's point, if found. Otherwise, an empty list.
 		/// </returns>
 		public static List<FLine> GetIntersectingLines(List<FLine> lines,
-			FPoint point)
+			FVector2 point)
 		{
 			List<FLine> result = new List<FLine>();
 
@@ -292,7 +292,7 @@ namespace Geometry
 		/// </returns>
 		public static FLine GetLine(FLine line, float rotation = 0f)
 		{
-			List<FPoint> points = null;
+			List<FVector2> points = null;
 			FLine result = new FLine();
 
 			if(line != null)
@@ -324,12 +324,12 @@ namespace Geometry
 		/// Reference to a list of floating-point points representing the vertices
 		/// of the line.
 		/// </returns>
-		public static List<FPoint> GetVertices(FLine line, float rotation = 0f)
+		public static List<FVector2> GetVertices(FLine line, float rotation = 0f)
 		{
-			FPoint center = null;
-			FPoint location = null;
-			FPoint point = null;
-			List<FPoint> result = new List<FPoint>();
+			FVector2 center = null;
+			FVector2 location = null;
+			FVector2 point = null;
+			List<FVector2> result = new List<FVector2>();
 			FLine workingLine = null;
 
 			if(line != null)
@@ -337,7 +337,7 @@ namespace Geometry
 				if(rotation == 0f)
 				{
 					//	Vertices with no rotation is much faster.
-					result.AddRange(new FPoint[]
+					result.AddRange(new FVector2[]
 					{
 						line.mPointA,
 						line.mPointB
@@ -347,20 +347,20 @@ namespace Geometry
 				{
 					//	Avoid affecting the caller's line object.
 					workingLine = Clone(line);
-					center = new FPoint(
+					center = new FVector2(
 						workingLine.mPointA.X +
 							((workingLine.mPointB.X - workingLine.mPointA.X) / 2f),
 						workingLine.mPointA.Y +
 							((workingLine.mPointB.Y - workingLine.mPointA.Y) / 2f));
-					location = FPoint.Clone(workingLine.mPointA);
+					location = FVector2.Clone(workingLine.mPointA);
 					//	Translate to origin.
-					Translate(workingLine, FPoint.Negate(center));
+					Translate(workingLine, FVector2.Negate(center));
 					//	Rotate and translate back.
-					point = FPoint.Rotate(workingLine.mPointA, rotation);
-					FPoint.Translate(point, center);
+					point = FVector2.Rotate(workingLine.mPointA, rotation);
+					FVector2.Translate(point, center);
 					result.Add(point);
-					point = FPoint.Rotate(workingLine.mPointB, rotation);
-					FPoint.Translate(point, center);
+					point = FVector2.Rotate(workingLine.mPointB, rotation);
+					FVector2.Translate(point, center);
 					result.Add(point);
 				}
 			}
@@ -393,7 +393,7 @@ namespace Geometry
 		public static bool HasIntersection(FLine lineA, FLine lineB,
 			bool allowImaginary = false)
 		{
-			FPoint point = null;
+			FVector2 point = null;
 			bool result = false;
 			if(lineA != null && lineB != null)
 			{
@@ -477,12 +477,12 @@ namespace Geometry
 		/// an intersection was found. Otherwise, a point where X and Y
 		/// are set to float.NegativeInfinity.
 		/// </returns>
-		public static FPoint Intersect(FLine lineA,
+		public static FVector2 Intersect(FLine lineA,
 			FLine lineB, bool allowImaginary = false)
 		{
 			double rd = 0f;
-			FPoint result =
-				new FPoint(float.NegativeInfinity, float.NegativeInfinity);
+			FVector2 result =
+				new FVector2(float.NegativeInfinity, float.NegativeInfinity);
 			double rn = 0f;
 			double x1 = 0f;
 			double x2 = 0f;
@@ -522,7 +522,7 @@ namespace Geometry
 					//	The intersection was only imaginary, and does not sit on either
 					//	physical line. In this case the intersection of the lines should
 					//	be the middle point between line1.pointB : line2.pointA.
-					result = FPoint.MiddlePoint(lineA.mPointB, lineB.mPointA);
+					result = FVector2.MiddlePoint(lineA.mPointB, lineB.mPointA);
 				}
 			}
 			return result;
@@ -546,9 +546,9 @@ namespace Geometry
 		/// Reference to point D where vector C intersects line AB, if a
 		/// point could be matched. Otherwise, null.
 		/// </returns>
-		public static FPoint Intersect(FLine line, FPoint vector, float magnitude)
+		public static FVector2 Intersect(FLine line, FVector2 vector, float magnitude)
 		{
-			FPoint result = null;
+			FVector2 result = null;
 
 			if(line != null)
 			{
@@ -578,18 +578,18 @@ namespace Geometry
 		/// Reference to point D where vector C intersects line AB, if a
 		/// point could be matched. Otherwise, null.
 		/// </returns>
-		public static FPoint Intersect(FPoint pointA, FPoint pointB,
-			FPoint vector, float magnitude)
+		public static FVector2 Intersect(FVector2 pointA, FVector2 pointB,
+			FVector2 vector, float magnitude)
 		{
-			FPoint ab = null;
+			FVector2 ab = null;
 			float abLength = 0f;
-			FPoint result = null;
+			FVector2 result = null;
 			float t = 0f;
 
 			if(pointA != null && pointB != null && vector != null)
 			{
 				ab = pointB - pointA;
-				abLength = FPoint.Magnitude(ab);
+				abLength = FVector2.Magnitude(ab);
 				if(abLength != 0f)
 				{
 					t = magnitude / abLength;
@@ -641,7 +641,7 @@ namespace Geometry
 		/// <returns>
 		/// True if the specified point is at one of the ends of the line.
 		/// </returns>
-		public static bool IsPointAtEnd(FLine line, FPoint point)
+		public static bool IsPointAtEnd(FLine line, FVector2 point)
 		{
 			bool result = false;
 
@@ -675,7 +675,7 @@ namespace Geometry
 		/// True if the caller's point exists in the area established by the
 		/// four points of the two lines. Otherwise, false.
 		/// </returns>
-		public static bool IsPointInArea(FLine lineA, FLine lineB, FPoint point)
+		public static bool IsPointInArea(FLine lineA, FLine lineB, FVector2 point)
 		{
 			float maxX = 0f;
 			float maxY = 0f;
@@ -724,7 +724,7 @@ namespace Geometry
 		/// True if the given point is within resolution distance the specified
 		/// line. Otherwise, false.
 		/// </returns>
-		public static bool IsPointNearLine(FLine line, FPoint point,
+		public static bool IsPointNearLine(FLine line, FVector2 point,
 			float resolution)
 		{
 			float angle = 0f;
@@ -794,7 +794,7 @@ namespace Geometry
 		/// True if the points are within the specified distance from one
 		/// another to be considered as near. Otherwise, false.
 		/// </returns>
-		public static bool IsPointNearPoint(FPoint point1, FPoint point2,
+		public static bool IsPointNearPoint(FVector2 point1, FVector2 point2,
 			float resolution)
 		{
 			float lineLen = 0f;
@@ -829,7 +829,7 @@ namespace Geometry
 		/// True if the specified point is on the provided line. Otherwise,
 		/// false.
 		/// </returns>
-		public static bool IsPointOnLine(FLine line, FPoint point)
+		public static bool IsPointOnLine(FLine line, FVector2 point)
 		{
 			float maxX = 0f;
 			float maxY = 0f;
@@ -884,11 +884,11 @@ namespace Geometry
 		/// <summary>
 		/// Inheritable point A field for reduced instruction cycle access.
 		/// </summary>
-		protected FPoint mPointA = new FPoint();
+		protected FVector2 mPointA = new FVector2();
 		/// <summary>
 		/// Get/Set a reference to point A.
 		/// </summary>
-		public virtual FPoint PointA
+		public virtual FVector2 PointA
 		{
 			get { return mPointA; }
 			set { mPointA = value; }
@@ -901,11 +901,11 @@ namespace Geometry
 		/// <summary>
 		/// Inheritable point B field for reduced instruction cycle access.
 		/// </summary>
-		protected FPoint mPointB = new FPoint();
+		protected FVector2 mPointB = new FVector2();
 		/// <summary>
 		/// Get/Set a reference to point B.
 		/// </summary>
-		public virtual FPoint PointB
+		public virtual FVector2 PointB
 		{
 			get { return mPointB; }
 			set { mPointB = value; }
@@ -974,8 +974,8 @@ namespace Geometry
 
 			if(source != null)
 			{
-				result.mPointA = FPoint.Scale(source.mPointA, scale);
-				result.mPointB = FPoint.Scale(source.mPointB, scale);
+				result.mPointA = FVector2.Scale(source.mPointA, scale);
+				result.mPointB = FVector2.Scale(source.mPointB, scale);
 			}
 			return result;
 		}
@@ -1000,8 +1000,8 @@ namespace Geometry
 
 			if(source != null && scale != null)
 			{
-				result.mPointA = FPoint.Scale(source.mPointA, scale.ScaleX);
-				result.mPointB = FPoint.Scale(source.mPointB, scale.ScaleY);
+				result.mPointA = FVector2.Scale(source.mPointA, scale.ScaleX);
+				result.mPointB = FVector2.Scale(source.mPointB, scale.ScaleY);
 			}
 			return result;
 		}
@@ -1023,10 +1023,10 @@ namespace Geometry
 		/// Reference to the point to be assigned to the target PointB property.
 		/// </param>
 		public static void TransferValues(FLine target,
-			FPoint pointA, FPoint pointB)
+			FVector2 pointA, FVector2 pointB)
 		{
-			FPoint.TransferValues(pointA, target.mPointA);
-			FPoint.TransferValues(pointB, target.mPointB);
+			FVector2.TransferValues(pointA, target.mPointA);
+			FVector2.TransferValues(pointB, target.mPointB);
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -1043,7 +1043,7 @@ namespace Geometry
 		/// <param name="offset">
 		/// Reference to the offset by which to translate the line.
 		/// </param>
-		public static void Translate(FLine target, FPoint offset)
+		public static void Translate(FLine target, FVector2 offset)
 		{
 			if(target != null && offset != null)
 			{
@@ -1079,7 +1079,7 @@ namespace Geometry
 			ArcDirectionEnum direction = ArcDirectionEnum.Forward)
 		{
 			float angle = 0f;
-			FPoint point = null;
+			FVector2 point = null;
 
 			if(target != null && offset != 0f && direction != ArcDirectionEnum.None)
 			{
@@ -1094,8 +1094,8 @@ namespace Geometry
 						angle -= HalfPi;
 						break;
 				}
-				point = new FPoint(Trig.GetDestPoint(target.mPointA, angle, offset));
-				Translate(target, FPoint.Delta(point, target.mPointA));
+				point = new FVector2(Trig.GetDestPoint(target.mPointA, angle, offset));
+				Translate(target, FVector2.Delta(point, target.mPointA));
 			}
 		}
 		//*-----------------------------------------------------------------------*

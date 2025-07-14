@@ -134,7 +134,7 @@ namespace Geometry
 		////*	_Implicit SKSize = FSize																							*
 		////*-----------------------------------------------------------------------*
 		///// <summary>
-		///// Cast an FPoint value to SKSize.
+		///// Cast an FVector2 value to SKSize.
 		///// </summary>
 		///// <param name="value">
 		///// The size to convert.

@@ -42,7 +42,8 @@ namespace Geometry
 	/// continue to carry exactly the same information as the root instance until
 	/// they are changed.
 	/// </remarks>
-	public class FRotation3 : FVector3
+	[Obsolete("FRotation3 is obsolete. Please use FVector3.")]
+	public class FRotation3
 	{
 		//*************************************************************************
 		//*	Private																																*
@@ -50,6 +51,21 @@ namespace Geometry
 		//*************************************************************************
 		//*	Protected																															*
 		//*************************************************************************
+		//*-----------------------------------------------------------------------*
+		//*	OnRotationChanged																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Raise the RotationChanged event whenever coordinates have changed.
+		/// </summary>
+		/// <param name="e">
+		/// Float point event arguments.
+		/// </param>
+		protected virtual void OnRotationChanged(FloatPointEventArgs e)
+		{
+			RotationChanged?.Invoke(this, e);
+		}
+		//*-----------------------------------------------------------------------*
+
 		//*************************************************************************
 		//*	Public																																*
 		//*************************************************************************
@@ -116,19 +132,19 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
-		//*	_Implicit FRotation3 = FPoint3																				*
+		//*	_Implicit FRotation3 = FVector3																				*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Cast the FPoint3 instance to a FRotation3.
+		/// Cast the FVector3 instance to a FRotation3.
 		/// </summary>
 		/// <param name="value">
-		/// Reference to the 3D point to convert.
+		/// Reference to the 3D vector to convert.
 		/// </param>
 		/// <returns>
-		/// Reference to the newly created 3D copy of the caller's 3D point, if
+		/// Reference to the newly created 3D copy of the caller's 3D vector, if
 		/// valid. Otherwise, an empty rotation.
 		/// </returns>
-		public static implicit operator FRotation3(FPoint3 value)
+		public static implicit operator FRotation3(FVector3 value)
 		{
 			FRotation3 result = null;
 
@@ -144,6 +160,40 @@ namespace Geometry
 			if(result == null)
 			{
 				result = new FRotation3();
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	_Implicit FVector3 = FRotation3																				*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Cast the FRotation3 instance to a FVector3.
+		/// </summary>
+		/// <param name="value">
+		/// Reference to the 3D rotation to convert.
+		/// </param>
+		/// <returns>
+		/// Reference to the newly created 3D copy of the caller's 3D rotation, if
+		/// valid. Otherwise, an empty vector.
+		/// </returns>
+		public static implicit operator FVector3(FRotation3 value)
+		{
+			FVector3 result = null;
+
+			if(value != null)
+			{
+				result = new FVector3()
+				{
+					X = value.mX,
+					Y = value.mY,
+					Z = value.mZ
+				};
+			}
+			if(result == null)
+			{
+				result = new FVector3();
 			}
 			return result;
 		}
@@ -380,6 +430,73 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	Assign																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Set the base values of the target rotation from the source.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the source rotation.
+		/// </param>
+		/// <param name="target">
+		/// Reference to the target rotation.
+		/// </param>
+		public static void Assign(FRotation3 source, FRotation3 target)
+		{
+			if(source != null && target != null)
+			{
+				target.mX = source.mX;
+				target.mY = source.mY;
+				target.mZ = source.mZ;
+			}
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Set the value of the rotation.
+		/// </summary>
+		/// <param name="rotation">
+		/// Reference to the rotation to be populated.
+		/// </param>
+		/// <param name="value">
+		/// Value to assign.
+		/// </param>
+		public static void Assign(FRotation3 rotation, float value)
+		{
+			if(rotation != null)
+			{
+				rotation.mX =
+					rotation.mY =
+					rotation.mZ = value;
+			}
+		}
+		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
+		/// <summary>
+		/// Set the value of the rotation.
+		/// </summary>
+		/// <param name="rotation">
+		/// Reference to the rotation to be populated.
+		/// </param>
+		/// <param name="x">
+		/// X value to assign.
+		/// </param>
+		/// <param name="y">
+		/// Y value to assign.
+		/// </param>
+		/// <param name="z">
+		/// Z value to assign.
+		/// </param>
+		public static void Assign(FRotation3 rotation, float x, float y, float z)
+		{
+			if(rotation != null)
+			{
+				rotation.mX = x;
+				rotation.mY = y;
+				rotation.mZ = z;
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	Clone																																	*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -418,7 +535,7 @@ namespace Geometry
 		/// values are the same as those in the source, if a legitimate source was
 		/// provided. Otherwise, an empty FRotation3.
 		/// </returns>
-		public static new FRotation3 Clone(FVector3 vector)
+		public static FRotation3 Clone(FVector3 vector)
 		{
 			FRotation3 result = new FRotation3();
 
@@ -678,7 +795,7 @@ namespace Geometry
 		/// Newly created FRotation3 value representing the caller's input, if
 		/// that input was legal or allowNull was false. Otherwise, a null value.
 		/// </returns>
-		public static new FRotation3 Parse(string coordinate,
+		public static FRotation3 Parse(string coordinate,
 			bool allowNull = false)
 		{
 			bool bX = false;
@@ -766,6 +883,33 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	ReadOnly																															*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Private member for <see cref="ReadOnly">ReadOnly</see>.
+		/// </summary>
+		private bool mReadOnly = false;
+		/// <summary>
+		/// Get/Set a value indicating whether this item is read-only.
+		/// </summary>
+		[JsonIgnore]
+		public bool ReadOnly
+		{
+			get { return mReadOnly; }
+			set { mReadOnly = value; }
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	RotationChanged																												*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Fired when a rotation has changed.
+		/// </summary>
+		public event FloatPointEventHandler RotationChanged;
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* Scale																																	*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -791,6 +935,99 @@ namespace Geometry
 				result.mZ = rotation.mZ * scale;
 			}
 			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	X																																			*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Private member for <see cref="X">X</see>.
+		/// </summary>
+		private float mX = 0f;
+		/// <summary>
+		/// Get/Set the x coordinate.
+		/// </summary>
+		[JsonProperty(Order = 0)]
+		public float X
+		{
+			get { return mX; }
+			set
+			{
+				float original = mX;
+
+				if(!mReadOnly)
+				{
+					mX = value;
+					if(original != value)
+					{
+						OnRotationChanged(
+							new FloatPointEventArgs("X", value, original));
+					}
+				}
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	Y																																			*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Private member for <see cref="Y">Y</see>.
+		/// </summary>
+		private float mY = 0f;
+		/// <summary>
+		/// Get/Set the y coordinate.
+		/// </summary>
+		[JsonProperty(Order = 1)]
+		public float Y
+		{
+			get { return mY; }
+			set
+			{
+				float original = mY;
+
+				if(!mReadOnly)
+				{
+					mY = value;
+					if(original != value)
+					{
+						OnRotationChanged(
+							new FloatPointEventArgs("Y", value, original));
+					}
+				}
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//*	Z																																			*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Private member for <see cref="Z">Z</see>.
+		/// </summary>
+		private float mZ = 0f;
+		/// <summary>
+		/// Get/Set the y coordinate.
+		/// </summary>
+		[JsonProperty(Order = 1)]
+		public float Z
+		{
+			get { return mZ; }
+			set
+			{
+				float original = mZ;
+
+				if(!mReadOnly)
+				{
+					mZ = value;
+					if(original != value)
+					{
+						OnRotationChanged(
+							new FloatPointEventArgs("Z", value, original));
+					}
+				}
+			}
 		}
 		//*-----------------------------------------------------------------------*
 

@@ -105,10 +105,11 @@ descriptor classes that can be used generically anywhere:
 
 -   **FPath**. Collection of single floating-point points.
 
--   **FPoint**. A single precision floating-point coordinate.
+-   **FPoint**. *Obsolete. Please use FVector2*. A single precision
+    floating-point coordinate.
 
--   **FPoint3**. A three-dimensional single precision floating-point
-    coordinate.
+-   **FPoint3**. *Obsolete. Please use FVector3*. A three-dimensional
+    single precision floating-point coordinate.
 
 -   **FQuaternion**. A quaternion rotation, complete with FromAxisAngle
     / ToAxisAngle, FromEuler / ToEuler (ZYX order), FromPitchRollYaw /
@@ -116,8 +117,8 @@ descriptor classes that can be used generically anywhere:
     Division, Dot Product and all of the other methods and functionality
     you would expect.
 
--   **FRotation3**. A three-dimensional single precision floating-point
-    rotation, similar to a point.
+-   **FRotation3**. *Obsolete. Please use FVector3*. A three-dimensional
+    single precision floating-point rotation, similar to a point.
 
 -   **FScale**. A single floating-point scaling value.
 
@@ -272,3 +273,10 @@ lifting.
 For the full documentation of this library, you can access the API in
 HTML format at the associated GitHub user page library
 <https://danielanywhere.github.io/Geometry>.
+
+<p>&nbsp;</p>
+
+## Notes on FPoint and FPoint3
+
+In an unfortunate recent direction change, I had made the FVector
+classes the

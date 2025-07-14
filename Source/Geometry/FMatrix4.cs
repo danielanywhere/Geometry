@@ -138,11 +138,11 @@ namespace Geometry
 		/// <returns>
 		/// Reference to a new single precision floating-point 3D point containing
 		/// values from the specified column, if the matrix and column were
-		/// legitimate. Otherwise, an empty FPoint3.
+		/// legitimate. Otherwise, an empty FVector3.
 		/// </returns>
-		public static FPoint3 ColumnToPoint(FMatrix4 matrix, int columnIndex)
+		public static FVector3 ColumnToPoint(FMatrix4 matrix, int columnIndex)
 		{
-			FPoint3 result = new FPoint3();
+			FVector3 result = new FVector3();
 
 			if(matrix != null &&
 				matrix.mValues.GetLength(0) > 3 &&
@@ -971,11 +971,11 @@ namespace Geometry
 		/// <returns>
 		/// Reference to a new single precision floating-point 3D point containing
 		/// values from the specified row, if the matrix and column were
-		/// legitimate. Otherwise, an empty FPoint3.
+		/// legitimate. Otherwise, an empty FVector3.
 		/// </returns>
-		public static FPoint3 RowToPoint(FMatrix4 matrix, int rowIndex)
+		public static FVector3 RowToPoint(FMatrix4 matrix, int rowIndex)
 		{
-			FPoint3 result = new FPoint3();
+			FVector3 result = new FVector3();
 
 			if(matrix != null &&
 				matrix.mValues.GetLength(0) > 3 &&
@@ -1045,26 +1045,9 @@ namespace Geometry
 		/// <returns>
 		/// Scaled point.
 		/// </returns>
-		public static FPoint Scale(FPoint point, FPoint scale)
+		public static FVector2 Scale(FVector2 point, FVector2 scale)
 		{
-			return new FPoint(FMatrix3.Scale((FVector2)point, (FVector2)scale));
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
-		/// <summary>
-		/// Scale a point by the specified translation.
-		/// </summary>
-		/// <param name="point">
-		/// Reference point.
-		/// </param>
-		/// <param name="scale">
-		/// Scale for the X, Y, Z axes.
-		/// </param>
-		/// <returns>
-		/// Scaled point.
-		/// </returns>
-		public static FPoint3 Scale(FPoint3 point, FVector3 scale)
-		{
-			return (FPoint3)Scale((FVector3)point, scale);
+			return FMatrix3.Scale(point, scale);
 		}
 		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
 		/// <summary>
@@ -1079,7 +1062,7 @@ namespace Geometry
 		/// <returns>
 		/// Scaled vector.
 		/// </returns>
-		public static FVector4 Scale(FVector3 point, FVector3 scale)
+		public static FVector3 Scale(FVector3 point, FVector3 scale)
 		{
 			FMatrix4 matrix = new FMatrix4();
 			FVector4 result = new FVector4();
@@ -1176,23 +1159,6 @@ namespace Geometry
 		//*	Translate																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
-		/// Translate a point by the specified translation.
-		/// </summary>
-		/// <param name="point">
-		/// Reference point.
-		/// </param>
-		/// <param name="translation">
-		/// Distance by which to move the point.
-		/// </param>
-		/// <returns>
-		/// Translated point.
-		/// </returns>
-		public static FPoint3 Translate(FPoint3 point, FVector3 translation)
-		{
-			return (FPoint3)Translate((FVector3)point, translation);
-		}
-		//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*
-		/// <summary>
 		/// Translate a vector by the specified translation.
 		/// </summary>
 		/// <param name="point">
@@ -1204,7 +1170,7 @@ namespace Geometry
 		/// <returns>
 		/// Translated point.
 		/// </returns>
-		public static FVector4 Translate(FVector3 point, FVector3 translation)
+		public static FVector3 Translate(FVector3 point, FVector3 translation)
 		{
 			FMatrix4 matrix = new FMatrix4();
 			FVector4 result = new FVector4();

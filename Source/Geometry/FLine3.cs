@@ -58,7 +58,7 @@ namespace Geometry
 		/// Optional color for the line. If provided, that object will act as
 		/// the color for the line.
 		/// </param>
-		public FLine3(FPoint3 pointA, FPoint3 pointB, FColor4 color = null)
+		public FLine3(FVector3 pointA, FVector3 pointB, FColor4 color = null)
 		{
 			if(pointA != null)
 			{
@@ -96,8 +96,8 @@ namespace Geometry
 			if(source != null)
 			{
 				result.mColor = FColor4.Clone(source.mColor);
-				result.mPointA = FPoint3.Clone(source.mPointA);
-				result.mPointB = FPoint3.Clone(source.mPointB);
+				result.mPointA = FVector3.Clone(source.mPointA);
+				result.mPointB = FVector3.Clone(source.mPointB);
 			}
 			return result;
 		}
@@ -126,11 +126,11 @@ namespace Geometry
 		/// <summary>
 		/// Private member for <see cref="PointA">PointA</see>.
 		/// </summary>
-		private FPoint3 mPointA = new FPoint3();
+		private FVector3 mPointA = new FVector3();
 		/// <summary>
 		/// Get/Set a reference to the first point on the line.
 		/// </summary>
-		public FPoint3 PointA
+		public FVector3 PointA
 		{
 			get { return mPointA; }
 			set { mPointA = value; }
@@ -143,11 +143,11 @@ namespace Geometry
 		/// <summary>
 		/// Private member for <see cref="PointB">PointB</see>.
 		/// </summary>
-		private FPoint3 mPointB = new FPoint3();
+		private FVector3 mPointB = new FVector3();
 		/// <summary>
 		/// Get/Set a reference to the second point on the line.
 		/// </summary>
-		public FPoint3 PointB
+		public FVector3 PointB
 		{
 			get { return mPointB; }
 			set { mPointB = value; }
@@ -171,8 +171,8 @@ namespace Geometry
 			if(source != null && target != null)
 			{
 				target.mColor = FColor4.Clone(source.mColor);
-				target.mPointA = FPoint3.Clone(source.mPointA);
-				target.mPointB = FPoint3.Clone(source.mPointB);
+				target.mPointA = FVector3.Clone(source.mPointA);
+				target.mPointB = FVector3.Clone(source.mPointB);
 			}
 		}
 		//*-----------------------------------------------------------------------*

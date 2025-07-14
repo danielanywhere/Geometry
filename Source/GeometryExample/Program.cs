@@ -96,31 +96,31 @@ namespace GeometryExample
 			float angleEnd = 0f;
 			float angleStart = 0f;
 			FArea area = null;
-			FPoint center = new FPoint(0, 0);
+			FVector2 center = new FVector2(0, 0);
 			int count = 0;
 			int index = 0;
-			FPoint[,] points = new FPoint[,]
+			FVector2[,] points = new FVector2[,]
 			{
-				{ new FPoint(10f, 10f), new FPoint(11f, 10f) },
-				{ new FPoint(10f, 10f), new FPoint(8f, 10f) },
-				{ new FPoint(10f, 10f), new FPoint(-10f, 10f) },
-				{ new FPoint(10f, 10f), new FPoint(-10f, -10f) },
-				{ new FPoint(10f, 10f), new FPoint(10f, -10f) },
-				{ new FPoint(-10f, 10f), new FPoint(-11f, 10f) },
-				{ new FPoint(-10f, 10f), new FPoint(-8f, 10f) },
-				{ new FPoint(-10f, 10f), new FPoint(-10f, -10f) },
-				{ new FPoint(-10f, 10f), new FPoint(10f, -10f) },
-				{ new FPoint(-10f, 10f), new FPoint(10f, 10f) },
-				{ new FPoint(-10f, -10f), new FPoint(-10f, -8f) },
-				{ new FPoint(-10f, -10f), new FPoint(-10f, -11f) },
-				{ new FPoint(-10f, -10f), new FPoint(10f, -10f) },
-				{ new FPoint(-10f, -10f), new FPoint(10f, 10f) },
-				{ new FPoint(-10f, -10f), new FPoint(-10f, 10f) },
-				{ new FPoint(10f, -10f), new FPoint(10f, -8f) },
-				{ new FPoint(10f, -10f), new FPoint(10f, -11f) },
-				{ new FPoint(10f, -10f), new FPoint(10f, 10f) },
-				{ new FPoint(10f, -10f), new FPoint(-10f, 10f) },
-				{ new FPoint(10f, -10f), new FPoint(-10f, -10f) },
+				{ new FVector2(10f, 10f), new FVector2(11f, 10f) },
+				{ new FVector2(10f, 10f), new FVector2(8f, 10f) },
+				{ new FVector2(10f, 10f), new FVector2(-10f, 10f) },
+				{ new FVector2(10f, 10f), new FVector2(-10f, -10f) },
+				{ new FVector2(10f, 10f), new FVector2(10f, -10f) },
+				{ new FVector2(-10f, 10f), new FVector2(-11f, 10f) },
+				{ new FVector2(-10f, 10f), new FVector2(-8f, 10f) },
+				{ new FVector2(-10f, 10f), new FVector2(-10f, -10f) },
+				{ new FVector2(-10f, 10f), new FVector2(10f, -10f) },
+				{ new FVector2(-10f, 10f), new FVector2(10f, 10f) },
+				{ new FVector2(-10f, -10f), new FVector2(-10f, -8f) },
+				{ new FVector2(-10f, -10f), new FVector2(-10f, -11f) },
+				{ new FVector2(-10f, -10f), new FVector2(10f, -10f) },
+				{ new FVector2(-10f, -10f), new FVector2(10f, 10f) },
+				{ new FVector2(-10f, -10f), new FVector2(-10f, 10f) },
+				{ new FVector2(10f, -10f), new FVector2(10f, -8f) },
+				{ new FVector2(10f, -10f), new FVector2(10f, -11f) },
+				{ new FVector2(10f, -10f), new FVector2(10f, 10f) },
+				{ new FVector2(10f, -10f), new FVector2(-10f, 10f) },
+				{ new FVector2(10f, -10f), new FVector2(-10f, -10f) },
 			};
 			ArcDirectionEnum winding = ArcDirectionEnum.None;
 
@@ -232,13 +232,13 @@ namespace GeometryExample
 		{
 			Camera3D camera = new Camera3D()
 			{
-				Position = new FPoint3(18.715f, 11.05f, -9.3556f),
-				LookAt = new FPoint3(5f, 0f, -0.36511f)
+				Position = new FVector3(18.715f, 11.05f, -9.3556f),
+				LookAt = new FVector3(5f, 0f, -0.36511f)
 			};
 			FLine line2 = null;
 			FLine3 line3 = new FLine3(
-				new FPoint3(0f, 0f, 0f),
-				new FPoint3(10f, 0f, 0f),
+				new FVector3(0f, 0f, 0f),
+				new FVector3(10f, 0f, 0f),
 				new FColor4(1f, 1f, 0f, 0f));
 
 			Console.WriteLine("** Testing 3D Line Projection **");
@@ -267,8 +267,8 @@ namespace GeometryExample
 
 			Console.WriteLine(" 3D Line:");
 			line3 = new FLine3(
-				new FPoint3(0f, 0f, 2f),
-				new FPoint3(10f, 0f, 2f),
+				new FVector3(0f, 0f, 2f),
+				new FVector3(10f, 0f, 2f),
 				new FColor4(1f, 1f, 0f, 0f));
 			Console.WriteLine($"  {line3.PointA}, ");
 			Console.WriteLine($"  {line3.PointB}");
@@ -288,8 +288,8 @@ namespace GeometryExample
 
 			Console.WriteLine(" 3D Line:");
 			line3 = new FLine3(
-				new FPoint3(0f, 0f, 8f),
-				new FPoint3(10f, 0f, 8f),
+				new FVector3(0f, 0f, 8f),
+				new FVector3(10f, 0f, 8f),
 				new FColor4(1f, 1f, 0f, 0f));
 			Console.WriteLine($"  {line3.PointA}, ");
 			Console.WriteLine($"  {line3.PointB}");
@@ -309,8 +309,8 @@ namespace GeometryExample
 
 			Console.WriteLine(" 3D Line:");
 			line3 = new FLine3(
-				new FPoint3(0f, 1f, 8f),
-				new FPoint3(10f, 1f, 8f),
+				new FVector3(0f, 1f, 8f),
+				new FVector3(10f, 1f, 8f),
 				new FColor4(1f, 1f, 0f, 0f));
 			Console.WriteLine($"  {line3.PointA}, ");
 			Console.WriteLine($"  {line3.PointB}");
@@ -355,8 +355,8 @@ namespace GeometryExample
 		{
 			Camera3D camera = null;
 			int index = 0;
-			FPoint point2 = null;
-			List<FPoint3> points = new List<FPoint3>();
+			FVector2 point2 = null;
+			List<FVector3> points = new List<FVector3>();
 			int row = 0;
 			int rowCount = 0;
 
@@ -366,9 +366,9 @@ namespace GeometryExample
 			{
 				DisplayWidth = 690,
 				DisplayHeight = 359,
-				LookAt = new FPoint3()
+				LookAt = new FVector3()
 			};
-			camera.Position = new FPoint3(1500f, 1500f, -1000f);
+			camera.Position = new FVector3(1500f, 1500f, -1000f);
 
 			float[,] items = new float[,]
 			{
@@ -421,11 +421,11 @@ namespace GeometryExample
 			rowCount = items.GetLength(0);
 			for(row = 0; row < rowCount; row ++)
 			{
-				points.Add(new FPoint3(items[row, 0], items[row, 1], items[row, 2]));
+				points.Add(new FVector3(items[row, 0], items[row, 1], items[row, 2]));
 			}
 
 			index = 0;
-			foreach(FPoint3 pointItem in points)
+			foreach(FVector3 pointItem in points)
 			{
 				point2 = camera.ProjectToScreen(pointItem);
 				Console.WriteLine($" {index.ToString().PadLeft(2, '0')}. " +
@@ -453,8 +453,8 @@ namespace GeometryExample
 			Console.WriteLine(" Position: 0, 0, 0");
 			Console.WriteLine(" Look at: 10, 10, 10");
 			camera.RotationMode = ObjectRotationMode.LookAt;
-			camera.Position = new FPoint3(0f, 0f, 0f);
-			camera.LookAt = new FPoint3(10f, 10f, 10f);
+			camera.Position = new FVector3(0f, 0f, 0f);
+			camera.LookAt = new FVector3(10f, 10f, 10f);
 			storedRotation = camera.Rotation;
 			Console.WriteLine($"  Camera distance: {camera.CameraDistance}");
 			Console.WriteLine($"  Rotation: {camera.Rotation}");
@@ -480,7 +480,7 @@ namespace GeometryExample
 		{
 			float angle = 0f;
 			FArea box = null;
-			FPoint coordinate = null;
+			FVector2 coordinate = null;
 			FEllipse ellipse = new FEllipse(
 				RandomFloatWhole(0f + 300f, 1920f - 300f),
 				RandomFloatWhole(0f + 300f, 1080f - 300f),
@@ -525,13 +525,13 @@ namespace GeometryExample
 		/// </summary>
 		private static void TestEllipseLineIntersection()
 		{
-			FPoint center = new FPoint(303.786f, 226.643f);
-			FPoint[] intersections = null;
-			FLine line = new FLine(new FPoint()
+			FVector2 center = new FVector2(303.786f, 226.643f);
+			FVector2[] intersections = null;
+			FLine line = new FLine(new FVector2()
 			{
 				X = 560.000f,
 				Y = 82.857f
-			}, new FPoint()
+			}, new FVector2()
 			{
 				X = 654.286f,
 				Y = 220.000f
@@ -555,7 +555,7 @@ namespace GeometryExample
 			else
 			{
 				Console.WriteLine(" Intersections:");
-				foreach(FPoint pointItem in intersections)
+				foreach(FVector2 pointItem in intersections)
 				{
 					Console.WriteLine($"  {pointItem.X}, {pointItem.Y}");
 				}
@@ -581,7 +581,7 @@ namespace GeometryExample
 			else
 			{
 				Console.WriteLine(" Intersections:");
-				foreach(FPoint pointItem in intersections)
+				foreach(FVector2 pointItem in intersections)
 				{
 					Console.WriteLine($"  {pointItem.X}, {pointItem.Y}");
 				}
@@ -607,7 +607,7 @@ namespace GeometryExample
 			else
 			{
 				Console.WriteLine(" Intersections:");
-				foreach(FPoint pointItem in intersections)
+				foreach(FVector2 pointItem in intersections)
 				{
 					Console.WriteLine($"  {pointItem.X}, {pointItem.Y}");
 				}
@@ -625,12 +625,12 @@ namespace GeometryExample
 		private static void TestFLineIntersect()
 		{
 			FLine line1 = new FLine(
-				new FPoint(1301.75f, 609.6f),
-				new FPoint(1301.75f, 158.485f));
+				new FVector2(1301.75f, 609.6f),
+				new FVector2(1301.75f, 158.485f));
 			FLine line2 = new FLine(
-				new FPoint(1301.75f, 160.0725f),
-				new FPoint(1428.485f, 160.0725f));
-			FPoint location = null;
+				new FVector2(1301.75f, 160.0725f),
+				new FVector2(1428.485f, 160.0725f));
+			FVector2 location = null;
 
 			Console.WriteLine("** Testing FLine Intersect **");
 			Console.WriteLine(" Line 1");
@@ -654,10 +654,10 @@ namespace GeometryExample
 		private static void TestFLineTranslateVector()
 		{
 			FLine line = new FLine(
-				new FPoint(
+				new FVector2(
 					RandomFloatWhole(0f, 1920f),
 					RandomFloatWhole(0f, 1080f)),
-				new FPoint(
+				new FVector2(
 					RandomFloatWhole(0f, 1920f),
 					RandomFloatWhole(0f, 1080f)));
 
@@ -682,10 +682,10 @@ namespace GeometryExample
 		private static void TestMatrix3()
 		{
 
-			FPoint point = new FPoint(
+			FVector2 point = new FVector2(
 				RandomFloatWhole(0f, 1920f),
 				RandomFloatWhole(0f, 1080f));
-			FPoint3 point3 = new FPoint3(
+			FVector3 point3 = new FVector3(
 				RandomFloat(-1f, 1f),
 				RandomFloat(-5f, 5f),
 				0.1f
@@ -697,9 +697,9 @@ namespace GeometryExample
 				$" Starting point (top left anchor): {point.X:0}, {point.Y:0}");
 
 			//	Flip Y.
-			point = FMatrix3.Scale(point, new FPoint(1f, -1f));
+			point = FMatrix3.Scale(point, new FVector2(1f, -1f));
 			//	Reposition Y.
-			point = FMatrix3.Translate(point, new FPoint(0f, 1080f));
+			point = FMatrix3.Translate(point, new FVector2(0f, 1080f));
 
 			Console.WriteLine(
 				$" Transformed point (bottom left anchor): {point.X:0}, {point.Y:0}");
@@ -1341,8 +1341,8 @@ namespace GeometryExample
 			FEllipse ellipse = null;
 			FLine line = null;
 			FPath path = null;
-			FPoint point = null;
-			List<FPoint> points = null;
+			FVector2 point = null;
+			List<FVector2> points = null;
 
 			Console.WriteLine("** Testing Shape Vertices **");
 
@@ -1351,7 +1351,7 @@ namespace GeometryExample
 			Console.WriteLine($" Area: {area.Left:0.###}, {area.Top:0.###}, " +
 				$"{area.Width:0.###}, {area.Height:0.###}. Rotation: 15.5deg.");
 			points = FArea.GetVertices(area, Trig.DegToRad(15.5f));
-			foreach(FPoint pointItem in points)
+			foreach(FVector2 pointItem in points)
 			{
 				Console.WriteLine($"  {pointItem.X:0.###}, {pointItem.Y:0.###}");
 			}
@@ -1363,38 +1363,38 @@ namespace GeometryExample
 				$"{ellipse.RadiusX:0.###}, {ellipse.RadiusY:0.###}. " +
 				"Rotation: -32deg.");
 			points = FEllipse.GetVertices(ellipse, 36, Trig.DegToRad(-32));
-			foreach(FPoint pointItem in points)
+			foreach(FVector2 pointItem in points)
 			{
 				Console.WriteLine($"  {pointItem.X:0.###}, {pointItem.Y:0.###}");
 			}
 			//	Line.
 			line = new FLine(
-				new FPoint(1180.000f, 632.857f), new FPoint(1462.857f, 632.857f));
+				new FVector2(1180.000f, 632.857f), new FVector2(1462.857f, 632.857f));
 			Console.WriteLine(
 				$" Line: {line.PointA.X:0.###}, {line.PointA.Y:0.###}, " +
 				$"{line.PointB.X:0.###}, {line.PointB.Y:0.###}. Rotation: 52.17deg.");
 			points = FLine.GetVertices(line, Trig.DegToRad(52.17f));
-			foreach(FPoint pointItem in points)
+			foreach(FVector2 pointItem in points)
 			{
 				Console.WriteLine($"  {pointItem.X:0.###}, {pointItem.Y:0.###}");
 			}
 			//	Path.
 			path = new FPath()
 			{
-				new FPoint(1507.143f, 352.857f),
-				new FPoint(1767.143f, 755.714f),
-				new FPoint(1595.714f, 302.857f)
+				new FVector2(1507.143f, 352.857f),
+				new FVector2(1767.143f, 755.714f),
+				new FVector2(1595.714f, 302.857f)
 			};
 			point = FPath.GetCenter(path);
 			Console.WriteLine(" Path. " +
 				$"Center: {point.X:0.###}, {point.Y:0.###}. Rotation: 12deg.:");
-			foreach(FPoint pointItem in path)
+			foreach(FVector2 pointItem in path)
 			{
 				Console.WriteLine($"  {pointItem.X:0.###}, {pointItem.Y:0.###}");
 			}
 			points = FPath.GetVertices(path, Trig.DegToRad(12f));
 			Console.WriteLine("  Points:");
-			foreach(FPoint pointItem in points)
+			foreach(FVector2 pointItem in points)
 			{
 				Console.WriteLine($"   {pointItem.X:0.###}, {pointItem.Y:0.###}");
 			}
@@ -1453,7 +1453,7 @@ namespace GeometryExample
 				key = "/controlpoint:";
 				if(lowerArg.StartsWith(key))
 				{
-					prg.mControlPoint = FPoint.Parse(arg.Substring(key.Length), true);
+					prg.mControlPoint = FVector2.Parse(arg.Substring(key.Length), true);
 					continue;
 				}
 				key = "/count:";
@@ -1465,13 +1465,13 @@ namespace GeometryExample
 				key = "/endpoint:";
 				if(lowerArg.StartsWith(key))
 				{
-					prg.mEndPoint = FPoint.Parse(arg.Substring(key.Length), true);
+					prg.mEndPoint = FVector2.Parse(arg.Substring(key.Length), true);
 					continue;
 				}
 				key = "/startpoint:";
 				if(lowerArg.StartsWith(key))
 				{
-					prg.mStartPoint = FPoint.Parse(arg.Substring(key.Length), true);
+					prg.mStartPoint = FVector2.Parse(arg.Substring(key.Length), true);
 					continue;
 				}
 				key = "/wait";
@@ -1552,11 +1552,11 @@ namespace GeometryExample
 		//*-----------------------------------------------------------------------*
 		//*	ControlPoint																													*
 		//*-----------------------------------------------------------------------*
-		private FPoint mControlPoint = null;
+		private FVector2 mControlPoint = null;
 		/// <summary>
 		/// Get/Set a reference to the control point.
 		/// </summary>
-		public FPoint ControlPoint
+		public FVector2 ControlPoint
 		{
 			get { return mControlPoint; }
 			set { mControlPoint = value; }
@@ -1580,11 +1580,11 @@ namespace GeometryExample
 		//*-----------------------------------------------------------------------*
 		//*	EndPoint																															*
 		//*-----------------------------------------------------------------------*
-		private FPoint mEndPoint = null;
+		private FVector2 mEndPoint = null;
 		/// <summary>
 		/// Get/Set a reference to the end point.
 		/// </summary>
-		public FPoint EndPoint
+		public FVector2 EndPoint
 		{
 			get { return mEndPoint; }
 			set { mEndPoint = value; }
@@ -1600,8 +1600,8 @@ namespace GeometryExample
 		public void Run()
 		{
 			int currentCol = 0;
-			FPoint coordinate = null;
-			List<FPoint> points = null;
+			FVector2 coordinate = null;
+			List<FVector2> points = null;
 			float time = 0f;
 			int index = 0;
 
@@ -1703,7 +1703,7 @@ namespace GeometryExample
 					points = Bezier.GetQuadraticCurvePointsEquidistant(mStartPoint,
 						mControlPoint, mEndPoint, mCount);
 					currentCol = 0;
-					foreach(FPoint pointItem in points)
+					foreach(FVector2 pointItem in points)
 					{
 						if(index > 0)
 						{
@@ -1727,11 +1727,11 @@ namespace GeometryExample
 		//*-----------------------------------------------------------------------*
 		//*	StartPoint																														*
 		//*-----------------------------------------------------------------------*
-		private FPoint mStartPoint = null;
+		private FVector2 mStartPoint = null;
 		/// <summary>
 		/// Get/Set a reference to the start point.
 		/// </summary>
-		public FPoint StartPoint
+		public FVector2 StartPoint
 		{
 			get { return mStartPoint; }
 			set { mStartPoint = value; }

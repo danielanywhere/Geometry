@@ -62,18 +62,18 @@ namespace Geometry
 		/// and / or the value of the Y or Z axes have been flipped, as necessary,
 		/// if a valid vector has been supplied. Otherwise, null.
 		/// </returns>
-		protected virtual FPoint3 ConvertCameraToWorld(FVector3 vector)
+		protected virtual FVector3 ConvertCameraToWorld(FVector3 vector)
 		{
-			FPoint3 result = null;
+			FVector3 result = null;
 
 			if(vector != null)
 			{
-				result = new FPoint3();
+				result = new FVector3();
 				if(mUpAxis == AxisType.Y &&
 					mHandedness == HandType.Left)
 				{
 					//	The world orientation matches the camera.
-					result = FPoint3.Clone(vector);
+					result = FVector3.Clone(vector);
 				}
 				else if(mUpAxis == AxisType.Z)
 				{
@@ -401,7 +401,7 @@ namespace Geometry
 		/// <summary>
 		/// Private member for <see cref="LookAt">LookAt</see>.
 		/// </summary>
-		private FPoint3 mLookAt = new FPoint3();
+		private FVector3 mLookAt = new FVector3();
 		/// <summary>
 		/// Private member for <see cref="LookAt">LookAt</see>.
 		/// </summary>
@@ -415,7 +415,7 @@ namespace Geometry
 		/// system, all of the positions are expressed in the host's world system
 		/// to avoid any confusion.
 		/// </remarks>
-		public FPoint3 LookAt
+		public FVector3 LookAt
 		{
 			get { return mLookAt; }
 			set
@@ -426,7 +426,7 @@ namespace Geometry
 				}
 				else
 				{
-					mLookAt = new FPoint3();
+					mLookAt = new FVector3();
 				}
 				UpdatePositions();
 			}
@@ -439,7 +439,7 @@ namespace Geometry
 		/// <summary>
 		/// Private member for <see cref="Position">Position</see>.
 		/// </summary>
-		private FPoint3 mPosition = new FPoint3();
+		private FVector3 mPosition = new FVector3();
 		/// <summary>
 		/// Private member for <see cref="Position">Position</see>.
 		/// </summary>
@@ -453,7 +453,7 @@ namespace Geometry
 		/// system, all of the positions are expressed in the host's world system
 		/// to avoid any confusion.
 		/// </remarks>
-		public FPoint3 Position
+		public FVector3 Position
 		{
 			get { return mPosition; }
 			set
@@ -464,7 +464,7 @@ namespace Geometry
 				}
 				else
 				{
-					mPosition = new FPoint3();
+					mPosition = new FVector3();
 				}
 				UpdatePositions();
 			}
@@ -548,7 +548,7 @@ namespace Geometry
 		/// Reference to a two dimensional point compatible with display on the
 		/// caller's screen, if valid. Otherwise, null.
 		/// </returns>
-		public FPoint ProjectToScreen(FPoint3 subject, bool trace = false,
+		public FVector2 ProjectToScreen(FVector3 subject, bool trace = false,
 			string traceShapeName = "")
 #else
 		/// <summary>
@@ -562,7 +562,7 @@ namespace Geometry
 		/// Reference to a two dimensional point compatible with display on the
 		/// caller's screen, if valid. Otherwise, null.
 		/// </returns>
-		public FPoint ProjectToScreen(FPoint3 subject)
+		public FVector2 ProjectToScreen(FVector3 subject)
 #endif
 		{
 			double camX = 0d;
@@ -573,7 +573,7 @@ namespace Geometry
 #endif
 			//double normX = 0d;
 			//double normY = 0d;
-			FPoint result = new FPoint();
+			FVector2 result = new FVector2();
 			double scaleX = 0d;
 			double scaleY = 0d;
 			FVector3 toSubject = null;

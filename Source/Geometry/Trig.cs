@@ -600,8 +600,8 @@ namespace Geometry
 		/// Reference to a line parallel to and inside of the caller's specified
 		/// line, with reference to the specified thickness.
 		/// </returns>
-		public static FLine GetInsideParallelLine(FVector2 pointA, FVector2 pointB,
-			ArcDirectionEnum orientation, float thickness)
+		public static FLine GetInsideParallelLine(FVector2 pointA,
+			FVector2 pointB, ArcDirectionEnum orientation, float thickness)
 		{
 			float angle = 0f;
 			FLine result = new FLine();
@@ -612,8 +612,8 @@ namespace Geometry
 				if(thickness == 0)
 				{
 					//	If the parallel area is zero, then source line is target line.
-					FVector2.TransferValues(pointA, result.PointA);
-					FVector2.TransferValues(pointB, result.PointB);
+					FVector2.TransferValues((FVector2)pointA, result.PointA);
+					FVector2.TransferValues((FVector2)pointB, result.PointB);
 				}
 				else
 				{
@@ -671,8 +671,8 @@ namespace Geometry
 		/// Reference to a line parallel to and inside of the caller's specified
 		/// line, with reference to the specified thickness.
 		/// </returns>
-		public static FLine GetInsideParallelLine(FVector2 pointA, FVector2 pointB,
-			float thickness, WindingOrientationEnum orientation,
+		public static FLine GetInsideParallelLine(FVector2 pointA,
+			FVector2 pointB, float thickness, WindingOrientationEnum orientation,
 			DrawingSpaceEnum drawingSpace = DrawingSpaceEnum.Display)
 		{
 			FLine result = null;

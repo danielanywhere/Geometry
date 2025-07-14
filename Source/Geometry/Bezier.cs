@@ -70,19 +70,19 @@ namespace Geometry
 		/// Reference to the bounding box area of the provided cubic Bezier
 		/// curve, if legitimate. Otherwise, an empty rectangle.
 		/// </returns>
-		public static FArea GetCubicBoundingBox(FPoint p0,
-			FPoint p1, FPoint p2, FPoint p3, int sampleCount)
+		public static FArea GetCubicBoundingBox(FVector2 p0,
+			FVector2 p1, FVector2 p2, FVector2 p3, int sampleCount)
 		{
 			float index = 0f;
 			float count = 0f;
 			FArea result = new FArea();
-			List<FPoint> samples = null;
+			List<FVector2> samples = null;
 			float t = 0f;
 
 			if(p0 != null && p1 != null && p2 != null && p3 != null &&
 				sampleCount > 3)
 			{
-				samples = new List<FPoint>();
+				samples = new List<FVector2>();
 				count = sampleCount;
 				for(index = 0f; index < count; index ++)
 				{
@@ -122,12 +122,12 @@ namespace Geometry
 		/// <returns>
 		/// The point along a cubic bezier curve that is indicated by t.
 		/// </returns>
-		public static FPoint GetCubicCurvePoint(FPoint p0,
-			FPoint p1, FPoint p2, FPoint p3, float t)
+		public static FVector2 GetCubicCurvePoint(FVector2 p0,
+			FVector2 p1, FVector2 p2, FVector2 p3, float t)
 		{
-			FPoint result = null;
-			FPoint v1 = null;
-			FPoint v2 = null;
+			FVector2 result = null;
+			FVector2 v1 = null;
+			FVector2 v2 = null;
 
 			if(p0 != null && p1 != null && p2 != null && p3 != null)
 			{
@@ -137,7 +137,7 @@ namespace Geometry
 			}
 			if(result == null)
 			{
-				result = new FPoint();
+				result = new FVector2();
 			}
 			return result;
 		}
@@ -175,20 +175,20 @@ namespace Geometry
 		/// the same length and the last segment will absorb any minor discrepancy
 		/// between the next-to-last point and the ending point.
 		/// </remarks>
-		public static List<FPoint> GetCubicCurvePointsEquidistant(FPoint p0,
-			FPoint p1, FPoint p2, FPoint p3, int count)
+		public static List<FVector2> GetCubicCurvePointsEquidistant(FVector2 p0,
+			FVector2 p1, FVector2 p2, FVector2 p3, int count)
 		{
 			float angle = 0f;
 			int index = 0;
 			float lengthSample = 0f;
 			float lengthSegment = 0f;
 			float lengthTotal = 0f;
-			FPoint pointCurrent = null;
-			FPoint pointLast = null;
-			FPoint pointNext = null;
-			List<FPoint> result = new List<FPoint>();
+			FVector2 pointCurrent = null;
+			FVector2 pointLast = null;
+			FVector2 pointNext = null;
+			List<FVector2> result = new List<FVector2>();
 			int sampleCount = 0;
-			List<FPoint> samples = new List<FPoint>();
+			List<FVector2> samples = new List<FVector2>();
 			float time = 0f;
 
 			if(p0 != null && p1 != null && p2 != null && count > 3)
@@ -226,8 +226,7 @@ namespace Geometry
 						angle = Trig.GetLineAngle(pointCurrent, pointNext);
 						// Jump to the end of the current segment as new reference point.
 						pointCurrent =
-							new FPoint(
-								Trig.GetDestPoint(pointCurrent, angle, lengthSegment));
+								Trig.GetDestPoint(pointCurrent, angle, lengthSegment);
 						result.Add(pointCurrent);
 					}
 				}
@@ -258,10 +257,10 @@ namespace Geometry
 		/// Reference to the bounding box area of the provided linear Bezier
 		/// curve, if legitimate. Otherwise, an empty rectangle.
 		/// </returns>
-		public static FArea GetLinearBoundingBox(FPoint p0, FPoint p1)
+		public static FArea GetLinearBoundingBox(FVector2 p0, FVector2 p1)
 		{
 			FArea result = new FArea();
-			List<FPoint> samples = null;
+			List<FVector2> samples = null;
 
 			if(p0 != null && p1 != null)
 			{
@@ -295,9 +294,10 @@ namespace Geometry
 		/// <returns>
 		/// The point along a linear bezier curve that is indicated by t.
 		/// </returns>
-		public static FPoint GetLinearCurvePoint(FPoint p0, FPoint p1, float t)
+		public static FVector2 GetLinearCurvePoint(FVector2 p0, FVector2 p1,
+			float t)
 		{
-			FPoint result = null;
+			FVector2 result = null;
 
 			if(p0 != null && p1 != null)
 			{
@@ -305,7 +305,7 @@ namespace Geometry
 			}
 			if(result == null)
 			{
-				result = new FPoint();
+				result = new FVector2();
 			}
 			return result;
 		}
@@ -332,11 +332,11 @@ namespace Geometry
 		/// Reference to a collection of equidistantly spaced points
 		/// along the specified linear curve (line).
 		/// </returns>
-		public static List<FPoint> GetLinearCurvePointsEquidistant(FPoint p0,
-			FPoint p1, int count)
+		public static List<FVector2> GetLinearCurvePointsEquidistant(FVector2 p0,
+			FVector2 p1, int count)
 		{
 			int index = 0;
-			List<FPoint> result = new List<FPoint>();
+			List<FVector2> result = new List<FVector2>();
 			float time = 0f;
 
 			if(p0 != null && p1 != null && count > 3)
@@ -373,19 +373,19 @@ namespace Geometry
 		/// Reference to the bounding box area of the provided quadratic Bezier
 		/// curve, if legitimate. Otherwise, an empty rectangle.
 		/// </returns>
-		public static FArea GetQuadraticBoundingBox(FPoint p0,
-			FPoint p1, FPoint p2, int sampleCount)
+		public static FArea GetQuadraticBoundingBox(FVector2 p0,
+			FVector2 p1, FVector2 p2, int sampleCount)
 		{
 			float index = 0f;
 			float count = 0f;
 			FArea result = new FArea();
-			List<FPoint> samples = null;
+			List<FVector2> samples = null;
 			float t = 0f;
 
 			if(p0 != null && p1 != null && p2 != null &&
 				sampleCount > 3)
 			{
-				samples = new List<FPoint>();
+				samples = new List<FVector2>();
 				count = sampleCount;
 				for(index = 0f; index < count; index++)
 				{
@@ -422,12 +422,12 @@ namespace Geometry
 		/// <returns>
 		/// The point along a cubic Bezier curve that is indicated by t.
 		/// </returns>
-		public static FPoint GetQuadraticCurvePoint(FPoint p0,
-			FPoint p1, FPoint p2, float t)
+		public static FVector2 GetQuadraticCurvePoint(FVector2 p0,
+			FVector2 p1, FVector2 p2, float t)
 		{
-			FPoint result = null;
-			FPoint xy1 = null;
-			FPoint xy2 = null;
+			FVector2 result = null;
+			FVector2 xy1 = null;
+			FVector2 xy2 = null;
 
 			if(p0 != null && p1 != null && p2 != null)
 			{
@@ -437,7 +437,7 @@ namespace Geometry
 			}
 			if(result == null)
 			{
-				result = new FPoint();
+				result = new FVector2();
 			}
 			return result;
 		}
@@ -472,20 +472,20 @@ namespace Geometry
 		/// the same length and the last segment will absorb any minor discrepancy
 		/// between the next-to-last point and the ending point.
 		/// </remarks>
-		public static List<FPoint> GetQuadraticCurvePointsEquidistant(FPoint p0,
-			FPoint p1, FPoint p2, int count)
+		public static List<FVector2> GetQuadraticCurvePointsEquidistant(
+			FVector2 p0, FVector2 p1, FVector2 p2, int count)
 		{
 			float angle = 0f;
 			int index = 0;
 			float lengthSample = 0f;
 			float lengthSegment = 0f;
 			float lengthTotal = 0f;
-			FPoint pointCurrent = null;
-			FPoint pointLast = null;
-			FPoint pointNext = null;
-			List<FPoint> result = new List<FPoint>();
+			FVector2 pointCurrent = null;
+			FVector2 pointLast = null;
+			FVector2 pointNext = null;
+			List<FVector2> result = new List<FVector2>();
 			int sampleCount = 0;
-			List<FPoint> samples = new List<FPoint>();
+			List<FVector2> samples = new List<FVector2>();
 			float time = 0f;
 
 			if(p0 != null && p1 != null && p2 != null && count > 3)
@@ -523,8 +523,7 @@ namespace Geometry
 						angle = Trig.GetLineAngle(pointCurrent, pointNext);
 						// Jump to the end of the current segment as new reference point.
 						pointCurrent =
-							new FPoint(
-								Trig.GetDestPoint(pointCurrent, angle, lengthSegment));
+							Trig.GetDestPoint(pointCurrent, angle, lengthSegment);
 						result.Add(pointCurrent);
 					}
 				}

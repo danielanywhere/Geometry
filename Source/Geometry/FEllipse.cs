@@ -353,11 +353,11 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 		//*	Center																																*
 		//*-----------------------------------------------------------------------*
-		private FPoint mCenter = new FPoint();
+		private FVector2 mCenter = new FVector2();
 		/// <summary>
 		/// Get/Set a reference to the center coordinate.
 		/// </summary>
-		public FPoint Center
+		public FVector2 Center
 		{
 			get { return mCenter; }
 			set
@@ -442,9 +442,9 @@ namespace Geometry
 
 			if(ellipse != null)
 			{
-				result.mCenter = new FPoint(ellipse.mCenter);
-				result.mFocalPoint1 = new FPoint(ellipse.mFocalPoint1);
-				result.mFocalPoint2 = new FPoint(ellipse.mFocalPoint2);
+				result.mCenter = new FVector2(ellipse.mCenter);
+				result.mFocalPoint1 = new FVector2(ellipse.mFocalPoint1);
+				result.mFocalPoint2 = new FVector2(ellipse.mFocalPoint2);
 				result.mRadiusX = ellipse.mRadiusX;
 				result.mRadiusY = ellipse.mRadiusY;
 				result.mFocalPoint1.ReadOnly = true;
@@ -475,10 +475,10 @@ namespace Geometry
 		/// Reference to an array of coordinates where the line crosses the edge
 		/// of the ellipse, if intersections were found. Otherwise, an empty array.
 		/// </returns>
-		public static FPoint[] FindIntersections(FEllipse ellipse, FLine line,
+		public static FVector2[] FindIntersections(FEllipse ellipse, FLine line,
 			bool allowImaginary = false)
 		{
-			FPoint[] result = null;
+			FVector2[] result = null;
 
 			if(ellipse != null && line != null)
 			{
@@ -487,7 +487,7 @@ namespace Geometry
 			}
 			if(result == null)
 			{
-				result = new FPoint[0];
+				result = new FVector2[0];
 			}
 			return result;
 		}
@@ -516,7 +516,7 @@ namespace Geometry
 		/// Reference to an array of coordinates where the line crosses the edge
 		/// of the ellipse, if intersections were found. Otherwise, an empty array.
 		/// </returns>
-		public static FPoint[] FindIntersections(FPoint center, float radiusX,
+		public static FVector2[] FindIntersections(FVector2 center, float radiusX,
 			float radiusY, FLine line, bool allowImaginary = false)
 		{
 			double A = 0d;
@@ -531,8 +531,8 @@ namespace Geometry
 			double ix = 0d;
 			double iy = 0d;
 			double k = 0d;
-			FPoint point = null;
-			List<FPoint> result = new List<FPoint>();
+			FVector2 point = null;
+			List<FVector2> result = new List<FVector2>();
 			double sqrtD = 0d;
 			double t = 0d;
 			double t1 = 0d;
@@ -574,7 +574,7 @@ namespace Geometry
 					ix = x1 + t * dx;
 					iy = y1 + t * dy;
 
-					result.Add(new FPoint((float)ix, (float)iy));
+					result.Add(new FVector2((float)ix, (float)iy));
 				}
 				else if(D > 0d)
 				{
@@ -585,12 +585,12 @@ namespace Geometry
 					t1 = (-B + sqrtD) / (2 * A);
 					t2 = (-B - sqrtD) / (2 * A);
 
-					point = new FPoint((float)(x1 + t1 * dx), (float)(y1 + t1 * dy));
+					point = new FVector2((float)(x1 + t1 * dx), (float)(y1 + t1 * dy));
 					if(allowImaginary || FLine.IsPointOnLine(line, point))
 					{
 						result.Add(point);
 					}
-					point = new FPoint((float)(x1 + t2 * dx), (float)(y1 + t2 * dy));
+					point = new FVector2((float)(x1 + t2 * dx), (float)(y1 + t2 * dy));
 					if(allowImaginary || FLine.IsPointOnLine(line, point))
 					{
 						result.Add(point);
@@ -604,11 +604,11 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 		//*	FocalPoint1																														*
 		//*-----------------------------------------------------------------------*
-		private FPoint mFocalPoint1 = new FPoint();
+		private FVector2 mFocalPoint1 = new FVector2();
 		/// <summary>
 		/// Get a reference to the first focal point.
 		/// </summary>
-		public FPoint FocalPoint1
+		public FVector2 FocalPoint1
 		{
 			get { return mFocalPoint1; }
 		}
@@ -617,11 +617,11 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 		//*	FocalPoint2																														*
 		//*-----------------------------------------------------------------------*
-		private FPoint mFocalPoint2 = new FPoint();
+		private FVector2 mFocalPoint2 = new FVector2();
 		/// <summary>
 		/// Get a reference to the second focal point.
 		/// </summary>
-		public FPoint FocalPoint2
+		public FVector2 FocalPoint2
 		{
 			get { return mFocalPoint2; }
 		}
@@ -669,9 +669,9 @@ namespace Geometry
 		/// the ellipse at the specified angle, if legitimate. Otherwise, an
 		/// empty point.
 		/// </returns>
-		public static FPoint GetCoordinateAtAngle(FEllipse ellipse, float angle)
+		public static FVector2 GetCoordinateAtAngle(FEllipse ellipse, float angle)
 		{
-			FPoint result = new FPoint();
+			FVector2 result = new FVector2();
 
 			if(ellipse != null)
 			{
@@ -716,7 +716,7 @@ namespace Geometry
 		{
 			int count = 0;
 			int index = 0;
-			List<FPoint> points = null;
+			List<FVector2> points = null;
 			List<FLine> result = new List<FLine>();
 
 			if(ellipse != null && pointCount > 0)
@@ -868,17 +868,17 @@ namespace Geometry
 		/// When rotation is 0, the first point occurs on the
 		/// vector +X,0 from center.
 		/// </remarks>
-		public static List<FPoint> GetVertices(FEllipse ellipse, int pointCount,
+		public static List<FVector2> GetVertices(FEllipse ellipse, int pointCount,
 			float startOffsetAngle = 0f)
 		{
 			float angle = 0f;
 			float count = 0f;
-			FPoint center = null;
+			FVector2 center = null;
 			float increment = 0f;
 			float index = 0f;
-			FPoint point = null;
-			List<FPoint> points = new List<FPoint>();
-			List<FPoint> result = new List<FPoint>();
+			FVector2 point = null;
+			List<FVector2> points = new List<FVector2>();
+			List<FVector2> result = new List<FVector2>();
 			float rotation = 0f;
 
 			if(ellipse != null && pointCount != 0)
@@ -900,14 +900,14 @@ namespace Geometry
 				else
 				{
 					//	Rotate the points around the local center.
-					center = FPoint.Clone(ellipse.Center);
+					center = FVector2.Clone(ellipse.Center);
 					//	Each point will need to be translated to origin,
 					//	rotated, then translated back to center.
-					foreach(FPoint pointItem in points)
+					foreach(FVector2 pointItem in points)
 					{
-						FPoint.Translate(pointItem, FPoint.Negate(center));
-						point = FPoint.Rotate(pointItem, rotation);
-						FPoint.Translate(point, center);
+						FVector2.Translate(pointItem, FVector2.Negate(center));
+						point = FVector2.Rotate(pointItem, rotation);
+						FVector2.Translate(point, center);
 						result.Add(point);
 					}
 				}
@@ -953,17 +953,17 @@ namespace Geometry
 		/// the beginning and center, as would be the case with the closed path.
 		/// </para>
 		/// </remarks>
-		public static List<FPoint> GetVerticesInArc(FEllipse ellipse,
+		public static List<FVector2> GetVerticesInArc(FEllipse ellipse,
 			int pointCount, float startAngle, float sweepAngle)
 		{
 			float angle = 0f;
 			float count = 0f;
-			FPoint center = null;
+			FVector2 center = null;
 			float increment = 0f;
 			float index = 0f;
-			FPoint point = null;
-			List<FPoint> points = new List<FPoint>();
-			List<FPoint> result = new List<FPoint>();
+			FVector2 point = null;
+			List<FVector2> points = new List<FVector2>();
+			List<FVector2> result = new List<FVector2>();
 			float rotation = 0f;
 
 			if(ellipse != null && pointCount > 1 && sweepAngle != 0f)
@@ -985,14 +985,14 @@ namespace Geometry
 				else
 				{
 					//	Rotate the points around the local center.
-					center = FPoint.Clone(ellipse.Center);
+					center = FVector2.Clone(ellipse.Center);
 					//	Each point will need to be translated to origin,
 					//	rotated, then translated back to center.
-					foreach(FPoint pointItem in points)
+					foreach(FVector2 pointItem in points)
 					{
-						FPoint.Translate(pointItem, FPoint.Negate(center));
-						point = FPoint.Rotate(pointItem, rotation);
-						FPoint.Translate(point, center);
+						FVector2.Translate(pointItem, FVector2.Negate(center));
+						point = FVector2.Rotate(pointItem, rotation);
+						FVector2.Translate(point, center);
 						result.Add(point);
 					}
 				}
@@ -1079,9 +1079,9 @@ namespace Geometry
 
 			if(ellipse != null)
 			{
-				result = (FPoint.IsEmpty(ellipse.mCenter) &&
-					FPoint.IsEmpty(ellipse.mFocalPoint1) &&
-					FPoint.IsEmpty(ellipse.mFocalPoint2) &&
+				result = (FVector2.IsEmpty(ellipse.mCenter) &&
+					FVector2.IsEmpty(ellipse.mFocalPoint1) &&
+					FVector2.IsEmpty(ellipse.mFocalPoint2) &&
 					ellipse.mRadiusX == 0f &&
 					ellipse.mRadiusY == 0f);
 			}
@@ -1321,7 +1321,7 @@ namespace Geometry
 
 			if(source != null && target != null)
 			{
-				FPoint.TransferValues(source.mCenter, target.mCenter);
+				FVector2.TransferValues(source.mCenter, target.mCenter);
 				originalRadiusX = target.mRadiusX;
 				originalRadiusY = target.mRadiusY;
 				target.mRadiusX = source.mRadiusX;
