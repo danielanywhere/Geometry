@@ -102,6 +102,32 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//*	_Implicit FVector3 = FVector2																					*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Cast the FVector2 instance to an FVector3.
+		/// </summary>
+		/// <param name="value">
+		/// Reference to the vector to be converted.
+		/// </param>
+		/// <returns>
+		/// Reference to a newly created FVector3 representing the values in
+		/// the caller's vector.
+		/// </returns>
+		public static implicit operator FVector3(FVector2 value)
+		{
+			FVector3 result = new FVector3();
+
+			if (value != null)
+			{
+				result.mX = value.X;
+				result.mY = value.Y;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	_Implicit FVector2 = FVector3																					*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -118,7 +144,7 @@ namespace Geometry
 		{
 			FVector2 result = new FVector2();
 
-			if(value != null)
+			if (value != null)
 			{
 				result.X = value.mX;
 				result.Y = value.mY;
