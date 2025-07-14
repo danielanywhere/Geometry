@@ -273,10 +273,3 @@ lifting.
 For the full documentation of this library, you can access the API in
 HTML format at the associated GitHub user page library
 <https://danielanywhere.github.io/Geometry>.
-
-<p>&nbsp;</p>
-
-## Notes on FPoint and FPoint3
-
-In an unfortunate recent direction change, I had made the FVector
-classes the
