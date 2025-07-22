@@ -43,6 +43,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.2722.4017 | No breaking changes. Added the function **SetPrecision** to the classes **FVector2**, **FVector3**, and **FVector4**. |
 | 25.2714.4042 | Added implicit conversion of **FVector2** to **FVector3**. |
 | 25.2714.3839 | In the interest of pursuing single points of truth for each context, **FPoint** and **FPoint3** have been depreciated and are now obsolete. At your earliest convenience, please switch to **FVector2** and **FVector3**, respectively. |
 | 25.2711.4719 | An error in casting from FVector2 to FPoint was causing exceptions to occur anywhere a function was returning an FVector2 by nature, but being used locally at the return site as an FPoint. This condition indicated that to inherit FPoint from FVector2 is a mistaken strategy. Additionally, since the .NET platform offers no support for class-level aliasing (ie. FVector2 is the equivalent of FPoint, which is really what I was shooting for), a temporary workaround was taken to avoid exceptions in inter-object handling for the time-being. |

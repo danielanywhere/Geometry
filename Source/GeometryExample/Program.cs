@@ -1330,6 +1330,64 @@ namespace GeometryExample
 		////*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* TestSetPrecision																											*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test the SetPrecision functions.
+		/// </summary>
+		private static void TestSetPrecision()
+		{
+			float max = 10000f;
+			float min = -10000f;
+			int precision = 0;
+			FVector2 vector2 = new FVector2(
+				RandomFloat(min, max),
+				RandomFloat(min, max));
+			FVector3 vector3 = new FVector3(
+				RandomFloat(min, max),
+				RandomFloat(min, max),
+				RandomFloat(min, max));
+			FVector4 vector4 = new FVector4(
+				RandomFloat(min, max),
+				RandomFloat(min, max),
+				RandomFloat(min, max),
+				RandomFloat(min, max));
+
+			Console.WriteLine("** Testing SetPrecision **");
+
+			Console.WriteLine($" FVector2. X:{vector2.X}; Y:{vector2.Y}");
+			precision = (int)RandomFloatWhole(1, 5);
+			Console.WriteLine($" Set precision to: {precision}");
+			FVector2.SetPrecision(vector2, precision);
+			Console.WriteLine($" Result.   X:{vector2.X}; Y:{vector2.Y}");
+			Console.WriteLine();
+
+			Console.WriteLine(
+				$" FVector3. X:{vector3.X}; Y:{vector3.Y}; Z:{vector3.Z}");
+			precision = (int)RandomFloatWhole(1, 5);
+			Console.WriteLine($" Set precision to: {precision}");
+			FVector3.SetPrecision(vector3, precision);
+			Console.WriteLine(
+				$" Result.   X:{vector3.X}; Y:{vector3.Y}; Z:{vector3.Z}");
+			Console.WriteLine();
+
+			Console.WriteLine(
+				$" FVector4. X:{vector4.X}; Y:{vector4.Y}; Z:{vector4.Z}; " +
+				$"W:{vector4.W}");
+			precision = (int)RandomFloatWhole(1, 5);
+			Console.WriteLine($" Set precision to: {precision}");
+			FVector4.SetPrecision(vector4, precision);
+			Console.WriteLine(
+				$" Result.   X:{vector4.X}; Y:{vector4.Y}; Z:{vector4.Z}; " +
+				$"W:{vector4.W}");
+			Console.WriteLine();
+
+			Console.WriteLine();
+
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* TestShapeVertices																											*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
@@ -1604,6 +1662,8 @@ namespace GeometryExample
 			List<FVector2> points = null;
 			float time = 0f;
 			int index = 0;
+
+			TestSetPrecision();
 
 			//	Quaternions.
 			TestQuaternionAdd();

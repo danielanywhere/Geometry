@@ -2062,6 +2062,37 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* SetPrecision																													*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Set the decimal precision on the member values of the caller's
+		/// specified vector.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the vector to be adjusted.
+		/// </param>
+		/// <param name="decimalPlaces">
+		/// Number of decimal places precision to allow on the member values of
+		/// the provided vector.
+		/// </param>
+		public static void SetPrecision(FVector3 vector, int decimalPlaces)
+		{
+			string format = "0";
+
+			if(vector != null && decimalPlaces > -1)
+			{
+				if(decimalPlaces > 0)
+				{
+					format += "." + new string('0', decimalPlaces);
+				}
+				vector.mX = ToFloat(vector.mX.ToString(format));
+				vector.mY = ToFloat(vector.mY.ToString(format));
+				vector.mZ = ToFloat(vector.mZ.ToString(format));
+			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//*	SetVectorLength																												*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
