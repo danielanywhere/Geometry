@@ -515,7 +515,20 @@ namespace Geometry
 					(y1 - y2) * (x3 - x4);
 				result.Y = (rd != 0d ? (float)(rn / rd) : float.NegativeInfinity);
 
-				if(!allowImaginary &&
+				if(float.IsNegativeInfinity(result.X) ||
+					float.IsNegativeInfinity(result.Y))
+				{
+					//	The lines don't intersect.
+					result = null;
+				}
+				else if(!allowImaginary &&
+					!IsPointNearLine(lineA, result, 0.0005f) &&
+					!IsPointNearLine(lineB, result, 0.0005f))
+				{
+					//	Imaginary intersection was found but not allowed.
+					result = null;
+				}
+				else if(allowImaginary &&
 					!IsPointNearLine(lineA, result, 0.0005f) &&
 					!IsPointNearLine(lineB, result, 0.0005f))
 				{

@@ -43,6 +43,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.2820.4317 | A correction was made to the **FLine.Intersect(lineA, lineB, allowImaginary)** function, which was including estimations for points that had no possible intersections. That function now returns null if no intersection exists, the imaginary point, if imaginary is allowed, and null if an imaginary intersection exists but is not allowed. |
 | 25.2722.4017 | No breaking changes. Added the function **SetPrecision** to the classes **FVector2**, **FVector3**, and **FVector4**. |
 | 25.2714.4042 | Added implicit conversion of **FVector2** to **FVector3**. |
 | 25.2714.3839 | In the interest of pursuing single points of truth for each context, **FPoint** and **FPoint3** have been depreciated and are now obsolete. At your earliest convenience, please switch to **FVector2** and **FVector3**, respectively. |
