@@ -45,6 +45,7 @@ namespace MyProject
 
 | Version | Description |
 |---------|-------------|
+| 25.3011.3729 | A correction was made to **FLine.HasIntersection(lineA, lineB, allowImaginary)**, which would throw an error if the two lines had no intersection; Added the **FArea.GetArea(FArea)** static function, which returns the total area of the specified area object. |
 | 25.2820.4317 | A correction was made to the **FLine.Intersect(lineA, lineB, allowImaginary)** function, which was including estimations for points that had no possible intersections. In addition to returning an on-line intersection, that function now returns null if no intersection exists, the imaginary point, if imaginary is allowed, and null if an imaginary intersection exists but is not allowed. |
 | 25.2722.4017 | No breaking changes. Added the function **SetPrecision** to the classes **FVector2**, **FVector3**, and **FVector4**. |
 | 25.2714.4042 | Added implicit conversion of **FVector2** to **FVector3**. |

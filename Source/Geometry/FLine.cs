@@ -398,7 +398,7 @@ namespace Geometry
 			if(lineA != null && lineB != null)
 			{
 				point = Intersect(lineA, lineB, allowImaginary);
-				if(!float.IsNegativeInfinity(point.X) &&
+				if(point != null && !float.IsNegativeInfinity(point.X) &&
 					!float.IsNegativeInfinity(point.Y))
 				{
 					//	Both values were resolved. The line has at least an imaginary

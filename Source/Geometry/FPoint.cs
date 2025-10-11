@@ -43,7 +43,7 @@ namespace Geometry
 	/// carry exactly the same information as the root instance until they
 	/// are changed.
 	/// </remarks>
-	[Obsolete("FPoint is obsolete. Please use FVector2.")]
+	[Obsolete("Please use FVector2.")]
 	public class FPoint
 	{
 		//*************************************************************************

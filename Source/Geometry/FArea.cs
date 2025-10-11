@@ -604,6 +604,30 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* GetArea																																*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the total area of the specified area object.
+		/// </summary>
+		/// <param name="area">
+		/// Reference to the area to be inspected.
+		/// </param>
+		/// <returns>
+		/// The total area, in the object's units, of the supplied area object.
+		/// </returns>
+		public static float GetArea(FArea area)
+		{
+			float result = 0f;
+
+			if(area != null)
+			{
+				result = area.Width * area.Height;
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* GetCenter																															*
 		//*-----------------------------------------------------------------------*
 		/// <summary>
