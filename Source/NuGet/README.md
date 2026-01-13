@@ -1,6 +1,6 @@
 # Dan's Geometry Library
 
-🆕 NEW! - If you find this library useful, please consider sponsoring me on [GitHub](https://github.com/sponsors/danielanywhere).
+If you find this library useful, please consider sponsoring me on [GitHub](https://github.com/sponsors/danielanywhere).
 
 An easy-to-implement function library providing numeric operations to handle solutions to typical problems encountered in the field of geometry, including Bezier Curves, Linear Interpolation, and Trigonometry.
 

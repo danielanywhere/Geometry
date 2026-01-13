@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-
+using System.Threading;
 using Geometry;
 
 using static Geometry.GeometryUtil;
@@ -613,6 +613,29 @@ namespace GeometryExample
 				}
 			}
 			Console.WriteLine("");
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TestFAreaHasVolume																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Test FArea.HasVolume.
+		/// </summary>
+		private static void TestFAreaHasVolume()
+		{
+			FArea area = new FArea()
+			{
+				X = -500f,
+				Y = float.MinValue / 2f,
+				Width = 240f,
+				Height = float.MaxValue
+			};
+
+			Console.WriteLine("** Testing FArea HasVolume **");
+			Console.WriteLine(
+				$" Area: {area.X}, {area.Y}, {area.Width}, {area.Height}");
+			Console.WriteLine($" HasVolume: {FArea.HasVolume(area)}");
 		}
 		//*-----------------------------------------------------------------------*
 
@@ -1662,6 +1685,8 @@ namespace GeometryExample
 			List<FVector2> points = null;
 			float time = 0f;
 			int index = 0;
+
+			TestFAreaHasVolume();
 
 			TestSetPrecision();
 
