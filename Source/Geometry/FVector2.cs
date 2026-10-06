@@ -504,6 +504,36 @@ namespace Geometry
 		//*-----------------------------------------------------------------------*
 
 		//*-----------------------------------------------------------------------*
+		//* DistanceTo																														*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Return the distance between the source and target points.
+		/// </summary>
+		/// <param name="source">
+		/// Reference to the source point to consider.
+		/// </param>
+		/// <param name="target">
+		/// Reference to the target point to consider.
+		/// </param>
+		/// <returns>
+		/// The distance between the two given points, if valid. Otherwise,
+		/// 0.
+		/// </returns>
+		public static float DistanceTo(FVector2 source, FVector2 target)
+		{
+			float result = 0f;
+
+			if(source != null && target != null)
+			{
+				result = (float)Math.Sqrt(
+					((double)(source.mX - target.mX) * (double)(source.mX - target.mX) +
+					(double)(source.mY - target.mY) * (double)(source.mY - target.mY)));
+			}
+			return result;
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
 		//* Dot																																		*
 		//*-----------------------------------------------------------------------*
 		/// <summary>

@@ -522,15 +522,15 @@ namespace Geometry
 					result = null;
 				}
 				else if(!allowImaginary &&
-					!IsPointNearLine(lineA, result, 0.0005f) &&
-					!IsPointNearLine(lineB, result, 0.0005f))
+					(!IsPointNearLine(lineA, result, 0.0005f) ||
+					!IsPointNearLine(lineB, result, 0.0005f)))
 				{
 					//	Imaginary intersection was found but not allowed.
 					result = null;
 				}
 				else if(allowImaginary &&
-					!IsPointNearLine(lineA, result, 0.0005f) &&
-					!IsPointNearLine(lineB, result, 0.0005f))
+					(!IsPointNearLine(lineA, result, 0.0005f) ||
+					!IsPointNearLine(lineB, result, 0.0005f)))
 				{
 					//	The intersection was only imaginary, and does not sit on either
 					//	physical line. In this case the intersection of the lines should
@@ -1110,6 +1110,79 @@ namespace Geometry
 				point = new FVector2(Trig.GetDestPoint(target.mPointA, angle, offset));
 				Translate(target, FVector2.Delta(point, target.mPointA));
 			}
+		}
+		//*-----------------------------------------------------------------------*
+
+		//*-----------------------------------------------------------------------*
+		//* TryFindIntersection																										*
+		//*-----------------------------------------------------------------------*
+		/// <summary>
+		/// Attempt to find an intersection between the two lines and output a
+		/// reference to that intersection, if found.
+		/// </summary>
+		/// <param name="pointA1">
+		/// Reference to the first point of the first line to compare.
+		/// </param>
+		/// <param name="pointA2">
+		/// Reference to the second point of the first line to compare.
+		/// </param>
+		/// <param name="pointB1">
+		/// Reference to the first point of the second line to compare.
+		/// </param>
+		/// <param name="pointB2">
+		/// Reference to the second point of the second line to compare.
+		/// </param>
+		/// <param name="intersection">
+		/// Reference to the intersection between the two lines, if found.
+		/// Otherwise, null.
+		/// </param>
+		/// <returns>
+		/// True if an intersection was found. Otherwise, false.
+		/// </returns>
+		public static bool TryFindIntersection(FVector2 pointA1, FVector2 pointA2,
+			FVector2 pointB1, FVector2 pointB2, out FVector2 intersection)
+		{
+			float ax = 0f;
+			float ay = 0f;
+			float bx = 0f;
+			float by = 0f;
+			float cx = 0f;
+			float cy = 0f;
+			float dx = 0f;
+			float dy = 0f;
+			float denom = 0f;
+			bool result = false;
+			float ua = 0f;
+			float ub = 0f;
+
+			intersection = null;
+			if(pointA1 != null && pointA2 != null &&
+				pointB1 != null && pointB2 != null)
+			{
+				ax = pointA1.X;
+				ay = pointA1.Y;
+				bx = pointA2.X;
+				by = pointA2.Y;
+				cx = pointB1.X;
+				cy = pointB1.Y;
+				dx = pointB2.X;
+				dy = pointB2.Y;
+				denom = (dy - cy) * (bx - ax) - (dx - cx) * (by - ay);
+				if(Math.Abs(denom) >= 1e-9f)
+				{
+					// Not parallel.
+					ua = ((dx - cx) * (ay - cy) - (dy - cy) * (ax - cx)) / denom;
+					ub = ((bx - ax) * (ay - cy) - (by - ay) * (ax - cx)) / denom;
+
+					if(ua >= 0f && ua <= 1f && ub >= 0f && ub <= 1f)
+					{
+						intersection =
+							new FVector2(ax + ua * (bx - ax), ay + ua * (by - ay));
+						result = true;
+					}
+				}
+			}
+			return result;
 		}
 		//*-----------------------------------------------------------------------*
 
